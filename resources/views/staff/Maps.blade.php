@@ -77,6 +77,21 @@
                 background-color: transparent;
                 color: white;
             }
+                
+            .content-wrapper {
+                margin-bottom: 60px; /* Adjust based on footer height */
+                padding-bottom: 20px; /* Adjust for bottom padding */
+            }
+            footer {
+                color: white;
+                background-color: #1d2039;
+                padding: 10px 0;
+                text-align: center;
+                width: 100%;
+                position: fixed;
+                bottom: 0;
+                z-index: 1000; /* Ensure footer is above other content */
+            }
 
         </style>
         <script src="{{ asset('js/jquery-3.7.1.min.js') }}"></script>
@@ -84,12 +99,12 @@
     </head>
     <body>
         <div class="container-fluid text-center">
-            <div class="row mt-2">
+            <div class="row mb-2" style="background-color: #1d2039;">
                 <div class="col-7 text-left text-uppercase header mt-2" >
-                    <span id="floorname_id" style="font-size:30px;color:whitesmoke;font-weight:bold;"></span>
+                    <span id="floorname_id" style="font-size:25px;color:whitesmoke;font-weight:bold;"></span>
                     <span id="point_id" style="color:whitesmoke"></span>
                 </div>
-                <div class="col-3 d-flex justify-content-end" style="margin-top: 0.5rem;">
+                <div class="col-3 d-flex justify-content-end" style="margin-top: 0.1rem;">
                     <select  style="background-color:transparent; border-color:transparent;color:white" id="dropDownDevice" onchange="showDeviceData()">
                         <option value="classNone">All Device</option>
                         <option value="classWifi">Wifi Unifi</option>
@@ -97,13 +112,14 @@
                     </select>
                 </div>
                 <div class="col-2 text-left  d-flex justify-content-end" >
-                    <input class="btn" style="margin-top:0.5rem;" type="button" onclick="location.href ='{{ url('/home') }}'"  id="btnBack" value="Back" >
-                    <form method="POST"  style="margin-top:0.7rem;" action="{{ route('logout') }}">
+                    <input class="btn" style="margin-top:0.1rem;text-transform: uppercase; font-weight:bold" type="button" onclick="location.href ='{{ url('/home') }}'"  id="btnBack" value="Back" >
+                    <form method="POST" style="margin-top:0.3rem;" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="btn">Logout</button>
+                        <button type="submit" style="text-transform: uppercase; font-weight:bold" class="btn">Logout</button>
                     </form>
                 </div>
-            </div> 
+            </div>
+            <div class="content-wrapper"> 
             <div class="row w-92 top7 mt-4" >
                 <div class="col-2">
                     <div class="row top7">
@@ -177,7 +193,8 @@
                     </table>
             </div>
         </div>
-        <footer style="color: white; background-color: #11142C; margin-top: 2%; padding: 1px;">
+        </div>
+        <footer style="color: white; background-color: #1d2039; margin-top: 2%; padding: 1px;">
             <p style="text-align: center; padding-top:1%">&copy; Mall Dashboard 2024 | Bedria Mashyanda Maail - 2440027303</p>
     </footer>
     </body>

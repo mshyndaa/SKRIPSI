@@ -179,19 +179,31 @@ function editFunc(id) {
 }
 
 function deleteFunc(id) {
-    if (confirm("Delete Record?") == true) {
+    if (confirm("Delete Record?")) {
         $.ajax({
             type: "POST",
-            url: "{{ url('delete-company') }}",
+            url: "{{ url('delete-user') }}",
             data: { id: id },
             dataType: 'json',
-            success: function(res) {
-                var oTable = $('#ajax-crud-datatable').DataTable();
-                oTable.draw(false);
+            success: function(response) {
+                if (response.success) {
+                    // Success handling, maybe show a success message or update UI
+                    var oTable = $('#ajax-crud-datatable').DataTable();
+                    oTable.draw(false); // Redraw the DataTable
+                } else {
+                    // Error handling, show an error message to the user
+                    alert("Deletion failed: " + response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                // General error handling, log or show a generic error message
+                console.error("Error deleting user:", error);
+                alert("An error occurred while deleting.");
             }
         });
     }
 }
+
 
 $('#CompanyForm').submit(function(e) {
     e.preventDefault();

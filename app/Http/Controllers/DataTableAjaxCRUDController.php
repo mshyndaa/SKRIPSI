@@ -171,9 +171,33 @@ public function editmall(Request $request) {
      * @param  \App\company  $company
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request) {
-        $company = Admin::where('id_users', $request->id)->delete();
-
-        return Response()->json($company);
+    public function destroy(Request $request)
+    {
+        $userId = $request->id;
+    
+        // Find and delete user by ID
+        $deleted = Admin::where('id_users', $userId)->delete();
+    
+        if ($deleted) {
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false, 'message' => 'User not found'], 404);
+        }
     }
+
+    public function destroyUser(Request $request)
+    {
+        $userId = $request->id;
+    
+        // Find and delete user by ID
+        $deleted = User::where('id_users', $userId)->delete();
+    
+        if ($deleted) {
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false, 'message' => 'User not found'], 404);
+        }
+    }
+    
+
 }

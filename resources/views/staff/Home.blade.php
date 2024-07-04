@@ -50,42 +50,47 @@
             }
 
             table.table-bordered> thead > tr > th{
-                border:1px solid purple;
+                border:1px solid #1b2890);
             }
             table.table-bordered > tbody > tr > td{
-                border:1px solid purple;
+                border:1px solid #1b2890);
             }
             .borderdiv {
-                border-top:1px solid purple;
-                border-left:1px solid purple;
-                border-right:1px solid purple;
+                border-top:1px solid #1b2890;
+                border-left:1px solid #1b2890;
+                border-right:1px solid #1b2890;
                 
             }
              .bordertext {
-                border-top:1px solid purple; 
+                border-top:1px solid #1b2890; 
                 
             }
             .borderrighttext {
-               border-right:1px solid purple; ; 
+               border-right:1px solid #1b2890 ; 
                 
             }
             .borderbottom {
-                border-bottom:1px solid purple; 
+                border-bottom:1px solid #1b2890; 
                 
             }
             .namalantai{
-                background-color: purple;
+                background-color: #1b2890;
                 margin-top: 2rem;
             }
             footer {
                 color: white;
-                background-color: #1d2039;
+                background-color: #1b2890;
                 padding: 10px 0;
                 text-align: center;
                 width: 100%;
                 position: fixed;
                 bottom: 0;
+                z-index: 1000; /* Ensure footer is above other content */
               
+            }
+            .content-wrapper {
+                margin-bottom: 60px; /* Adjust based on footer height */
+                padding-bottom: 20px; /* Adjust for bottom padding */
             }
 
         </style>
@@ -95,12 +100,12 @@
     </head>
     <body>
         <div class="container-fluid text-center" style="padding: 0%;">
-            <div class="row mt-2 mb-2">
-                <div class="col-8 text-left text-uppercase header mt-2" style="margin-left: 2rem">
-                    <span id="floorname_id" style="font-size:30px;color:whitesmoke;font-weight:bold;"></span>
+            <div class="row mb-2" style="background-color: #1d2039;">
+                <div class="col-8 text-left text-uppercase header mt-2" style="margin-left: 2rem;">
+                    <span id="floorname_id" style="font-size:25px;color:whitesmoke;font-weight:bold;"></span>
                 </div>
                 <div class="col-2 text-right" style="margin-top: 1rem; padding:0%; margin-left:4rem;"  >
-                    <select id="dropdownmall" onchange="changeLayout()" style="background-color: transparent; border-color:transparent; color:white">
+                    <select id="dropdownmall" onchange="changeLayout()" style="background-color: transparent; border-color:transparent; text-transform: uppercase;;color:white">
                         @if ($Data->count() > 0)
                         @foreach ($Data as $role)
                         <option value="{{ $role->id }}">
@@ -111,7 +116,7 @@
                         No Record Found
                         @endif
                     </select>
-                    <select id="dropdowndisplay" onchange="changeLayout()" style="background-color: transparent; border-color:transparent; color:white">
+                    <select id="dropdowndisplay" onchange="changeLayout()" style="background-color: transparent; border-color:transparent; text-transform: uppercase; color:white">
                         <option value="33">3x3</option>
                         <option value="32">3x2</option>
                     </select>
@@ -119,11 +124,12 @@
                 <div class="col-1 " style="margin-top: 0.6rem;padding:0%;"> 
                     <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="btn regular">Logout</button>
+                    <button type="submit" style="text-transform: uppercase; font-weight:bold" class="btn regular">Logout</button>
                     </form>
                 </div>
             </div>
             {{-- Maps / Floor  --}}
+            <div class="content-wrapper"> 
             <div class="row class33 classLayout" style="margin-top:2rem">
                 <div class="col-3" id="class33_1_1" style="padding-top: 0.5%;padding-left:0%; padding-right:0%;margin-left:7rem;margin-right:2rem;">
                     <svg version="1.1" id="Layer_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
@@ -318,17 +324,18 @@
             <div class="row" style="display: flex; justify-content: center; margin-top:2rem;">
                 <div id="pagination-container"></div>
             </div>
-
-            <footer style="color: white; background-color: #11142C; margin-top: 2%; padding: 1px;">
+            </div>
+            <footer style="color: white; background-color: #1d2039; margin-top: 2%; padding: 1px;">
                     <p style="text-align: center; padding-top:1%">&copy; Mall Dashboard 2024 | Bedria Mashyanda Maail - 2440027303</p>
             </footer>
         </div>
     </body>
-    <script>
+       <script>
         var numItems = 0;
         var perPage = 4;
         $(document).ready(function () {
             $("#dropdownmall").val($("#dropdownmall option:first").val());
+            // $('#dropdownmall').prop('selectedIndex',0);
             a = $('#dropdownmall').val();
             console.log($("#dropdownmall option:selected").text());
             $("#floorname_id").text($("#dropdownmall option:selected").text());
@@ -358,6 +365,7 @@
                             if (classval == '33' && i < 9) {
                                 perPage = 9;
                               console.log("coldiv=" + coldiv);
+                           //     console.log(rowdiv)
                                 console.log(data[i]['id']);
                                  $('#mps' + classval + "_" + rowdiv + "_" + coldiv).myShow();
                                   $('#class' + classval + "_" + rowdiv + "_" + coldiv).addClass('borderdiv');
@@ -369,12 +377,14 @@
                                         $('#class' + classval + "_" + rowdiv + "_" + coldiv).addClass('borderbottom');
                                   }  
                                  document.getElementById('mps' + classval + "_" + rowdiv + "_" + coldiv).setAttribute('href', '' + data[i]['maps_img']);
+                                 
                                 document.getElementById('mapstext' + classval + "_" + rowdiv + "_" + coldiv).innerHTML =  data[i]["name"];
                                 idfloormaps='maps' + classval + "_" + rowdiv + "_" + coldiv;
                                 document.getElementById('floorIdPic'+picNum).value=data[i]['id'];
                               
                             }else if (classval == '32' && i < 6) {
                                 perPage = 6;
+                               
                                  $('#mps' + classval + "_" + rowdiv + "_" + coldiv).myShow();
                                   $('#class' + classval + "_" + rowdiv + "_" + coldiv).addClass('borderdiv');
                                   $('#col' + classval + "_" + rowdiv + "_" + coldiv).addClass('bordertext');
@@ -400,13 +410,16 @@
                         nextText: "&raquo;",
                         onPageClick: function (pageNumber) {
                             showPages(pageNumber, perPage);
+                            //  var showFrom = perPage * (pageNumber - 1);
+                            //    var showTo = showFrom + perPage;
+                            // items.hide().slice(showFrom, showTo).show();
                         }
                     });
                 }
             });
         });
         var index = 0;
-        var type = 'pc';
+        var type = 'hibob';
         function changemaps(id,idfloor) {
             var div = document.getElementById(id);
             console.log(id);
@@ -422,27 +435,68 @@
                           
                             if (data.length != 0) {
                                 for (var i = 0; i < data.length; i++) {
-                                    if (data[i]['type'] == 'pc') {
+                                    if (data[i]['type'] == 'hibob') {
+                                    //    totalHibobFloor = totalHibobFloor + 1;
+                                   //     console.log("AA");
+                                     //     console.log(data[i]);
+                                        var x = data[i]['x_axis'];
+                                        var y = data[i]['y_axis'];
+                                        var name = data[i]['id'];
+                                        
+                                        var ip_addr = (data[i]['link']!=null?data[i]['link']:'');
+                                        var namedevice = (data[i]['name']!=null?data[i]['name']:'');
+                                     //   test = test + '<circle id="c1' + index + '" fill="transparent" stroke="#21de54" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle id="c2' + index + '" fill="transparent" stroke="#21de54" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle id="c3' + index + '" cx="' + x + '" cy="' + y + '" r="8" fill="#21de54" onclick="hibobclickjs(\'' + name + '\')"></circle>';
+                                        div.innerHTML += '<a data-toggle="popover" id="pop' + index + '"  class="popover-icon" data-container="body" title="Device Name" data-content="'+namedevice+'<br>'+ip_addr+'" data-placement="right" data-trigger="hover"><circle id="c1' + index + '" fill="transparent" stroke="#21de54" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle id="c2' + index + '" fill="transparent" stroke="#21de54" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle id="c3' + index + '" cx="' + x + '" cy="' + y + '" r="8" fill="#21de54" onclick="hibobclickjs(\'' + name + '\')"></circle></a>';
+                                        index++;
+                                    } else if (data[i]['type'] == 'cctv') {
+                                     //   totalCCTVFloor = totalCCTVFloor + 1;
                                         var x = data[i]['x_axis'];
                                         var y = data[i]['y_axis'];
                                         var id = data[i]['id'];
                                         var ip_addr = (data[i]['link']!=null?data[i]['link']:'');
                                         var namedevice = (data[i]['name']!=null?data[i]['name']:'');
+                                   //     test = test + '<circle id="c1' + index + '" fill="transparent" stroke="#21de54" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle id="c2' + index + '" fill="transparent" stroke="#db2525" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle id="c3' + index + '" cx="' + x + '" cy="' + y + '" r="8" fill="#db2525" onclick="hibobclickjs(\'' + name + '\')"></circle>';
+                                        div.innerHTML += '<a data-toggle="popover" id="pop' + index + '"  class="popover-icon" data-container="body" title="Device Name" data-content="'+namedevice+'<br>'+ip_addr+'" data-placement="right" data-trigger="hover"><circle id="c1' + index + '" fill="transparent" stroke="#db2525" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle id="c2' + index + '" fill="transparent" stroke="#db2525" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle  id="c3' + index + '" cx="' + x + '" cy="' + y + '" r="8" fill="#db2525" onclick="cctvclick(' + id + ')"></circle></a>';
+                                        // onmouseover="inmouse(\'Name: '+data[i]['name']+'\',\''+index+'\')" onmouseout="outmouse(\''+index+'\')"<svg width="300" height="150" x="'+(x+15)+'" y="'+(y+15)+'"  id="pop'+index+'" visibility="hidden"><image width="100%" height="100%" margin="0px" xlink:href="asset/rectpop.svg"></image><text id="text'+index+'" visibility="hidden" x="10" y="25" font-family="Arial" font-size="18" fill="'+colortext+'"></text></svg>
+                                        index++;
+                                    } else if (data[i]['type'] == 'pc') {
+                                      //  totalPCFloor = totalPCFloor + 1;
+                                        var x = data[i]['x_axis'];
+                                        var y = data[i]['y_axis'];
+                            var id = data[i]['id'];
+                                        var ip_addr = (data[i]['link']!=null?data[i]['link']:'');
+                                                    var namedevice = (data[i]['name']!=null?data[i]['name']:'');
+                                   //     test = test + '<circle id="c1' + index + '" fill="transparent" stroke="#21de54" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle id="c2' + index + '" fill="transparent" stroke="#f79545" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle id="c3' + index + '" cx="' + x + '" cy="' + y + '" r="8" fill="#f79545" onclick="hibobclickjs(\'' + name + '\')"></circle>';
                                         div.innerHTML += '<a data-toggle="popover" id="pop' + index + '"  class="popover-icon" data-container="body" title="Device Name" data-content="'+namedevice+'<br>'+ip_addr+'" data-placement="right" data-trigger="hover"><circle id="c1' + index + '" fill="transparent" stroke="#f79545" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle id="c2' + index + '" fill="transparent" stroke="#f79545" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle  id="c3' + index + '" cx="' + x + '" cy="' + y + '" r="8" fill="#f79545" onclick="pcclickjs(' + id + ')"</circle></a>';
+                                        //  onmouseover="inmouse(\'Name: '+data[i]['name']+'\',\''+index+'\')" onmouseout="outmouse(\''+index+'\')"></circle><svg width="300" height="150" x="'+(x+15)+'" y="'+(y+15)+'"  id="pop'+index+'" visibility="hidden"><image width="100%" height="100%" margin="0px" xlink:href="asset/rectpop.svg"></image><text id="text'+index+'" visibility="hidden" x="10" y="25" font-family="Arial" font-size="18" fill="'+colortext+'"></text></svg>
                                         index++;
                                     } else if (data[i]['type'] == 'wifi') {
+                                       // console.log(totalWifiFloor);
+                                     //   totalWifiFloor = totalWifiFloor + 1;
+                                       // console.log("bb");
+                                     //   console.log(totalWifiFloor);
+                                     //   console.log(data[i]['type']);
                                         var x = data[i]['x_axis'];
                                         var y = data[i]['y_axis'];
                                         var id = data[i]['id'];
                                         var ip_addr = (data[i]['link']!=null?data[i]['link']:'');
                                         var namedevice = (data[i]['name']!=null?data[i]['name']:'');
+                                      //  test = test + '<circle id="c1' + index + '" fill="transparent" stroke="#21de54" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle id="c2' + index + '" fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle id="c3' + index + '" cx="' + x + '" cy="' + y + '" r="8" fill="#04d9ff" onclick="hibobclickjs(\'' + name + '\')"></circle>';
                                         div.innerHTML += '<a data-toggle="popover" id="pop' + index + '"  class="popover-icon" data-container="body" title="Device Name" data-content="'+namedevice+'<br>'+ip_addr+'" data-placement="right" data-trigger="hover"><circle id="c1' + index + '" fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle id="c2' + index + '" fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle  id="c3' + index + '" cx="' + x + '" cy="' + y + '" r="8" fill="#04d9ff"  onclick="wificlickjs(\'' + id + '\',\''+index+'\');"></circle></a>';
                                         index++;
                                     }
                                 }
                             }
+                          //  console.log(test);
+                                   
+                              //hetmap
+           
+                            // console.log(totalWifiFloor);
                         }
                     });
+            
+
+
         }
         function picClick(id){
         console.log($("#"+id).val());
@@ -529,6 +583,9 @@
                         nextText: "&raquo;",
                         onPageClick: function (pageNumber) {
                             showPages(pageNumber, perPage);
+                            //  var showFrom = perPage * (pageNumber - 1);
+                            //    var showTo = showFrom + perPage;
+                            // items.hide().slice(showFrom, showTo).show();
                         }
                     });
                 }
@@ -629,10 +686,14 @@
                                 console.log("coldivz=" + coldiv);
                                 console.log(rowdiv)
                                
+                                //document.getElementById('floorIdPic'+picNum).value=data[i]['id'];
                                 
                             }else if(classval == '32' && i < 6){
                                 perPage = 6;
+                               // document.getElementById('floorIdPic2_'+picNum).value=data[i]['id'];
                             }
+                            //document.getElementById('mps' + classval + "_" + rowdiv + "_" + coldiv).setAttribute('href', '' + data[i]['maps_img']);
+                             //$('#mps' + classval + "_" + rowdiv + "_" + coldiv).myShow();
                             $('#class' + classval + "_" + rowdiv + "_" + coldiv).addClass('borderbottom');
                             $('#col' + classval + "_" + rowdiv + "_" + coldiv).addClass('borderbottom');
                             if (i ==data.length)

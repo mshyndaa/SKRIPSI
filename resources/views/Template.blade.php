@@ -68,7 +68,7 @@
             <div class="text header text-uppercase" style="color: white;margin-top:0.2rem">
                 <H5 style="font-weight: bold;">Dashboard Center</h5>
             </div>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <div class="collapse navbar-collapse justify-content-end" style="margin-right: 1rem" id="navbarNav">
                     <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link  active" id="admin" href="/admin"> Admin </a> </li>
@@ -84,7 +84,7 @@
                                 <a class="dropdown-item" href="/ms_item/3">Blok M</a>
                             </div>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" style="margin-left: 2rem">
                             <a class="nav-link" href="{{ route('adminlogout') }}"><i class="fa fa-sign-out"></i> Logout</a>
                         </li>
                     </ul> 

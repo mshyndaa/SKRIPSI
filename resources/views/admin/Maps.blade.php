@@ -163,7 +163,7 @@
                 </div>
             </form>
 
-            
+            <div class="content-wrapper">
             <form method="post" action="/save" id="newlocation">
                 <div class="row mt-4 justify-content-center" style="color:white;">
                 <div class="col-8" >
@@ -275,6 +275,7 @@
             <input type='hidden' name='floorId' id='floorId' value="" />
         </div>
     </div>
+</div>
 
     <footer style="color: white; background-color: #1d2039; margin-top: 2%; padding: 1px;">
         <p style="text-align: center; padding-top:1%">&copy; Mall Dashboard 2024 | Bedria Mashyanda Maail - 2440027303</p>

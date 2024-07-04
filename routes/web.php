@@ -85,15 +85,17 @@ Route::get('/pcadminclick/{id}', [AdminMapsController::class, 'pcclick']);
 Route::get('/user/', [AdminMapsController::class, 'useredit']);
 
 Route::resource('ajaxposts', PostAjaxController::class);
-
+/*tsruh ini paling bawah ntar kacau*/
+//Route::get('/{id}', [MapsController::class, 'indexbycompany']);
 Route::get('ajax-crud-user-datatable', [DataTableAjaxCRUDController::class, 'indexuser']);
 Route::post('edit-user', [DataTableAjaxCRUDController::class, 'edituser']);
 Route::post('edit-mall', [DataTableAjaxCRUDController::class, 'editmall']);
 Route::post('store-user', [DataTableAjaxCRUDController::class, 'storeuser']);
+Route::post('delete-company', [DataTableAjaxCRUDController::class, 'destroy']);
 
 Route::get('ajax-crud-datatable', [DataTableAjaxCRUDController::class, 'index']);
 Route::post('store-company', [DataTableAjaxCRUDController::class, 'store']);
 Route::post('edit-company', [DataTableAjaxCRUDController::class, 'edit']);
-Route::post('delete-company', [DataTableAjaxCRUDController::class, 'destroy']);
+Route::post('delete-user', [DataTableAjaxCRUDController::class, 'destroyUser']);
 /*end*/
 
