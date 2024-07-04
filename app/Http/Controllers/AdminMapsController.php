@@ -19,17 +19,6 @@ class AdminMapsController extends Controller {
             }
         });
     }
-    public function home(){      
-          $data = DB::connection('mysql1')->table('users')
-                  ->join('user_akses', 'user_akses.user_id', 'users.user_id')
-                   ->join('ms_company', 'ms_company.id', 'user_akses.company_id')
-                ->where('ms_company.id', '1')
-                ->select('ms_company.*')
-                ->orderby('ms_company.id', 'ASC')
-                ->get();
-              
-          return view('HomeUser', ['Data' => $data]);
-    }
     public function getMap($id){
          $data = DB::connection('mysql1')->table('ms_floor')
                 ->where('company_id',$id)
@@ -51,554 +40,6 @@ class AdminMapsController extends Controller {
          echo $data;
         
         
-    }
-    public function test(){
-         $data = DB::connection('mysql1')->table('ms_item')
-                ->where('location', '1')
-                ->get();
-        //$hibobcount=[];
-        $hibobcount = DB::connection('mysql2')->table('hibob_gc_getuserinoutbytime_src')->select("nama_staff")->distinct()->get();
-        $hibobcountHK = DB::connection('mysql2')->table('hibob_gc_getuserinoutbytime_src')->select("nama_staff")->where('hibob_gc_getuserinoutbytime_src.posisi_staff', 'HK')->distinct()->get();
-        $hibobcountGS = DB::connection('mysql2')->table('hibob_gc_getuserinoutbytime_src')->select("nama_staff")->where('hibob_gc_getuserinoutbytime_src.posisi_staff', 'SG')->distinct()->get();
-        $hibobcountOthers = DB::connection('mysql2')->table('hibob_gc_getuserinoutbytime_src')->select("nama_staff")->where('hibob_gc_getuserinoutbytime_src.posisi_staff', '!=', 'SG')->where('hibob_gc_getuserinoutbytime_src.posisi_staff', '!=', 'HK')->distinct()->get();
-        $unifiSumDownload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')   as total from unifi_list_event_src "); //where  DATE(last_update) = CURDATE()
-//dump($unifiSumDownload[0]->total);
-        $unifiSumdUpload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')  as total from unifi_list_event_src "); //where  DATE(last_update) = CURDATE()
-        // $unificountconnect = DB::connection('mysql2')->table('unifi_list_event_sr')->where('msg','like','%has connecrted%')->get();
-        $unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%'");
-        $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%' or msg like '%disconnected from%'");
-        $unifi = count($unificountdisconnect) - count($unificountconnect);
-        $floor = DB::connection('mysql1')->table('ms_floor')
-                ->join('ms_company', 'ms_company.id', 'ms_floor.company_id')
-                ->where('ms_company.id', '1')
-                ->select('ms_floor.*')
-                ->orderby('ms_floor.sequence_number', 'ASC')
-                ->get();
-
-        $compname = DB::connection('mysql1')->table('ms_company')
-                ->where('ms_company.id', '1')
-                ->value('sitename');
-        $cctv_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '1')
-                ->where('ms_item.type', 'cctv')
-                ->get();
-           $pc_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '1')
-                ->where('ms_item.type', 'pc')
-                ->get(); 
-             $wifi_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '1')
-                ->where('ms_item.type', 'wifi')
-                ->get();
-             $hibob_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '1')
-                ->where('ms_item.type', 'hibob')
-                ->get();
-       //  dump($compname);
-        return view('DivMaps', ['Data' => $data, 'hibob' => count($hibobcount),'hibobdata'=>count($hibob_data),'wifidata'=>count($wifi_data),'pcdata'=>count($pc_data),'cctv'=>count($cctv_data), 'unifi' => $unifi, 'floor' => $floor, 'compname' => $compname, 'hibobcountHK' => count($hibobcountHK), 'hibobcountGS' => count($hibobcountGS), 'hibobcountOthers' => count($hibobcountOthers), 'wifiDownload' => $unifiSumDownload[0]->total, 'wifiUpload' => $unifiSumdUpload[0]->total]);
-    }
-    
-    public function displayfloor(){
-        
-        return view('FloorMaps');
-        
-    }
-    public function index() {
-        $data = DB::connection('mysql1')->table('ms_item')
-                ->where('location', '1')
-                ->get();
-        //$hibobcount=[];
-        $hibobcount = DB::connection('mysql2')->table('hibob_gc_getuserinoutbytime_src')->select("nama_staff")->distinct()->get();
-        $hibobcountHK = DB::connection('mysql2')->table('hibob_gc_getuserinoutbytime_src')->select("nama_staff")->where('hibob_gc_getuserinoutbytime_src.posisi_staff', 'HK')->distinct()->get();
-        $hibobcountGS = DB::connection('mysql2')->table('hibob_gc_getuserinoutbytime_src')->select("nama_staff")->where('hibob_gc_getuserinoutbytime_src.posisi_staff', 'SG')->distinct()->get();
-        $hibobcountOthers = DB::connection('mysql2')->table('hibob_gc_getuserinoutbytime_src')->select("nama_staff")->where('hibob_gc_getuserinoutbytime_src.posisi_staff', '!=', 'SG')->where('hibob_gc_getuserinoutbytime_src.posisi_staff', '!=', 'HK')->distinct()->get();
-        $unifiSumDownload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')   as total from unifi_list_event_src "); //where  DATE(last_update) = CURDATE()
-//dump($unifiSumDownload[0]->total);
-        $unifiSumdUpload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')  as total from unifi_list_event_kk_src "); //where  DATE(last_update) = CURDATE()
-        // $unificountconnect = DB::connection('mysql2')->table('unifi_list_event_sr')->where('msg','like','%has connecrted%')->get();
-        $unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%'");
-        $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%' or msg like '%disconnected from%'");
-        $unifi = count($unificountdisconnect) - count($unificountconnect);
-        $floor = DB::connection('mysql1')->table('ms_floor')
-                ->join('ms_company', 'ms_company.id', 'ms_floor.company_id')
-                ->where('ms_company.id', '1')
-                ->select('ms_floor.*')
-                ->orderby('ms_floor.sequence_number', 'ASC')
-                ->get();
-  $cctv_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '1')
-                ->where('ms_item.type', 'cctv')
-                ->get();
-           $pc_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '1')
-                ->where('ms_item.type', 'pc')
-                ->get(); 
-             $wifi_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '1')
-                ->where('ms_item.type', 'wifi')
-                ->get();
-             $hibob_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '1')
-                ->where('ms_item.type', 'hibob')
-                ->get();
-        $compname = DB::connection('mysql1')->table('ms_company')
-                ->where('ms_company.id', '1')
-                ->value('sitename');
-        //       dump($compname);
-        return view('Maps', ['Data' => $data, 'hibob' => count($hibobcount), 'unifi' => $unifi, 'floor' => $floor, 'compname' => $compname, 'hibobcountHK' => count($hibobcountHK), 'hibobcountGS' => count($hibobcountGS), 'hibobcountOthers' => count($hibobcountOthers), 'wifiDownload' => $unifiSumDownload[0]->total, 'wifiUpload' => $unifiSumdUpload[0]->total]);
-    }
-
-    public function indexbycompany($id) {
-         
-        if ($id == 1) {
-       //     $hibobcount = DB::connection('mysql2')->table('hibob_gc_getuserinoutbytime_src')->select("nama_staff")->distinct()->get();
-            $unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%'");
-            $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%' or msg like '%disconnected from%'");
-            $unifi = count($unificountdisconnect) - count($unificountconnect);
-            $hibobcount = DB::connection('mysql2')->table('hibob_gc_getuserinoutbytime_src')->select("nama_staff")->distinct()->get();
-            $hibobcountHK = DB::connection('mysql2')->table('hibob_gc_getuserinoutbytime_src')->select("nama_staff")->where('hibob_gc_getuserinoutbytime_src.posisi_staff', 'HK')->distinct()->get();
-            $hibobcountGS = DB::connection('mysql2')->table('hibob_gc_getuserinoutbytime_src')->select("nama_staff")->where('hibob_gc_getuserinoutbytime_src.posisi_staff', 'SG')->distinct()->get();
-            $hibobcountOthers = DB::connection('mysql2')->table('hibob_gc_getuserinoutbytime_src')->select("nama_staff")->where('hibob_gc_getuserinoutbytime_src.posisi_staff', '!=', 'SG')->where('hibob_gc_getuserinoutbytime_src.posisi_staff', '!=', 'HK')->distinct()->get();
-          /* $unifiSumDownload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')   as total from unifi_list_event_kk_src "); //where  DATE(last_update) = CURDATE()
-//dump($unifiSumDownload[0]->total);
-            $unifiSumdUpload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')  as total from unifi_list_event_kk_src ");   */
-             $unifiSumDownload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')   as total from unifi_list_event_src "); //where  DATE(last_update) = CURDATE()
-//dump($unifiSumDownload[0]->total);
-            $unifiSumdUpload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')  as total from unifi_list_event_src "); //where  DATE(last_update) = CURDATE()
-          $unifiSumDownload=$unifiSumDownload[0]->total;
-          $unifiSumdUpload=$unifiSumdUpload[0]->total;
-          // if(!empty($unificountdisconnect) && !empty($unificountconnect))
-                $unifi = count($unificountdisconnect) - count($unificountconnect);
-             /*$cctv_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_item.id')    
-                ->where('ms_floor.company_id', '1')
-                     ->distinct()->get()
-                ; */
-             $cctv_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '1')
-                ->where('ms_item.type', 'cctv')
-                ->get();
-           $pc_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '1')
-                ->where('ms_item.type', 'pc')
-                ->get(); 
-             $wifi_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '1')
-                ->where('ms_item.type', 'wifi')
-                ->get();
-             $hibob_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '1')
-                ->where('ms_item.type', 'hibob')
-                ->get();
-           // else 
-         //       $unifi=0;
-            $floor = DB::connection('mysql1')->table('ms_floor')
-                    ->join('ms_company', 'ms_company.id', 'ms_floor.company_id')
-                    ->where('ms_company.id', '1')
-                    ->select('ms_floor.*')
-                    ->orderby('ms_floor.sequence_number', 'ASC')
-                    ->get();
-
-            $compname = DB::connection('mysql1')->table('ms_company')
-                    ->where('ms_company.id', '1')
-                    ->value('sitename');
-            $pc = 0;
-        } else if ($id == 2) {
-         //   $hibobcount = DB::connection('mysql2')->table('hibob_kk_getuserinoutbytime_src')->select("nama_staff")->distinct()->get();
-            $unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_kk_src where msg like '%has connected%'");
-            $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_kk_src where msg like '%has connected%' or msg like '%disconnected from%'");
-          /* $unifiSumDownload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')   as total from unifi_list_event_kk_src "); //where  DATE(last_update) = CURDATE()
-//dump($unifiSumDownload[0]->total);
-            $unifiSumdUpload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')  as total from unifi_list_event_kk_src "); */
-          $hibobcount = DB::connection('mysql2')->table('hibob_kk_getuserinoutbytime_src')->select("nama_staff")->distinct()->get();
-            $hibobcountHK = DB::connection('mysql2')->table('hibob_kk_getuserinoutbytime_src')->select("nama_staff")->where('hibob_kk_getuserinoutbytime_src.posisi_staff', 'HK')->distinct()->get();
-            $hibobcountGS = DB::connection('mysql2')->table('hibob_kk_getuserinoutbytime_src')->select("nama_staff")->where('hibob_kk_getuserinoutbytime_src.posisi_staff', 'SG')->distinct()->get();
-            $hibobcountOthers = DB::connection('mysql2')->table('hibob_kk_getuserinoutbytime_src')->select("nama_staff")->where('hibob_kk_getuserinoutbytime_src.posisi_staff', '!=', 'SG')->where('hibob_kk_getuserinoutbytime_src.posisi_staff', '!=', 'HK')->distinct()->get();
-            //$unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%'");
-           // $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%' or msg like '%disconnected from%'");
-            $unifiSumDownload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')   as total from unifi_list_event_kk_src "); //where  DATE(last_update) = CURDATE()
-//dump($unifiSumDownload[0]->total);
-            $unifiSumdUpload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')  as total from unifi_list_event_kk_src "); //where  DATE(last_update) = CURDATE()
-          $unifiSumDownload=$unifiSumDownload[0]->total;
-          $unifiSumdUpload=$unifiSumdUpload[0]->total;
-           // if(!empty($unificountdisconnect) && !empty($unificountconnect))
-                $unifi = count($unificountdisconnect) - count($unificountconnect);
-         //   else 
-         //       $unifi=0;
-            $pc = 0;
-            $pcdata = DB::connection('mysql2')->table('people_counting_kk_traffics_src')
-                    ->select('ctvalue')
-                    ->whereRaw('LEFT(cttime, 10) = LEFT(NOW(), 10)')
-                    ->get();
-            foreach ($pcdata as $list) {
-                $pc = $pc + $list->ctvalue;
-            }
-            $cctv_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '2')
-                ->where('ms_item.type', 'cctv')
-                ->get();
-           $pc_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '2')
-                ->where('ms_item.type', 'pc')
-                ->get(); 
-             $wifi_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '2')
-                ->where('ms_item.type', 'wifi')
-                ->get();
-             $hibob_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '2')
-                ->where('ms_item.type', 'hibob')
-                ->get();
-        } else if ($id == 3) {
-           $hibobcount = DB::connection('mysql2')->table('hibob_pbm_getuserinoutbytime_src')->select("nama_staff")->distinct()->get();
-            $hibobcountHK = DB::connection('mysql2')->table('hibob_pbm_getuserinoutbytime_src')->select("nama_staff")->where('hibob_pbm_getuserinoutbytime_src.posisi_staff', 'HK')->distinct()->get();
-            $hibobcountGS = DB::connection('mysql2')->table('hibob_pbm_getuserinoutbytime_src')->select("nama_staff")->where('hibob_pbm_getuserinoutbytime_src.posisi_staff', 'SG')->distinct()->get();
-            $hibobcountOthers = DB::connection('mysql2')->table('hibob_pbm_getuserinoutbytime_src')->select("nama_staff")->where('hibob_pbm_getuserinoutbytime_src.posisi_staff', '!=', 'SG')->where('hibob_pbm_getuserinoutbytime_src.posisi_staff', '!=', 'HK')->distinct()->get();
-        
-               $unifiSumDownload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')   as total from unifi_list_event_src "); //where  DATE(last_update) = CURDATE()
-//dump($unifiSumDownload[0]->total);
-            $unifiSumdUpload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')  as total from unifi_list_event_src "); //where  DATE(last_update) = CURDATE()
-          $unifiSumDownload=$unifiSumDownload[0]->total;
-          $unifiSumdUpload=$unifiSumdUpload[0]->total;
-           $unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%'");
-            $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%' or msg like '%disconnected from%'");
-            $unifi = count($unificountdisconnect) - count($unificountconnect);
-            $unifi = count($unificountdisconnect) - count($unificountconnect);
-            $pc = 0;
-            $pc_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '3')
-                ->where('ms_item.type', 'pc')
-                ->get();
-            $pcdata = DB::connection('mysql2')->table('people_counting_pbm_traffics_src')
-                    ->select('ctvalue')
-                    ->whereRaw('LEFT(cttime, 10) = LEFT(NOW(), 10)')
-                    ->get();
-            foreach ($pcdata as $list) {
-                $pc = $pc + $list->ctvalue;
-            }
-            $cctv_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '3')
-                ->where('ms_item.type', 'cctv')
-                ->get();
-             $pc_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '3')
-                ->where('ms_item.type', 'pc')
-                ->get();
-             $wifi_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '3')
-                ->where('ms_item.type', 'wifi')
-                ->get();
-             $hibob_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '3')
-                ->where('ms_item.type', 'hibob')
-                ->get();
-        } else {
-            $hibobcount = [];
-            $unifi = 0;
-            $pc = 0;
-        }
-
-        $floor = DB::connection('mysql1')->table('ms_floor')
-                ->join('ms_company', 'ms_company.id', 'ms_floor.company_id')
-                ->where('ms_company.id', $id)
-                ->select('ms_floor.*')
-                ->orderby('ms_floor.sequence_number', 'ASC')
-                ->get();
-        $compname = DB::connection('mysql1')->table('ms_company')
-                ->where('ms_company.id', $id)
-                ->value('sitename');
-        $data2 = DB::connection('mysql1')->table('ms_floor')
-                ->join('ms_company', 'ms_company.id', 'ms_floor.company_id')
-                ->where('ms_company.id', $id)
-                ->where('ms_floor.sequence_number', '1')
-                ->select('ms_floor.id')
-                ->get();
-        $FloorID = 0;
-        foreach ($data2 as $index) {
-            $FloorID = $index->id;
-        }
-        //return view('EmptyMaps', ['Data' => $data, 'hibob' => count($hibobcount), 'unifi' => $unifi, 'floor' => $floor, 'compname' => $compname, 'hibobcountHK' => count($hibobcountHK), 'hibobcountGS' => count($hibobcountGS), 'hibobcountOthers' => count($hibobcountOthers), 'wifiDownload' => $unifiSumDownload[0]->total, 'wifiUpload' => $unifiSumdUpload[0]->total]);
-        return view('EmptyMaps',['hibob'=>count($hibobcount),'hibobdata'=>count($hibob_data),'wifidata'=>count($wifi_data),'pcdata'=>count($pc_data),'cctv'=>count($cctv_data),'unifi'=>$unifi,'PeopleCounting'=>$pc,'floor'=>$floor,'compname'=>$compname,'FloorID'=>$FloorID, 'hibobcountHK' => count($hibobcountHK), 'hibobcountGS' => count($hibobcountGS), 'hibobcountOthers' => count($hibobcountOthers),'wifiDownload' => $unifiSumDownload, 'wifiUpload' => $unifiSumdUpload]);
-    
-    }
-
-    public function indexByFloor($id) {
-        $data = DB::connection('mysql1')->table('ms_item')
-                ->where('location',$id)
-                ->get();
-        $companyprofile =  DB::connection('mysql1')->table('ms_floor')
-                ->join('ms_company', 'ms_company.id', 'ms_floor.company_id')
-                ->where('ms_floor.id', $id)
-                ->select('ms_company.*')
-                ->get();
-      //  dd($companyprofile);
-          $compname= $companyprofile[0]->sitename; 
-          $compid= $companyprofile[0]->id;
-         $floor = DB::connection('mysql1')->table('ms_floor')
-                ->join('ms_company', 'ms_company.id', 'ms_floor.company_id')
-                ->where('ms_floor.company_id', $compid)
-                ->select('ms_floor.*')
-                ->orderby('ms_floor.sequence_number', 'ASC')
-                ->get();
-         $no=1;
-         foreach ($floor as $index) {
-          if ((int)$index->id==$id){
-                break;
-           }
-            $no++;
-        }
-
-         $jumlahlantai=count($floor);
-         $pagesurface=ceil($no/4);
-        if ($compid == 1) {
-       //     $hibobcount = DB::connection('mysql2')->table('hibob_gc_getuserinoutbytime_src')->select("nama_staff")->distinct()->get();
-            $unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%'");
-            $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%' or msg like '%disconnected from%'");
-            $unifi = count($unificountdisconnect) - count($unificountconnect);
-            $hibobcount = DB::connection('mysql2')->table('hibob_gc_getuserinoutbytime_src')->select("nama_staff")->distinct()->get();
-            $hibobcountHK = DB::connection('mysql2')->table('hibob_gc_getuserinoutbytime_src')->select("nama_staff")->where('hibob_gc_getuserinoutbytime_src.posisi_staff', 'HK')->distinct()->get();
-            $hibobcountGS = DB::connection('mysql2')->table('hibob_gc_getuserinoutbytime_src')->select("nama_staff")->where('hibob_gc_getuserinoutbytime_src.posisi_staff', 'SG')->distinct()->get();
-            $hibobcountOthers = DB::connection('mysql2')->table('hibob_gc_getuserinoutbytime_src')->select("nama_staff")->where('hibob_gc_getuserinoutbytime_src.posisi_staff', '!=', 'SG')->where('hibob_gc_getuserinoutbytime_src.posisi_staff', '!=', 'HK')->distinct()->get();
-          /* $unifiSumDownload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')   as total from unifi_list_event_kk_src "); //where  DATE(last_update) = CURDATE()
-//dump($unifiSumDownload[0]->total);
-            $unifiSumdUpload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')  as total from unifi_list_event_kk_src ");   */
-             $unifiSumDownload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')   as total from unifi_list_event_src "); //where  DATE(last_update) = CURDATE()
-//dump($unifiSumDownload[0]->total);
-            $unifiSumdUpload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')  as total from unifi_list_event_src "); //where  DATE(last_update) = CURDATE()
-          $unifiSumDownload=$unifiSumDownload[0]->total;
-          $unifiSumdUpload=$unifiSumdUpload[0]->total;
-          // if(!empty($unificountdisconnect) && !empty($unificountconnect))
-                $unifi = count($unificountdisconnect) - count($unificountconnect);
-             /*$cctv_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_item.id')    
-                ->where('ms_floor.company_id', '1')
-                     ->distinct()->get()
-                ; */
-             $cctv_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '1')
-                ->where('ms_item.type', 'cctv')
-                ->get();
-           $pc_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '1')
-                ->where('ms_item.type', 'pc')
-                ->get(); 
-             $wifi_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '1')
-                ->where('ms_item.type', 'wifi')
-                ->get();
-             $hibob_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '1')
-                ->where('ms_item.type', 'hibob')
-                ->get();
-           // else 
-         //       $unifi=0;
-           
-            $pc = 0;
-        } else if ($compid == 2) {
-         //   $hibobcount = DB::connection('mysql2')->table('hibob_kk_getuserinoutbytime_src')->select("nama_staff")->distinct()->get();
-            $unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_kk_src where msg like '%has connected%'");
-            $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_kk_src where msg like '%has connected%' or msg like '%disconnected from%'");
-          /* $unifiSumDownload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')   as total from unifi_list_event_kk_src "); //where  DATE(last_update) = CURDATE()
-//dump($unifiSumDownload[0]->total);
-            $unifiSumdUpload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')  as total from unifi_list_event_kk_src "); */
-          $hibobcount = DB::connection('mysql2')->table('hibob_kk_getuserinoutbytime_src')->select("nama_staff")->distinct()->get();
-            $hibobcountHK = DB::connection('mysql2')->table('hibob_kk_getuserinoutbytime_src')->select("nama_staff")->where('hibob_kk_getuserinoutbytime_src.posisi_staff', 'HK')->distinct()->get();
-            $hibobcountGS = DB::connection('mysql2')->table('hibob_kk_getuserinoutbytime_src')->select("nama_staff")->where('hibob_kk_getuserinoutbytime_src.posisi_staff', 'SG')->distinct()->get();
-            $hibobcountOthers = DB::connection('mysql2')->table('hibob_kk_getuserinoutbytime_src')->select("nama_staff")->where('hibob_kk_getuserinoutbytime_src.posisi_staff', '!=', 'SG')->where('hibob_kk_getuserinoutbytime_src.posisi_staff', '!=', 'HK')->distinct()->get();
-            //$unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%'");
-           // $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%' or msg like '%disconnected from%'");
-            $unifiSumDownload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')   as total from unifi_list_event_kk_src "); //where  DATE(last_update) = CURDATE()
-//dump($unifiSumDownload[0]->total);
-            $unifiSumdUpload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')  as total from unifi_list_event_kk_src "); //where  DATE(last_update) = CURDATE()
-          $unifiSumDownload=$unifiSumDownload[0]->total;
-          $unifiSumdUpload=$unifiSumdUpload[0]->total;
-           // if(!empty($unificountdisconnect) && !empty($unificountconnect))
-                $unifi = count($unificountdisconnect) - count($unificountconnect);
-         //   else 
-         //       $unifi=0;
-            $pc = 0;
-            $pcdata = DB::connection('mysql2')->table('people_counting_kk_traffics_src')
-                    ->select('ctvalue')
-                    ->whereRaw('LEFT(cttime, 10) = LEFT(NOW(), 10)')
-                    ->get();
-            foreach ($pcdata as $list) {
-                $pc = $pc + $list->ctvalue;
-            }
-            $cctv_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '2')
-                ->where('ms_item.type', 'cctv')
-                ->get();
-           $pc_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '2')
-                ->where('ms_item.type', 'pc')
-                ->get(); 
-             $wifi_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '2')
-                ->where('ms_item.type', 'wifi')
-                ->get();
-             $hibob_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '2')
-                ->where('ms_item.type', 'hibob')
-                ->get();
-        } else if ($compid == 3) {
-           $hibobcount = DB::connection('mysql2')->table('hibob_pbm_getuserinoutbytime_src')->select("nama_staff")->distinct()->get();
-            $hibobcountHK = DB::connection('mysql2')->table('hibob_pbm_getuserinoutbytime_src')->select("nama_staff")->where('hibob_pbm_getuserinoutbytime_src.posisi_staff', 'HK')->distinct()->get();
-            $hibobcountGS = DB::connection('mysql2')->table('hibob_pbm_getuserinoutbytime_src')->select("nama_staff")->where('hibob_pbm_getuserinoutbytime_src.posisi_staff', 'SG')->distinct()->get();
-            $hibobcountOthers = DB::connection('mysql2')->table('hibob_pbm_getuserinoutbytime_src')->select("nama_staff")->where('hibob_pbm_getuserinoutbytime_src.posisi_staff', '!=', 'SG')->where('hibob_pbm_getuserinoutbytime_src.posisi_staff', '!=', 'HK')->distinct()->get();
-        
-               $unifiSumDownload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')   as total from unifi_list_event_src "); //where  DATE(last_update) = CURDATE()
-//dump($unifiSumDownload[0]->total);
-            $unifiSumdUpload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')  as total from unifi_list_event_src "); //where  DATE(last_update) = CURDATE()
-          $unifiSumDownload=$unifiSumDownload[0]->total;
-          $unifiSumdUpload=$unifiSumdUpload[0]->total;
-           $unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%'");
-            $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%' or msg like '%disconnected from%'");
-            $unifi = count($unificountdisconnect) - count($unificountconnect);
-            $unifi = count($unificountdisconnect) - count($unificountconnect);
-            $pc = 0;
-            $pc_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '3')
-                ->where('ms_item.type', 'pc')
-                ->get();
-            $pcdata = DB::connection('mysql2')->table('people_counting_pbm_traffics_src')
-                    ->select('ctvalue')
-                    ->whereRaw('LEFT(cttime, 10) = LEFT(NOW(), 10)')
-                    ->get();
-            foreach ($pcdata as $list) {
-                $pc = $pc + $list->ctvalue;
-            }
-            $cctv_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '3')
-                ->where('ms_item.type', 'cctv')
-                ->get();
-             $pc_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '3')
-                ->where('ms_item.type', 'pc')
-                ->get();
-             $wifi_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '3')
-                ->where('ms_item.type', 'wifi')
-                ->get();
-             $hibob_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', '3')
-                ->where('ms_item.type', 'hibob')
-                ->get();
-        } else {
-            $hibobcount = [];
-            $unifi = 0;
-            $pc = 0;
-        }
-$data2 = DB::connection('mysql1')->table('ms_floor')
-                ->join('ms_company', 'ms_company.id', 'ms_floor.company_id')
-                ->where('ms_company.id', $compid)
-                ->where('ms_floor.sequence_number', '1')
-                ->select('ms_floor.id')
-                ->get();
-        $FloorID = $id;
-       
-        
-        
-        //return view('EmptyMaps', ['Data' => $data, 'hibob' => count($hibobcount), 'unifi' => $unifi, 'floor' => $floor, 'compname' => $compname, 'hibobcountHK' => count($hibobcountHK), 'hibobcountGS' => count($hibobcountGS), 'hibobcountOthers' => count($hibobcountOthers), 'wifiDownload' => $unifiSumDownload[0]->total, 'wifiUpload' => $unifiSumdUpload[0]->total]);
-        return view('ViewFloorById',['hibob'=>count($hibobcount),'hibobdata'=>count($hibob_data),'wifidata'=>count($wifi_data),'pcdata'=>count($pc_data),'cctv'=>count($cctv_data),'unifi'=>$unifi,'PeopleCounting'=>$pc,'floor'=>$floor,'compname'=>$compname,'FloorID'=>$FloorID, 'hibobcountHK' => count($hibobcountHK), 'hibobcountGS' => count($hibobcountGS), 'hibobcountOthers' => count($hibobcountOthers),'wifiDownload' => $unifiSumDownload, 'wifiUpload' => $unifiSumdUpload,'pagesurface'=>$pagesurface]);
-    
-    }
-
-    public function maps() {
-        $data = DB::connection('mysql1')->table('ms_item')
-                ->where('location', 'b2')
-                ->get();
-
-        return view('OnlyMaps', ['Data' => $data]);
-    }
-
-    public function ms_item() {
-        $data = DB::connection('mysql1')->table('ms_item')
-                ->where('location', 'b2')
-                ->get();
-        $hibobcount = DB::connection('mysql2')->table('hibob_gc_getuserinoutbytime_src')->select("nama_staff")->distinct()->get();
-        $unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%'");
-        $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%' or msg like '%disconnected from%'");
-        $unifi = count($unificountdisconnect) - count($unificountconnect);
-        $floor = DB::connection('mysql1')->table('ms_floor')
-                ->join('ms_company', 'ms_company.id', 'ms_floor.company_id')
-                ->where('ms_company.id', '1')
-                ->select('ms_floor.*')
-                ->orderby('ms_floor.sequence_number', 'ASC')
-                ->get();
-        $compname = DB::connection('mysql1')->table('ms_company')
-                ->where('ms_company.id', '1')
-                ->value('sitename');
-        return view('Mapsms_item', ['Data' => $data, 'hibob' => count($hibobcount), 'unifi' => $unifi, 'floor' => $floor, 'compname' => $compname]);
     }
 
     public function ms_itemcompany($id) {
@@ -682,7 +123,7 @@ $data2 = DB::connection('mysql1')->table('ms_floor')
         foreach ($data2 as $index) {
             $FloorID = $index->id;
         }
-        return view('MapsMasterNew', ['hibob'=>count($hibobcount),'hibobdata'=>count($hibob_data),'wifidata'=>count($wifi_data),'pcdata'=>count($pc_data),'cctv'=>count($cctv_data), 'unifi' => $unifi, 'PeopleCounting' => $pc, 'floor' => $floor, 'compname' => $compname, 'FloorID' => $FloorID, 'CompID' => $id]);
+        return view('../admin/Maps', ['hibob'=>count($hibobcount),'hibobdata'=>count($hibob_data),'wifidata'=>count($wifi_data),'pcdata'=>count($pc_data),'cctv'=>count($cctv_data), 'unifi' => $unifi, 'PeopleCounting' => $pc, 'floor' => $floor, 'compname' => $compname, 'FloorID' => $FloorID, 'CompID' => $id]);
     }
 
     public function changefloor($id) {
@@ -777,10 +218,7 @@ $data2 = DB::connection('mysql1')->table('ms_floor')
                 'type' => $typeppoint
             ]);
         }
-        
-        //return view('MapsMasterNew', ['Data' => $data]);
-        //return redirect('/ms_item/' . $company);
-        ///return redirect()->back()->with('success', 'your message,here');  
+
         return response()->json(['message' => 'Lokasi '.$typeppoint.' berhasil disimpan!']);
     }
     public function update(Request $request) {
@@ -823,97 +261,17 @@ $post->save();
 
         }
         
-        //return view('MapsMasterNew', ['Data' => $data]);
-        //return redirect('/ms_item/' . $company);
-        ///return redirect()->back()->with('success', 'your message,here');  
-        return response()->json(['message' => 'Update Lokasi berhasil disimpan!']);
+        return response()->json(['message' => 'Update Device berhasil disimpan!']);
     }
     public function deleteData($id) {
         DB::connection('mysql1')->table('ms_item')->where('id', $id)->delete();
-        return response()->json(['message' => 'Delete Lokasi berhasil !']);
+        return response()->json(['message' => 'Delete Device berhasil !']);
     }
     public function deleteDataAjax(Request $request){
         $id = (isset($request['deleteid'])) ? $request['deleteid'] : '';
        // echo "a".$id."b";
         DB::connection('mysql1')->table('ms_item')->where('id', $id)->delete();
-        return response()->json(['message' => 'Delete Lokasi berhasil !']);
-    }
-    public function right(Request $request) {
-        $id_new = DB::connection('mysql1')->table('cctv')
-                        ->join('ms_item', 'ms_item.id', 'cctv.cctv_id_new')
-                        ->select('ms_item.zm_id')
-                        ->first()->zm_id;
-
-        $id_old = DB::connection('mysql1')->table('cctv')
-                        ->join('ms_item', 'ms_item.id', 'cctv.cctv_id_old')
-                        ->select('ms_item.zm_id')
-                        ->first()->zm_id;
-
-        $cookie_jar = tempnam("tmp", "cookie");
-        //login
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://172.30.50.40/zm/api/host/login.json',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_COOKIEJAR => $cookie_jar,
-            CURLOPT_POSTFIELDS => 'user=admin2&pass=Pakuwon2023%23',
-            CURLOPT_HTTPHEADER => array(
-                'Content-Type: application/x-www-form-urlencoded'),
-                )
-        );
-        $response = json_decode(curl_exec($curl))->access_token;
-        //turn off
-        curl_setopt_array($curl, array(
-            // CURLOPT_URL             => 'http://192.168.0.88/PakuwonUATTenant2/entity/Pakuwon/18.200.001/StockItem?$top=50&$skip='.$skip.'&$expand=WarehouseDetails',
-            CURLOPT_URL => 'http://172.30.50.40/zm/api/monitors/' . $id_old . '.json?token=' . $response,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_COOKIEFILE => $cookie_jar,
-            CURLOPT_POSTFIELDS => 'Monitor[Function]=None&Monitor[Enabled]=1',
-            CURLOPT_HTTPHEADER => array(
-                'Content-Type: application/x-www-form-urlencoded'),
-                )
-        );
-        $data = json_decode(curl_exec($curl));
-        //turn on
-        curl_setopt_array($curl, array(
-            // CURLOPT_URL             => 'http://192.168.0.88/PakuwonUATTenant2/entity/Pakuwon/18.200.001/StockItem?$top=50&$skip='.$skip.'&$expand=WarehouseDetails',
-            CURLOPT_URL => 'http://172.30.50.40/zm/api/monitors/' . $id_new . '.json?token=' . $response,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_COOKIEFILE => $cookie_jar,
-            CURLOPT_POSTFIELDS => 'Monitor[Function]=Monitor&Monitor[Enabled]=1',
-            CURLOPT_HTTPHEADER => array(
-                'Content-Type: application/x-www-form-urlencoded'),
-                )
-        );
-        $data = json_decode(curl_exec($curl));
-        // <img src="https://yourserver/zm/cgi-bin/nph-zms?scale=50&width=640p&height=480px&mode=jpeg&maxfps=5&buffer=1000&&monitor=1&auth=b5<deleted>03&connkey=36139" />
-        // $link = 'http://172.30.50.40/zm/cgi-bin/nph-zms?scale=100&mode=jpeg&maxfps=5&monitor='.$id_new;
-        $link = DB::connection('mysql1')->table('ms_item')
-                        ->where('zm_id', $id_new)
-                        ->first()->link . '&user=admin2&pass=Pakuwon2023%23';
-
-        $new = DB::connection('mysql1')->table('cctv')
-                ->value('cctv_id_new');
-        return view('Right', ['NewCCTV' => $new, 'Link' => $link]);
+        return response()->json(['message' => 'Delete Device berhasil !']);
     }
 
     public function delete($id) {
@@ -921,33 +279,6 @@ $post->save();
         return 'true';
     }
 
-    public function hibobdata($id) {
-        
-        $name = DB::connection('mysql1')->table('ms_item')->where('id', $id)->value('name');
-        $company_id = DB::connection('mysql1')->table('ms_item')->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                        ->where('ms_item.id', $id)->take(1)->value('ms_floor.company_id','ms_floor.company_name');
-         $company_detail=DB::connection('mysql1')->table('ms_item')
-                    ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                      ->where('ms_item.id', $id)
-                    ->select('ms_item.name',"ms_floor.company_id")
-                    ->get();
-          $company_id=$company_detail[0]->company_id;
-        $name=$company_detail[0]->name;
-               
-        //$company_id=
-        //dd($company_id);
-        if ($company_id == '1' || $company_id == 1) {
-            $data = DB::connection('mysql2')->table('hibob_gc_getlateingateway_src')->where('nama_gateway', $name)->orderby('waktu_alert', 'Desc')->distinct()->take(2)->get();
-        } else if ($company_id == '2' || $company_id == 2) {
-            $data = DB::connection('mysql2')->table('hibob_kk_getlateingateway_src')->where('nama_gateway', $name)->orderby('waktu_alert', 'Desc')->distinct()->take(2)->get();
-        } else if ($company_id == '3' || $company_id == 3) {
-            $data = DB::connection('mysql2')->table('hibob_pbm_getlateingateway_src')->where('nama_gateway', $name)->orderby('waktu_alert', 'Desc')->distinct()->take(2)->get();
-        } else {
-            $data = [];
-        }
-
-        return $data;
-    }
 
     public function wifidatadetail($id) {
         $name = DB::connection('mysql1')->table('ms_item')
@@ -996,15 +327,6 @@ $post->save();
         return json_encode($array);
     }
 
-    public function cctvclick($id) {
-        $old = DB::connection('mysql1')->table('cctv')->value('cctv_id_new');
-        DB::connection('mysql1')->table('cctv')->update([
-            'cctv_id_new' => $id,
-            'cctv_id_old' => $old
-        ]);
-        $zm_id = DB::connection('mysql1')->table('ms_item')->where('id', $id)->value('zm_id');
-        return 'Monitor ' . $zm_id;
-    }
 
     public function pcclick($id) {
         $idsource = DB::connection('mysql1')->table('ms_item')
@@ -1061,12 +383,6 @@ $post->save();
             return 'None';
         }
     }
-
-    public function HeatMap() {
-        $floorid = 4;
-        return view('HeatMap', ['FloorID' => $floorid]);
-    }
-
     public function HeatData($id) {
         $data = DB::connection('mysql1')->table('ms_item')
                 ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
@@ -1216,14 +532,11 @@ return response()->json(['data'=>$data,'chgDeviceStatus'=>$changedDevice]);
 
         return redirect('/admin');
     }
-     public function dashboard()
-    {
-        return view('dashboard');
-    }
+
     public function backdashboard(){
         return redirect('/admin');
     }
     public function useredit(){
-       return view('../admin/ListUser');
+       return view('../admin/Listuser');
     }
 }

@@ -77,6 +77,17 @@
                 background-color: purple;
                 margin-top: 2rem;
             }
+            footer {
+                color: white;
+                background-color: #1d2039;
+                padding: 10px 0;
+                text-align: center;
+                width: 100%;
+                position: fixed;
+                bottom: 0;
+              
+            }
+
         </style>
         <script src="{{ asset('js/jquery-3.7.1.min.js') }}"></script>
         <script src="{{ asset('js/jquery.simplePagination.js') }}"></script>
@@ -84,7 +95,6 @@
     </head>
     <body>
         <div class="container-fluid text-center" style="padding: 0%;">
-            {{-- header --}}
             <div class="row mt-2 mb-2">
                 <div class="col-8 text-left text-uppercase header mt-2" style="margin-left: 2rem">
                     <span id="floorname_id" style="font-size:30px;color:whitesmoke;font-weight:bold;"></span>
@@ -312,8 +322,6 @@
             <footer style="color: white; background-color: #11142C; margin-top: 2%; padding: 1px;">
                     <p style="text-align: center; padding-top:1%">&copy; Mall Dashboard 2024 | Bedria Mashyanda Maail - 2440027303</p>
             </footer>
-            
-        </div>
         </div>
     </body>
     <script>

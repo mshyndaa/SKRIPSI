@@ -8,58 +8,51 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 
-
 class UserController extends Controller
-        {
+{
     public function viewLogin()
     {
-       if (Session::get('user.id') != null){ 
+        if (Session::get('user.id') != null) {
             return redirect('home');
-        }else{
-             return view('../staff/Login');
+        } else {
+            return view('../staff/Login');
         }
     }
 
     public function verifyLoginStaff(Request $request)
     {
-        $username = (isset($request['username'])) ? $request['username'] : '0';
-        $password = (isset($request['password'])) ? $request['password'] : '0';
-        $remember = (isset($request['remember'])) ? $request['remember'] : false;
+        $username = $request->input('username', '0');
+        $password = $request->input('password', '0');
+        $remember = $request->input('remember', false);
+
         $credentials = $request->only('username', 'password');
 
         if (Auth::attempt($credentials)) {
-            $name = '';
-            $uname = '';
-            $id = '';
-            $email = '';
-            $phone = '';
-            $office = '';
             $users = DB::connection('mysql1')
-                ->table('users')    
+                ->table('users')
                 ->where('users.username', '=', $username)
                 ->get();
-            $row = 0;
-            foreach ($users as $key => $user) {
+
+            foreach ($users as $user) {
                 $id = $user->id_users;
-                $uname = $user->username;
+                $username = $user->username;
                 $email = $user->email;
+
                 $request->session()->put('user', [
-                    'id' => $id, 'name' => $name, 'username' => $username, 'email' => $email
+                    'id' => $id, 'name' => '', 'username' => $username, 'email' => $email
                 ]);
 
                 return redirect('/home');
             }
         } else {
-            Session::flash('message', 'Username or Password is incorrect Please check your credentials again.');
-            return redirect::back();
+            Session::flash('message', 'Username or Password is incorrect. Please check your credentials again.');
+            return redirect()->back();
         }
     }
-    
+
     public function logout(Request $request)
     {
-        $request->session()->forget('user');
-        $request->session()->forget('devicetype');
-
+        $request->session()->forget(['user', 'devicetype']);
         return redirect('/');
     }
 }

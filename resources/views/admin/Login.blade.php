@@ -10,6 +10,7 @@
     <link href = {{ asset("css/LTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css") }} rel="stylesheet" />
     <link href = {{ asset("css/LTE/dist/css/adminlte.min.css") }} rel="stylesheet" />
     <link href = {{ asset("css/LTE/plugins/toastr/toastr.min.css") }} rel="stylesheet" />  
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400;600&display=swap" rel="stylesheet">
 
     <style>
       body {
@@ -49,7 +50,6 @@
           color: #ffffff;
       }
     </style>
-
 </head>
 <body>
   <div class="container-fluid login-container">
@@ -68,59 +68,45 @@
 
        <form action="{{ route('verifyLogin') }}" method="post">
             @csrf
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <div class="input-group-text">
-              <span class="fas fa-user"></span>
+          <div class="form" style="margin-top:2rem;">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <div class="input-group-text">
+                  <span class="fas fa-user"></span>
+                </div>
+              </div>
+              <input type="text" name="username" id="username" class="form-control" placeholder="Username">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <div class="input-group-text">
+                  <span class="fas fa-lock"></span>
+                </div>
+              </div>
+              <input type="password" name="password" id="password" class="form-control" placeholder="Password">
             </div>
           </div>
-          <input type="text" name="username" id="username" class="form-control" placeholder="Username">
-        </div>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
-          </div>
-          <input type="password" name="password" id="password" class="form-control" placeholder="Password">
-        </div>
+
         <div class="row">
           <div class="col-8">
             <label>
               <input type="checkbox" id="remember" name="remember"  checked="checked"> Remember Me
             </label>
           </div>
-          <!-- /.col -->
-          <div class="col-4">
-            <button type="submit" class="btn btn-sm btn-block" id="btnLogin">Sign In</button>
-          </div>
-            @if ($errors->has('email'))
-          <span>
-            <strong>{{ $errors->first('email') }}</strong>
-          </span>
-        @endif
-          <!-- /.col -->
         </div>
-        </form>
-            
+      
+            <button type="submit" class="btn btn-block regular" style="margin-top:1rem" id="btnLogin">Sign In</button>
+
+            @if ($errors->has('email'))
+            <span>
+              <strong>{{ $errors->first('email') }}</strong>
+            </span>
+            @endif
+      </form>
     </div>
-   
   </div>
 </div>
-<!-- /.login-box -->
-
-<!-- jQuery -->
- <script src="{{ asset('js/jquery-3.7.1.min.js') }}"></script>
-  <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
-<!-- Bootstrap 4 -->
-
-<script type="text/javascript">
-  $(function() {
-   
-  });
- </script> 
-
-
-</body>
+<script src="{{ asset('js/jquery-3.7.1.min.js') }}"></script>
+<script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>

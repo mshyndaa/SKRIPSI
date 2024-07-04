@@ -190,7 +190,7 @@
         var arrDeadIdTotal = [];
         var FloorID = 0;
         var floor = <?php echo isset($floor) ? json_encode($floor) : 0; ?>;
-        var color = '#21de54';
+        var color = '#f79545';
         var menu = <?php echo isset($pagesurface) ? json_encode($pagesurface) : 1; ?>;
         var colortext = 'white';
         var colortextalert = 'red';
@@ -198,6 +198,7 @@
         if (parseInt(floor.length % 4) != 0) {
         maxmenu++;
         }
+
         var colormenuon = 'white';
         var colormenuoff = '#DFE2E2';
         var height = window.screen.availHeight;
@@ -212,8 +213,8 @@
         var wifiUpload = <?php echo isset($wifiUpload) ? json_encode($wifiUpload) : 0; ?>;
         var totalPC = <?php echo isset($pcdata) ? json_encode($pcdata) : 0; ?>;
         var totalWifi = <?php echo isset($wifidata) ? json_encode($wifidata) : 0; ?>;
-         var count = totalPC.toString();
-         xpospc=50-5*count.length;
+        var count = totalPC.toString();
+        xpospc=50-5*count.length;
         document.getElementById("allpc").innerHTML = "<tspan x='42%' font-weight='bold' font-size='100x'  fill='white' style='font-color:white' >" + totalPC + " Device</tspan>";
         document.getElementById("allwifi").innerHTML = "<tspan x='42%' font-weight='bold' font-size='100x'  fill='white' style='font-color:white' >" + totalWifi + " Device</tspan>";
         document.getElementById("wifirect").innerHTML = '<text id="wificount1" x="20%" y="50%" font-family="Poppins" font-size="55px" fill="' + colortext + '" font-weight="bold"></text>\n\
@@ -246,7 +247,6 @@
         console.log("sdsd"+classDeviceSelected);
         $('#dropDownDevice').val(classDeviceSelected);
          if(classDeviceSelected!='classWifi')checkloop=1; else checkloop=2;
-       // if(classDeviceSelected!='classWifi')
         changemaps(FloorID);
         loadAllDataWifi(FloorID);
         setTimeout(refreshData, 30000);
@@ -311,12 +311,133 @@
         {
         throw new Error('This is not an error. This is just to abort javascript');
         }
-        function changemaps(a) {
+        function refreshData() {
+            var pos=0;
+            var floorvalue=document.getElementById('floorId').value;
+            var div = document.getElementById('maps');
+              if(checkloop=='0') checkloop=1;
+            loopke++;
+            console.log("check="+checkloop);
             var idfloor = '';
+            var totalHibobFloor = 0;
             var totalWifiFloor = 0;
             var totalPCFloor = 0;
+            var totalCCTVFloor = 0;
+            var totalDeadHibobFloor = 0;
             var totalDeadWifiFloor = 0;
             var totalDeadPCFloor = 0;
+            var totalDeadCCTVFloor = 0;
+            var displayAwal = 0;
+            var blinkAnimated = 1;
+            if(checkloop==1){
+                $.ajax({
+                type: 'GET',
+                        url: window.location.origin + "/floorcondition/" + FloorID,
+                        beforeSend: function () {
+                        },
+                        success: function (response) {
+                            if(checkloop==1){
+                            $(".popover").popover('hide');
+                            var data = response['data'];
+                            var infoDeviceMati = response['chgDeviceStatus'];
+
+                            if (data.length != 0) {
+                            div.innerHTML = '';
+                            for (var i = 0; i < data.length; i++) {
+                            if (displayAwal == 0)
+                                    arrId.push(data[i]['id']);
+                            if (data[i]['isalive'] == 0) {
+                            arrDeadIdTotal.push(data[i]['id']);
+                            }if (data[i]['type'] == 'pc') {
+                            totalPCFloor = totalPCFloor + 1;
+                            var x = data[i]['x_axis'];
+                            var y = data[i]['y_axis'];
+                            var id = data[i]['id'];
+                            var id_no = (data[i]['zm_id'] != null?data[i]['zm_id']:"");
+                            var ip_addr = (data[i]['link'] != null ? data[i]['link'] : '');
+                            var namedevice = (data[i]['name'] != null ? data[i]['name'] : '');
+                            if (data[i]['isalive'] == 0)
+                            {
+                            totalDeadPCFloor = totalDeadPCFloor + 1;
+                            div.innerHTML += '<a data-toggle="popover" id="pop_' + id + '"  class="popover-icon" data-container="body" title="' + namedevice + '" data-content="' + id_no + '<br>' + ip_addr + '" data-placement="right" data-trigger="hover"><circle class="classPC classNone" id="c1_' + id + '"  fill="transparent" stroke="#f79545" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12" onclick="pcclickjs(' + id + ')"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="' + blinkAnimated + '" /></circle><circle class="classPC classNone" id="c2_' + id + '"   fill="transparent" stroke="#f79545" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10" onclick="pcclickjs(' + id + ')"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="' + blinkAnimated + '" /></circle><circle  class="classPC classNone" id="c3_' + id + '"   cx="' + x + '" cy="' + y + '" r="8" fill="#f79545" onclick="pcclickjs(' + id + ')"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="' + blinkAnimated + '" /></circle></a>';
+                            } else {
+                            div.innerHTML += '<a data-toggle="popover" id="pop_' + id + '"  class="popover-icon" data-container="body" title="' + namedevice + '" data-content="' + id_no + '<br>' + ip_addr + '" data-placement="right" data-trigger="hover"><circle class="classPC classNone" id="c1_' + id + '"  fill="transparent" stroke="#f79545" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12" onclick="pcclickjs(' + id + ')"></circle><circle class="classPC classNone" id="c2_' + id + '"   fill="transparent" stroke="#f79545" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10" onclick="pcclickjs(' + id + ')"></circle><circle  class="classPC classNone" id="c3_' + id + '"   cx="' + x + '" cy="' + y + '" r="8" fill="#f79545" onclick="pcclickjs(' + id + ')"></circle></a>';
+                            }
+                            index++;
+                            } else if (data[i]['type'] == 'wifi') {
+                            totalWifiFloor = totalWifiFloor + 1;
+                            var x = data[i]['x_axis'];
+                            var y = data[i]['y_axis'];
+                            var id = data[i]['id'];
+                            var id_no = (data[i]['zm_id'] != null?data[i]['zm_id']:"");
+                            var ip_addr = (data[i]['link'] != null ? data[i]['link'] : '');
+                            var namedevice = (data[i]['name'] != null ? data[i]['name'] : '');
+                            if (data[i]['isalive'] == 0)
+                            {
+                            totalDeadWifiFloor = totalDeadWifiFloor + 1;
+                            div.innerHTML += '<a data-toggle="popover" id="pop_' + id + '"  class="popover-icon" data-container="body" title="' + namedevice + '" data-content="' + id_no + '<br>' + ip_addr + '" data-placement="right" data-trigger="hover"><circle class="classWifi classNone" id="c1_' + id + '"  fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12" onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle class="classWifi classNone" id="c2_' + id + '"  fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10" onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle class="classWifi classNone"  id="c3_' + id + '"  cx="' + x + '" cy="' + y + '" r="8" fill="#04d9ff"  onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="' + blinkAnimated + '" /><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="' + blinkAnimated + '" /></circle></a>';
+                            } else
+                                    div.innerHTML += '<a data-toggle="popover" id="pop_' + id + '"  class="popover-icon" data-container="body" title="' + namedevice + '" data-content="' + id_no + '<br>' + ip_addr + '" data-placement="right" data-trigger="hover"><circle class="classWifi classNone" id="c1_' + id + '"  fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12" onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"></circle><circle class="classWifi classNone" id="c2_' + id + '"  fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10" onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"></circle><circle class="classWifi classNone"  id="c3_' + id + '"  cx="' + x + '" cy="' + y + '" r="8" fill="#04d9ff"  onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"></circle></a>';
+                            index++;
+                            }
+                            showDevice();
+                            }
+                            }
+                            document.getElementById("offwifi").innerHTML = totalDeadWifiFloor + " Device";
+                            document.getElementById("offpc").innerHTML = totalDeadPCFloor + " Device";
+                            if (infoDeviceMati.length != 0) {
+                            var info = "";
+                            for (var i = 0; i < infoDeviceMati.length; i++) {
+                            if (infoDeviceMati[i]['name'] == null)
+                                    namemodal = "";
+                            else
+                                    namemodal = infoDeviceMati[i]['name'];
+                            if (infoDeviceMati[i]['ip'] == null)
+                                    ipmodal = "";
+                            else
+                                    ipmodal = infoDeviceMati[i]['ip'];
+                            if ($('#dropDownDevice').val() == 'classWifi') {
+                            if (infoDeviceMati[i]['type'] == 'wifi') {
+                            if (info != '')
+                                    info += ' <br/>';
+                            info += namemodal + "|" + ipmodal;
+                            }
+                            } else if ($('#dropDownDevice').val() == 'classPC') {
+                            if (infoDeviceMati[i]['type'] == 'pc') {
+                            if (info != '')
+                                    info += ' <br/>';
+                            info += namemodal + "|" + ipmodal;
+                            }
+                            } else {
+                            if (info != '')
+                                    info += ' <br/>';
+                            info += namemodal + "|" + ipmodal;
+                            }
+                            }
+                            $("#error").html(info);
+                            $('#myModal').modal("show");
+
+                            }
+                        }
+                        }
+                }).then(
+                    function() {
+                      console.log('finished ALL OK')
+                    setTimeout(refreshData, 30000);
+                    })
+                }else if (checkloop=2)
+                   showHeatMap(floorvalue,pos);
+        }
+        function changemaps(a) {
+            var idfloor = '';
+            var totalHibobFloor = 0;
+            var totalWifiFloor = 0;
+            var totalPCFloor = 0;
+            var totalCCTVFloor = 0;
+            var totalDeadHibobFloor = 0;
+            var totalDeadWifiFloor = 0;
+            var totalDeadPCFloor = 0;
+            var totalDeadCCTVFloor = 0;
             var displayAwal = 0;
             var div = document.getElementById('maps');
             if(checkloop==1){
@@ -328,6 +449,7 @@
                     success: function (response) {
                     var data = JSON.parse(response);
                     var test = "";
+                    // console.log(data);
                     var blinkAnimated = 1;
                     document.getElementById('mps').setAttribute('href', '../' + data[0]['maps_img']);
                     document.getElementById('floorname_id').innerHTML = data[0]['sitename'].toString() + ' Floor ' + data[0]['name'].toString();
@@ -345,12 +467,14 @@
                                 var data = JSON.parse(response);
                                 if (data.length != 0) {
                                 for (var i = 0; i < data.length; i++) {
+                                //   console.log("test="+arrId.length);
+
                                 if (displayAwal == 0)
                                         arrId.push(data[i]['id']);
                                 if (data[i]['isalive'] == 0) {
                                 arrDeadIdTotal.push(data[i]['id']);
                                 }
-                                if (data[i]['type'] == 'pc') {
+                                 if (data[i]['type'] == 'pc') {
                                 totalPCFloor = totalPCFloor + 1;
                                 var x = data[i]['x_axis'];
                                 var y = data[i]['y_axis'];
@@ -363,7 +487,6 @@
                                 totalDeadPCFloor = totalDeadPCFloor + 1;
                                 div.innerHTML += '<a data-toggle="popover" id="pop_' + id + '"  class="popover-icon" data-container="body" title="' + namedevice + '" data-content="' + id_no + '<br>' + ip_addr + '" data-placement="right" data-trigger="hover"><circle class="classPC classNone" id="c1_' + id + '"  fill="transparent" stroke="#f79545" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12" onclick="pcclickjs(' + id + ')"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="' + blinkAnimated + '" /></circle><circle class="classPC classNone" id="c2_' + id + '"   fill="transparent" stroke="#f79545" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10" onclick="pcclickjs(' + id + ')"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="' + blinkAnimated + '" /></circle><circle  class="classPC classNone" id="c3_' + id + '"   cx="' + x + '" cy="' + y + '" r="8" fill="#f79545" onclick="pcclickjs(' + id + ')"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="' + blinkAnimated + '" /></circle></a>';
                                 } else {
-                                test = test + '<circle id="c1_' + id + '" fill="transparent" stroke="#21de54" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle id="c2_' + id + '" fill="transparent" stroke="#f79545" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle id="c3_' + id + '" cx="' + x + '" cy="' + y + '" r="8" fill="#f79545" onclick="hibobclickjs(\'' + name + '\')"></circle>';
                                 div.innerHTML += '<a data-toggle="popover" id="pop_' + id + '"  class="popover-icon" data-container="body" title="' + namedevice + '" data-content="' + id_no + '<br>' + ip_addr + '" data-placement="right" data-trigger="hover"><circle class="classPC classNone" id="c1_' + id + '"  fill="transparent" stroke="#f79545" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12" onclick="pcclickjs(' + id + ')"></circle><circle class="classPC classNone" id="c2_' + id + '"   fill="transparent" stroke="#f79545" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10" onclick="pcclickjs(' + id + ')"></circle><circle  class="classPC classNone" id="c3_' + id + '"   cx="' + x + '" cy="' + y + '" r="8" fill="#f79545" onclick="pcclickjs(' + id + ')"></circle></a>';
                                 }
                                 index++;
@@ -380,7 +503,6 @@
                                 totalDeadWifiFloor = totalDeadWifiFloor + 1;
                                 div.innerHTML += '<a data-toggle="popover" id="pop_' + id + '"  class="popover-icon" data-container="body" title="' + namedevice + '" data-content="' + id_no + '<br>' + ip_addr + '" data-placement="right" data-trigger="hover"><circle class="classWifi classNone" id="c1_' + id + '"  fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12" onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle class="classWifi classNone" id="c2_' + id + '"  fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10" onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle class="classWifi classNone"  id="c3_' + id + '"  cx="' + x + '" cy="' + y + '" r="8" fill="#04d9ff"  onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="' + blinkAnimated + '" /><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="' + blinkAnimated + '" /></circle></a>';
                                 }
-                                test = test + '<circle id="c1_' + id + '" fill="transparent" stroke="#21de54" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle id="c2_' + id + '" fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle id="c3_' + id + '" cx="' + x + '" cy="' + y + '" r="8" fill="#04d9ff" onclick="hibobclickjs(\'' + name + '\')"></circle>';
                                 div.innerHTML += '<a data-toggle="popover" id="pop_' + id + '"  class="popover-icon" data-container="body" title="' + namedevice + '" data-content="' + id_no + '<br>' + ip_addr + '" data-placement="right" data-trigger="hover"><circle class="classWifi classNone" id="c1_' + id + '"  fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12" onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"></circle><circle class="classWifi classNone" id="c2_' + id + '"  fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10" onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"></circle><circle class="classWifi classNone"  id="c3_' + id + '"  cx="' + x + '" cy="' + y + '" r="8" fill="#04d9ff"  onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"></circle></a>';
                                 index++;
                                 }
@@ -414,6 +536,8 @@
             
             }
         }
+
+    
         function showDeviceData(){
             var classnya = $('#dropDownDevice').val();
                if(classnya!='classWifi')checkloop=1; else checkloop=2;
@@ -476,8 +600,8 @@
                             xposname=40-((valName.length-11)*2);
                     
                         <!--<text x="30%" y="80%" font-family="Poppins" font-size="9px" fill="' + colortext + '">' +<?php echo isset($compname) ? json_encode($compname) : 0; ?> + '</text>\n\
-                        document.getElementById("wifirect").innerHTML = '<text id="wificount1" x="'+xpos+'%" y="55%" font-family="Poppins" font-size="55px" fill="' + colortext + '" font-weight="bold"></text>\n\
-                                                                            <text x="'+xposname+'%" y="62%" font-family="Poppins" font-size="10px" fill="' + colortext + '">' + response[0]['Name'] + '</text>\n\
+                        document.getElementById("wifirect").innerHTML = '<text id="wificount1" x="'+xpos+'%" y="50%" font-family="Poppins" font-size="55px" fill="' + colortext + '" font-weight="bold"></text>\n\
+                                                                            <text x="'+xposname+'%" y="60%" font-family="Poppins" font-size="10px" fill="' + colortext + '">' + response[0]['Name'] + '</text>\n\
                                                                             <text x="40%" y="83%" font-family="Poppins" font-size="10px" fill="' + colortext + '">' + (response[0]['Ip']==null?'':response[0]['Ip']) + '</text>\n\
                                                                             <text x="10%" y="80%" font-family="Poppins" font-size="12px" fill="' + colortext + '" id="wifidownload">' + response[0]['WifiDownload']  + '</text>\n\\n\
                                                                             <text x="65%" y="80%" font-family="Poppins" font-size="12px" fill="' + colortext + '" id="wifiupload">' + response[0]['WifiUpload']  + '</text>\n\
@@ -515,7 +639,7 @@
                         }    
             });         
             ;
-        }            
+        }           
         function pcclickjs(id) {
             $(".popover").hide();
             $.ajax({
@@ -541,7 +665,7 @@
                     }
             });
         }
-                        
+
         function changemapsbyfloor(id){
          window.location = window.location.origin + "/indexbyfloor/" + id;
         }
@@ -603,19 +727,19 @@
                 document.getElementById("c3" + i).style.filter = 'blur(0px)';
             }
         }
-     
-        function wificlick() {
+                
+ function wificlick() {
             var div = document.getElementById('wifistatus');
             div.value = '0';
             var wifiDownload = <?php echo isset($wifiDownload) ? json_encode($wifiDownload) : 0; ?>;
             var wifiUpload = <?php echo isset($wifiUpload) ? json_encode($wifiUpload) : 0; ?>;
             document.getElementById('wifi').setAttribute('href', "../asset/wifi1.png");
-            document.getElementById("wifirect").innerHTML = '<text id="wificount1" x="20%" y="55%" font-family="Poppins" font-size="55px" fill="' + colortext + '" font-weight="bold"></text>\n\
-                                                        <text x="18%" y="62%" font-family="Poppins" font-size="16px" fill="' + colortext + '">Connected Device</text>\n\
-                                                        <text x="10%" y="80%" font-family="Poppins" font-size="12px" fill="' + colortext + '" id="wifidownload">' + wifiDownload + '</text>\n\\n\
-                                                        <text x="65%" y="80%" font-family="Poppins" font-size="12px" fill="' + colortext + '" id="wifiupload">' + wifiUpload + '</text>\n\
-                                                        <text x="7%" y="90%" font-family="Poppins" font-size="9px" fill="' + colortext + '" font-height="bold">Mbps Download</text>\n\
-                                                        <text x="62%" y="90%" font-family="Poppins" font-size="9px" fill="' + colortext + '" font-height="bold">Mbps Upload</text>';
+            document.getElementById("wifirect").innerHTML = '<text id="wificount1" x="20%" y="50%" font-family="Poppins" font-size="55px" fill="' + colortext + '" font-weight="bold"></text>\n\
+                                                            <text x="18%" y="60%" font-family="Poppins" font-size="14px" fill="' + colortext + '">Connected Device</text>\n\
+                                                            <text x="10%" y="82%" font-family="Poppins" font-size="12px" fill="' + colortext + '" id="wifidownload">' + wifiDownload + '</text>\n\\n\
+                                                            <text x="65%" y="82%" font-family="Poppins" font-size="12px" fill="' + colortext + '" id="wifiupload">' + wifiUpload + '</text>\n\
+                                                            <text x="7%" y="90%" font-family="Poppins" font-size="9px" fill="' + colortext + '" font-height="bold">Mbps Download</text>\n\
+                                                           <text x="62%" y="90%" font-family="Poppins" font-size="9px" fill="' + colortext + '" font-height="bold">Mbps Upload</text>';
             var unifi = <?php echo isset($unifi) ? json_encode($unifi) : 0; ?>;
             if (unifi != 0 || unifi != '0') {
             counter("wificount1", 0, parseInt(unifi), 1);
@@ -639,6 +763,7 @@
         }
                 
                 
+                
         function counter(id, start, end, duration) {
             if (end == 0) {
                 document.getElementById(id).innerHTML = 0;
@@ -660,10 +785,15 @@
         }
                 
         function showHeatMap(a,iddevice){
+
+             var totalHibobFloor = 0;
             var totalWifiFloor = 0;
             var totalPCFloor = 0;
+            var totalCCTVFloor = 0;
+            var totalDeadHibobFloor = 0;
             var totalDeadWifiFloor = 0;
             var totalDeadPCFloor = 0;
+            var totalDeadCCTVFloor = 0;
             var div = document.getElementById('maps');
             $.ajax({
             type: 'GET',
@@ -673,10 +803,11 @@
                     success: function (data) {
                         if(checkloop==2){
                     div.innerHTML = '';
+                    //        div2.innerHTML = '';
                     if (data.length != 0) {
                     document.getElementById('mps').setAttribute('href', '../' + data[0]['maps_img']);
                     for (var i = 0; i < data.length; i++) {
-                    if (data[i]['tipe'] == 'pc') {
+                   if (data[i]['tipe'] == 'pc') {
                         totalPCFloor = totalPCFloor + 1;
                                 if (data[i]['isalive'] == 0)
                                 {
@@ -684,6 +815,7 @@
                                 }
                     index++;
                     } else if (data[i]['tipe'] == 'wifi') {
+                    // console.log(totalWifiFloor);
                     var id = data[i]['id'];
                     var x = data[i]['x_axis'];
                     var y = data[i]['y_axis'];
@@ -706,9 +838,10 @@
                     if (data[i]['isalive'] == 0)
                     {
                     totalDeadWifiFloor = totalDeadWifiFloor + 1;
-                            div.innerHTML += '<a data-toggle="popover" id="pop_' + id + '"  class="popover-icon" data-container="body" title="' + namedevice + '" data-content="' + id_no + '<br>' + ip_addr + '" data-placement="right" data-trigger="hover"><circle class="classWifi classNone" id="c1_' + id + '"  fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12" onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"></circle><circle class="classWifi classNone" id="c2_' + id + '"  fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10" onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"></circle><circle class="classWifi classNone"  id="c3_' + id + '"  cx="' + x + '" cy="' + y + '" r="8" fill="#04d9ff"  onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"></circle><circle style="filter: blur(30px);" id="c1' + index + '" cx="' + x + '" cy="' + y + '" r="70" fill="' + color + '" onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"></circle></a>';
+            
+                            div.innerHTML += '<a data-toggle="popover" id="pop_' + id + '"  class="popover-icon" data-container="body" title="' + namedevice + '" data-content="' + id_no + '<br>' + ip_addr + '" data-placement="right" data-trigger="hover"><circle class="classWifi classNone" id="c1_' + id + '"  fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12" onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"></circle><circle class="classWifi classNone" id="c2_' + id + '"  fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10" onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"></circle><circle class="classWifi classNone"  id="c3_' + id + '"  cx="' + x + '" cy="' + y + '" r="8" fill="#04d9ff"  onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"></circle><circle style="filter: blur(50px);" id="c1' + index + '" cx="' + x + '" cy="' + y + '" r="80" fill="' + color + '" onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"></circle></a>';
                     } else
-                            div.innerHTML += '<a data-toggle="popover" id="pop_' + id + '"  class="popover-icon" data-container="body" title="' + namedevice + '" data-content="' + id_no + '<br>' + ip_addr + '" data-placement="right" data-trigger="hover"><circle class="classWifi classNone" id="c1_' + id + '"  fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12" onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"></circle><circle class="classWifi classNone" id="c2_' + id + '"  fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10" onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"></circle><circle class="classWifi classNone"  id="c3_' + id + '"  cx="' + x + '" cy="' + y + '" r="8" fill="#04d9ff"  onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"></circle><circle style="filter: blur(30px);" id="c1' + index + '" cx="' + x + '" cy="' + y + '" r="70" fill="' + color + '" onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"></circle></a>';
+                            div.innerHTML += '<a data-toggle="popover" id="pop_' + id + '"  class="popover-icon" data-container="body" title="' + namedevice + '" data-content="' + id_no + '<br>' + ip_addr + '" data-placement="right" data-trigger="hover"><circle class="classWifi classNone" id="c1_' + id + '"  fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12" onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"></circle><circle class="classWifi classNone" id="c2_' + id + '"  fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10" onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"></circle><circle class="classWifi classNone"  id="c3_' + id + '"  cx="' + x + '" cy="' + y + '" r="8" fill="#04d9ff"  onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"></circle><circle style="filter: blur(50px);" id="c1' + index + '" cx="' + x + '" cy="' + y + '" r="80" fill="' + color + '" onclick="wificlickjs(\'' + id + '\',\'' + index + '\');"></circle></a>';
                     index++;
 
                     index++;
@@ -721,12 +854,12 @@
                                 document.getElementById("floorpc").innerHTML = totalPCFloor + " Device";
                                 document.getElementById("offwifi").innerHTML = totalDeadWifiFloor + " Device";
                                 document.getElementById("offpc").innerHTML = totalDeadPCFloor + " Device";
-
                     }
                     }
             }).then(
                     function() {
                         if(checkloop==2){
+                            //checkloop=1
                             var classnya = $('#dropDownDevice').val();
                             if(classnya!='classWifi')checkloop=1; else checkloop=2;
                             console.log('finished ALL2 OK')
@@ -772,6 +905,6 @@
         <!--
         function removePopOver(id) {
               id = "#" + id;
-              $(id).popover('dispose'); 
+              $(id).popover('dispose');
         }-->
     </html><!-- comment -->

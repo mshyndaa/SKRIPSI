@@ -82,6 +82,7 @@
 
                     <form action="{{ route('verifyLoginStaff') }}" method="post">
                         @csrf
+                        <div class="form" style="margin-top:2rem;">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                               <div class="input-group-text">
@@ -99,7 +100,9 @@
                             </div>
                             <input type="password" name="password" id="password" class="form-control" placeholder="Password">
                           </div>
-                        <button type="submit" class="btn btn-block regular">Log In</button>
+                        </div>
+
+                        <button type="submit" class="btn btn-block regular" style="margin-top:2rem">Log In</button>
 
                         @if ($errors->has('email'))
                         <span>
@@ -108,7 +111,6 @@
                         @endif
                         <p class="text-center light" style="margin-top: 1rem;">Don't have an account ? <a href="/register" class="regular">Register</a> now!</p>
                     </form>
-
                 </div>
             </div>
         </div>

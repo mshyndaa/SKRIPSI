@@ -1,26 +1,30 @@
 @extends('template')
 
 @section('content')
-<div class="container" style="margin-top: 2rem;">
-
+<div class="container mt-5">
     @if ($message = Session::get('success'))
-        <div class="alert alert-success">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
             <p>{{ $message }}</p>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
     @endif
 
-    <div class="card-body">
-        <table class="table table-bordered" id="ajax-crud-datatable">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Created at</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-        </table>
+    <div class="card shadow" style="margin-top: 5rem">
+        <div class="card-body">
+            <table class="table table-hover table-bordered" id="ajax-crud-datatable">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Created at</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -28,11 +32,15 @@
 <div class="modal fade" id="company-modal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-primary text-white">
                 <h4 class="modal-title" id="CompanyModal"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <form action="javascript:void(0)" id="CompanyForm" name="CompanyForm" class="form-horizontal" method="POST" enctype="multipart/form-data">
+                    @csrf
                     <input type="hidden" name="id" id="id">
                     <div class="form-group row">
                         <label for="name" class="col-sm-3 col-form-label">Username</label>
@@ -66,7 +74,7 @@
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Akses Mall</label>
+                        <label class="col-sm-3 col-form-label">Mall Access</label>
                         <div class="col-sm-9">
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" name="mall[]" id="mall_1" value="1">
@@ -83,20 +91,14 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <div class="col-sm-offset-3 col-sm-9">
-                            <button type="submit" class="btn btn-primary" id="btn-save">Save changes</button>
-                        </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary" id="btn-save">Save changes</button>
                     </div>
                 </form>
-            </div>
-            <div class="modal-footer">
-                
             </div>
         </div>
     </div>
 </div>
-
 <!-- End Bootstrap model -->
 
 <script type="text/javascript">
@@ -126,12 +128,11 @@ $(document).ready(function() {
             { targets: 0, visible: false }
         ]
     });
-
 });
 
 function add() {
     $('#CompanyForm').trigger("reset");
-    $('#CompanyModal').html("Add Admin");
+    $('#CompanyModal').html("Add User");
     $('#company-modal').modal('show');
     $("#password").prop('required', true);
     $("#name").prop('readonly', false);
@@ -179,15 +180,14 @@ function editFunc(id) {
 
 function deleteFunc(id) {
     if (confirm("Delete Record?") == true) {
-        var id = id;
         $.ajax({
             type: "POST",
             url: "{{ url('delete-company') }}",
             data: { id: id },
             dataType: 'json',
             success: function(res) {
-                var oTable = $('#ajax-crud-datatable').dataTable();
-                oTable.fnDraw(false);
+                var oTable = $('#ajax-crud-datatable').DataTable();
+                oTable.draw(false);
             }
         });
     }
@@ -207,8 +207,8 @@ $('#CompanyForm').submit(function(e) {
         processData: false,
         success: function(data) {
             $("#company-modal").modal('hide');
-            var oTable = $('#ajax-crud-datatable').dataTable();
-            oTable.fnDraw(false);
+            var oTable = $('#ajax-crud-datatable').DataTable();
+            oTable.draw(false);
             $("#btn-save").html('Submit');
             $("#btn-save").attr("disabled", false);
         },
@@ -218,5 +218,4 @@ $('#CompanyForm').submit(function(e) {
     });
 });
 </script>
-
 @endsection

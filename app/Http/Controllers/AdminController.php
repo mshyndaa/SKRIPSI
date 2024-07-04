@@ -11,57 +11,48 @@ use Illuminate\Support\Facades\Redirect;
 
 class AdminController extends Controller
 {
-    
     public function viewAdminLogin()
     {
-          if (Session::get('admin.id') != null){ 
+        if (Session::get('admin.id') != null) {
             return view('../admin/Listadmin');
-        }else{
+        } else {
             return view('../admin/login');
         }
     }
 
     public function verifyLogin(Request $request)
     {
-       $username = (isset($request['username'])) ? $request['username'] : '0';
-        $password = (isset($request['password'])) ? $request['password'] : '0';
-        $remember = (isset($request['remember'])) ? $request['remember'] : false;
-        $users = DB::connection('mysql1')->table('admin')
-                ->where('admin.username', '=', $username)
-                ->get();
+        $username = $request->input('username', '0');
+        $password = $request->input('password', '0');
+        $remember = $request->input('remember', false);
 
-        if (count($users)) { 
-            $name = '';
-            $uname = '';
-            $id = '';
-            $email = '';
-            $phone = '';
-            $office = '';
-            $row = 0;
-            foreach ($users as $key => $user) {
+        $users = DB::connection('mysql1')
+            ->table('admin')
+            ->where('admin.username', '=', $username)
+            ->get();
+
+        if (count($users) > 0) {
+            foreach ($users as $user) {
                 $id = $user->id_users;
-                $uname = $user->username;
+                $username = $user->username;
                 $email = $user->email;
-                $passwordDb= $user->password;
-                if(Hash::check($password, $passwordDb)){
+                $passwordDb = $user->password;
+
+                if (Hash::check($password, $passwordDb)) {
                     $request->session()->put('admin', [
-                        'id' => $id, 'name' => $name, 'username' => $username, 'email' => $email
+                        'id' => $id, 'name' => '', 'username' => $username, 'email' => $email
                     ]);
 
                     return redirect('/admin');
-                }else
-                Session::flash('message', 'Username or Password is incorrect ! Please check your credentials again.');
-                return redirect::back();
+                } else {
+                    Session::flash('message', 'Username or Password is incorrect! Please check your credentials again.');
+                    return redirect()->back();
+                }
             }
         } else {
-            return Redirect::back()->withErrors(
-                [
-                    'email' => 'Username atau Password Salah !!!',
-                ]
-            );
+            return redirect()->back()->withErrors([
+                'email' => 'Username atau Password Salah !!!',
+            ]);
         }
     }
-
-   
-
 }

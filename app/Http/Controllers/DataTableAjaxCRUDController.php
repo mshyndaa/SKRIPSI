@@ -37,7 +37,7 @@ class DataTableAjaxCRUDController extends Controller {
                             ->addIndexColumn()
                             ->make(true);
         }
-        return view('admin_form');
+        return view('../admin/Listadmin');
     }
 
     public function indexuser() {
@@ -48,7 +48,7 @@ class DataTableAjaxCRUDController extends Controller {
                             ->addIndexColumn()
                             ->make(true);
         }
-        return view('user_form');
+        return view('../admin/Listuser');
     }
 
     /**

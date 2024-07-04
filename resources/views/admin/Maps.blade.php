@@ -1,381 +1,286 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content="Simple CMS" />
-
-
-
-        <title></title>
-
-        <!-- Bootstrap core CSS -->
-        <link href = {{ asset("css/bootstrap.css") }} rel="stylesheet" />
-<link  href="{{ asset('css/jquery.dataTables.min.css') }}" rel="stylesheet">
-              <!-- Custom styles for this template -->
-             <style>
-            body{
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/dataTables.bootstrap4.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+        <style>
+            body {
                 width: 100%;
-                height:100%;
+                height: 100%;
                 padding: 0;
-                margin:0;
-          background-color:#11142C;
+                margin: 0;
+                background-color: #11142C;
+                font-family: 'Poppins', sans-serif;
+                overflow-y: auto; /* Enable vertical scrolling */
             }
-
-
- .modal-header {
-  background-color:#11142C;
-  color: whitesmoke;
-  
-}    
-.modal-content {
-  background-color:lightblue;
-  color: red;
-  font-weight: bold;
-  
-}   
-.modal-footer {
-  background-color:#11142C;
-  color: whitesmoke;
-  
-}   
- 
+        
+            .modal-header,
+            .modal-footer {
+                background-color: rgb(255, 255, 255);
+                color: grey;
+            }
+        
+            .modal-content {
+                text-align: center;
+                background-color: rgb(255, 255, 255);
+                color: red;
+                font-weight: bold;
+            }
+        
             .fill {
                 height: 60%;
             }
+        
             .top7 {
-                margin-top:5px;
+                margin-top: 5px;
             }
-            /* Number Effect */
-            div {
-                row-gap: 0.5cm;
-            }
+        
             .wifi {
                 background: #04d9ff;
             }
-.hibob {
-                background: #21de54;
-            }
+        
             .pc {
                 background: #f79545;
             }
-            .cctv {
-                background: #db2525;
+        
+            .dataTables_wrapper {
+                font-family: tahoma;
+                font-size: 14px;
+                position: relative;
+                clear: both;
+                *zoom: 1;
+                zoom: 1;
             }
-  
-.dataTables_wrapper {
-    font-family: tahoma;
-    font-size: 14px;
-    position: relative;
-    clear: both;
-    *zoom: 1;
-    zoom: 1;
-}
-   .dataTables_filter  {
-    color: whitesmoke !IMPORTANT;
-}       
- .dataTables_info  {
-    color: whitesmoke !IMPORTANT;
-}       
-table.dataTable thead tr {
-  color: whitesmoke !IMPORTANT;
-  background-color: #283593  ;
-}
-
-table.dataTable tbody tr {
-  color: whitesmoke !IMPORTANT;
-  background-color:#283593;
-}
-             .form-control-sm {
-    height: 20px;
-    padding: .25rem .5rem;
-    font-size: .875rem;
-    line-height: 1.5;
-    border-radius: .2rem;
-}
-  
-
- .page-item .page-link {
-    background-color: yellow !important;
-    border: 1px solid red;
-}
-.page-link {
-    color: whitesmoke !important;
-}
- table td  th{
-        word-break: break-word;
-        vertical-align: top;
-        white-space: normal !important;
-          font-size: 0.2rem;
-
-    }
-    table.table-bordered> thead > tr > th{
-                border:1px solid purple;
-                height: 10px;
+        
+            .dataTables_filter,
+            .dataTables_info {
+                color: whitesmoke !important;
             }
-            table.table-bordered > tbody > tr > td{
-                border:1px solid purple;
+        
+            .form-control-sm {
+                height: 20px;
+                padding: .25rem .5rem;
+                font-size: .875rem;
+                line-height: 1.5;
+                border-radius: .2rem;
             }
+        
+            .page-item .page-link {
+                background-color: yellow !important;
+                border: 1px solid red;
+            }
+        
+            .page-link {
+                color: whitesmoke !important;
+            }
+        
+            table td,
+            th {
+                word-break: break-word;
+                vertical-align: top;
+                white-space: normal !important;
+                font-size: 16px;
+                background-color: transparent;
+                color: white;
+            }
+        
+            table.table-bordered>thead>tr>th,
+            table.table-bordered>tbody>tr>td {
+                border: 1px solid purple;
+            }
+        
             select.malldropdown:option {
-  
-  background: #11142C;
-  color: whitesmoke;
-  
-}
-select.malldropdown {
- 
-  background: #11142C;
-  
-}
-
+                background: #11142C;
+                color: whitesmoke;
+            }
+        
+            select.malldropdown {
+                background: #11142C;
+            }
+        
+            .ltn {
+                color: white;
+                background-color: transparent;
+                font-size: 16px;
+            }
+        
+            footer {
+                color: white;
+                background-color: #1d2039;
+                padding: 10px 0;
+                text-align: center;
+                width: 100%;
+                position: fixed;
+                bottom: 0;
+                z-index: 1000; /* Ensure footer is above other content */
+            }
+    
+            .content-wrapper {
+                margin-bottom: 60px; /* Adjust based on footer height */
+                padding-bottom: 20px; /* Adjust for bottom padding */
+            }
         </style>
-
-    
-        <script src="{{ asset('js/jquery-3.7.1.min.js') }}"></script>
-        <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
-         <script src="{{ asset('js/draggable/plain-draggable.min.js') }}"></script>
-         <script src="{{ asset('js/jquery.confirmModal.js') }}"></script>
-          <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
+            
+    <script src="{{ asset('js/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/draggable/plain-draggable.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.confirmModal.js') }}"></script>
+    <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
     <body>
-        <!-- <div class="alert alert-success alert-dismissable" id="flash-msg">
-<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-<h4><i class="icon fa fa-check"></i><span id="isimessage"></span></h4>
-</div>-->
         <div class="container-fluid text-center">
-            <!-- Modal -->
-  <div class="modal fade" id="flash-msg" role="dialog">
-    <div class="modal-dialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content">
-          <div class="modal-header" style="background-color:grey">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          
-        </div>
-        <div class="modal-body">
-            <p id="erroradd" id="error" style="color: red;font-weight: bold;"></p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-      
-    </div>
-  </div>
-  
-            <!-- Text color class used -->
-             <form method="post" action="" id="my_form">
-                  @csrf
-                  <input type="hidden"  id="valueBtn" name="valueBtn" vale=""">
-                  
-                   
-                   
-            <div class="row mt-2">
-                <div class="col-1" > <input class="btn btn-primary btn-sm" type="button" onclick="location.href='{{ url('/admin') }}'"  id="btnBack"  value="Back" >
-                    </div>    
-            <div class="col-9" >
-
-            <span id="floorname_id" style="font-family:Arial; font-size:25px;color:whitesmoke;font-weight:bold;"></span>&nbsp;&nbsp;&nbsp;
-            <select id="malldropdown" class="malldropdown" onchange="changesmaps()" style="font-family:Arial; font-size:25px;color:whitesmoke;font-weight:bold;">
-                    <optgroup> 
-                    </optgroup>
-            </select>
-            <span id="point_id"></span>
-            
+            <div class="modal fade" id="flash-msg" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color:white">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="erroradd" id="error" style="color: red;font-weight: bold;"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-                <div class="col-1" >
-                <br style="line-height:15;" />   
-      </div>  
-                 <div class="col-1" > <input class="btn btn-primary btn-sm" type="button"  id="btnLogout"  value="Logout" onclick="location.href='{{ url('adminlogout') }}'"></div>  
-            
-                       </div>
-             </form>
-             <form  method="post" action="/save" id="newlocation">
-              <div class="row  " >
-                
-                <div class="col-2">&nbsp;</div>
-                <div class="col-8 form-group" >
-                     <div class="row ">
-                        <div class="col-2"><label for="name" id="linkdevice" style="font-family:Arial; font-size:14px;color:whitesmoke;font-weight:bold;">Device Type</label></div>
-                        
-                        <div class="col-3 d-flex justify">
-                            <select id="type" onchange="changetype()" style="height: 20px;">
-                                <option value="hibob" selected>HiBob</option>
-                                <option value="cctv">CCTV</option>
-                                <option value="pc">People Counting</option>
-                                <option value="wifi">Wifi</option>
 
-                            </select>
+            <form method="post" action="" id="my_form">
+                @csrf
+                <div class="row align-items-center" style="margin-bottom: 2rem; background-color: #1d2039; height: 3rem;">
+                    <div class="col-5 ">
+                        <span id="floorname_id" class="text-uppercase font-weight-bold text-white d-flex justify-content-star" style="font-size: 20px; flex: 1; padding: 0;"></span>
+                        <span id="point_id"></span>
+                    </div>
+                    <div class="col-7 d-flex justify-content-end align-items-center">
+                        <select id="malldropdown" class="malldropdown border-0 bg-transparent" onchange="changesmaps()" style="font-size: 16px; font-weight: bold; color: whitesmoke; margin-right: 2rem;"></select>
+                        <input class="btn btn-sm mr-2 font-weight-bold text-uppercase" type="button" style="margin-right: 2rem; background-color: transparent; color: white;" id="btnBack" value="Back" onclick="location.href='{{ url('/admin') }}'">
+                        <input class="btn btn-sm font-weight-bold text-uppercase" type="button" id="btnLogout" value="Logout" style="background-color: transparent; color: white;" onclick="location.href='{{ url('adminlogout') }}'">
+                    </div>
+                </div>
+            </form>
+
+            
+            <form method="post" action="/save" id="newlocation">
+                <div class="row mt-4 justify-content-center" style="color:white;">
+                <div class="col-8" >
+                     <div class="row ">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="name" class="col-sm-4 col-form-label" id="linkdevice">Device Type</label>
+                                <div class="col-sm-8">
+                                    <select id="type" name="type" onchange="changetype()" class="form-control">
+                                        <option value="pc">People Counting</option>
+                                        <option value="wifi">Wifi</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="name" class="col-sm-4 col-form-label" id="linkname">Device Name</label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="name" name="name"  class="form-control">
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-1"></div>
-                        <div class="col-2"><label for="name" id="linkname" style="font-family:Arial; ffont-size:14px;color:whitesmoke;font-weight:bold;">Device Name</label></div>
-                        
-                        <div class="col-4"><input type="text" id="name" name="name"  class="form-control form-control-sm mb-2"></div>
-                    </div>
-                     <div class="row">
-                        <div class="col-2"><label for="name" id="linktext" style="font-family:Arial; ffont-size:14px;color:whitesmoke;font-weight:bold;">Device Link</label></td></div>
-                        
-                        <div class="col-4"><input type="text" id="link" name="link"  class="form-control form-control-sm mb-2"></div>
-                   
-                        <div class="col-2"><label for="idlinktext" id="idlinktext" style="font-family:Arial; ffont-size:14px;color:whitesmoke;font-weight:bold;">Device ID</label></td></div>
-                        
-                        <div class="col-4"><input type="text" id="idlink" name="idlink"  maxlength="5" class="form-control form-control-sm mb-2"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <input class="btn btn-primary btn-sm" type="button"  id="btnAdd" value="Add">
-                            <input class="btn btn-primary btn-sm" type="button"  id="btnUpdate" value="Update">
-                            <input class="btn btn-primary btn-sm" type="button"  id="btnSave" value="Save" >
-                            <input class="btn btn-default btn-sm" type="button"  id="btnCancel" value="Cancel" >
-                            <input class="btn btn-danger btn-sm" type="button" disabled id="btnDelete" value="Delete">
+                    
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="idlinktext"  class="col-sm-4 col-form-label" id="idlinktext">Device ID</label>
+                                <div class="col-sm-8">
+                                    <input type="text"  id="idlink" name="idlink"  maxlength="5" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="name" class="col-sm-4 col-form-label" id="linktext">Device Link</label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="link" name="link"  class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+
+                    <div class="row" style="margin-top: 1rem">
+                        <div class="col-sm-12 text-center">
+                            <input class="btn btn-primary mr-2" type="button"  id="btnAdd" value="Add">
+                            <input class="btn btn-primary mr-2" type="button"  id="btnUpdate" value="Update">
+                            <input class="btn btn-primary mr-2" type="button"  id="btnSave" value="Save" >
+                            <input class="btn btn-secondary mr-2" type="button"  id="btnCancel" value="Cancel" >
+                            <input class="btn btn-danger" type="button" disabled id="btnDelete" value="Delete">
                         </div>
                     </div>
+
                {!! csrf_field() !!}
                                 <input type="text" id="location" name="location" value="{{$FloorID}}" hidden>
-                                <!-- <label for="typeppoint">Type</label> -->
-                                <input type="text" id="typeppoint" name="typeppoint" value="hibob" hidden>
+                                <input type="text" id="typeppoint" name="typeppoint" value="pc" hidden>
                                 <input type="text" id="company" name="company" value="{{$CompID}}" hidden>
-                                <!-- <label for="x">X Axis</label> -->
                                 <input type="hidden" id="x" name="x" >
-                                <!-- <br> -->
-                                <!-- <label for="y">Y Axis</label> -->
                                 <input type="hidden" id="y" name="y" >
                                 <input type="hidden" id="actionmap" name="actionmap"/>
-                                <!-- <br> -->
-                               
                                 <label for="idn" id='idtext' hidden>Source ID</label>
                                 <input type="hidden" id="idn" name="idn" value="">
-                              
-                                </form>   
-                        <input type='hidden' name='floorId' id='floorId' value=""/>
-                        <input type='hidden' name='deleteid' id='deleteid' value=""/>
-                        </div>
-                <div class="col-2">&nbsp;</div>
-                   
-            </div>
-           
-            <div class="row w-88 " >
- 
-              
-                <div class="col-7" id="displayFloor"> <svg version="1.1" id="mysvg" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
-                                                           xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1903 1000"
-                                                           xml:space="preserve" >
-                    <image id="mps" width="1903" height="1000" xlink:href="peta/b2.png"
-                           href="">
-                    </image>    
-                    <g  id="maps" onclick="clicked(evt)">
-                        <rect class="btn" style="background-color: blue;fill-opacity:0;" id="_x3C_Slice_x3E_" x="0" y="0" fill="blue" width="1903" height="1000"/>
-                        <!-- <text x="0" y="875" font-family="Arial" font-size="20" fill="#e8e8e8" >Information :</text>
-                        <rect style="background-color: #04d9ff;fill-opacity:1;" x="0" y="894" fill="#04d9ff" width="18" height="18"></rect>
-                        <text x="20" y="905" font-family="Arial" font-size="18" fill="#e8e8e8" >:</text>
-                        <text x="25" y="905" font-family="Arial" font-size="18" fill="#e8e8e8" >Wifi</text>
-                        <rect style="background-color: #f79545;fill-opacity:1;" x="0" y="924" fill="#f79545" width="18" height="18"></rect>
-                        <text x="20" y="935" font-family="Arial" font-size="18" fill="#e8e8e8" >:</text>
-                        <text x="25" y="935" font-family="Arial" font-size="18" fill="#e8e8e8" >People Counting</text>
-                        <rect style="background-color: #db2525;fill-opacity:1;" x="0" y="954" fill="#db2525" width="18" height="18"></rect>
-                        <text x="20" y="965" font-family="Arial" font-size="18" fill="#e8e8e8" >:</text>
-                        <text x="25" y="965" font-family="Arial" font-size="18" fill="#e8e8e8" >CCTV</text>
-                        <rect style="background-color: #21de54;fill-opacity:1;" x="0" y="984" fill="#21de54" width="18" height="18"></rect>
-                        <text x="20" y="995" font-family="Arial" font-size="18" fill="#e8e8e8" >:</text>
-                        <text x="25" y="995" font-family="Arial" font-size="18" fill="#e8e8e8" >Gateaway - HiBob</text> -->
-
+                                <input type='hidden' name='floorId' id='floorId' value=""/>
+                                <input type='hidden' name='deleteid' id='deleteid' value=""/>
+                     </div>
+                </div>
+        </form>   
+        <div class="row justify-content-center" style="margin-top: 1rem;">
+            <div class="col-12 d-flex justify-content-center align-items-center" style="max-width: 50%">
+                <svg version="1.1" id="mysvg" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
+                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                    viewBox="0 0 1903 1000" xml:space="preserve">
+                    <image id="mps" width="1903" height="1000" xlink:href="peta/b2.png" href="">
+                    </image>
+                    <g id="maps" onclick="clicked(evt)">
+                        <rect class="btn" style="background-color: blue; fill-opacity: 0;" id="_x3C_Slice_x3E_" x="0" y="0"
+                            fill="blue" width="1903" height="1000" />
                     </g>
-                 
-                    
-                    </svg></div>
-                <div class="col-5">
-                <div class="col-12 table-responsive"">
-
-                    <table class="table table-bordered  dt-responsive " id="ajax-crud-datatable">
-           <thead>
-              <tr>
-                 <th>Id</th>
-                <th>Name</th>
-                <th>Link</th>
-                <th>Type</th>
-              </tr>
-           </thead>
-           <tbody></tbody>
-        </table>
-                                     </div>   
-                    <div clas="col-12">
-
-         <table class="table table-bordered table-dark small">
-                        <thead>
-                            <tr>
-                                <th scope="col" colspan="4">Information</th>
-                            </tr>
-                            <tr>
-                                <th scope="col">Legend</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Total Device</th>
-                                <th scope="col">Total Device / Floor</th>
-                                
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td scope="col" class="wifi"></td>
-                                <td >Wifi Unifi</td>
-                                <td><span id="allwifi"></span></td>
-                                <td><span id="floorwifi"></span></td>
-                                
-                            </tr>
-                            <tr>
-                                <td scope="col" class="pc"></td>
-                                <td >People Counting</td>
-                                <td><span id="allpc"></span></td>
-                                <td><span id="floorpc"></span></td>
-                                
-                            </tr>
-                            <tr>
-                                <td scope="col" class="hibob"></td>
-                                <td >Gateway Hibob</td>
-                                <td><span id="allhibob"></span></td>
-                                <td><span id="floorhibob"></span></td>
-                                
-                            </tr>
-                            <tr>
-                                <td scope="col" class="cctv"></td>
-                                <td >CCTV</td>
-                                <td><span id="allcctv"></span></td>
-                                <td><span id="floorcctv"></span></td>
-                             
-                            </tr>
-                        </tbody>
-                        <input type='hidden' name='floorId' id='floorId' value=""/>
-                    </table>     
-                    </div>
-                </div>
+                </svg>
             </div>
-                 <div class="row w-7 " >
-                <div class="col-12" >
-                   
-
-                </div>
-            </div>
-        
-       </div>        
-
-         <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content" style="color:black">
-          
-        <div class="modal-body">
-            <h5 class="modal-title" style="color: black">This <b>'Device/Gateway'</b> down,failed toconnect </h5>
-          <p id="error" style="color: black"></p>
-          <p style="color: black">Please check your device or gateway, or trying to reconnect again</p>
-          <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
         </div>
         
-      </div>
-      
+    <div class="row justify-content-center"  style="margin-top: 3rem;">
+        <div class="col-5 d-flex justify-content-center align-items-center" style="max-width: 100%">
+            <table class="table table-bordered" style="width:70rem" >
+                <thead>
+                    <tr>
+                        <th scope="col"  colspan="4">Information Center</th >
+                    </tr>
+                    <tr>
+                        <th scope="col">Legend</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Total Device</th>
+                        <th scope="col">Total Device / Floor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td scope="col" class="wifi"></td>
+                        <td>Wifi Unifi</td>
+                        <td><span id="allwifi"></span></td>
+                        <td><span id="floorwifi"></span></td>
+                    </tr>
+                    <tr>
+                        <td scope="col" class="pc"></td>
+                        <td>People Counting</td>
+                        <td><span id="allpc"></span></td>
+                        <td><span id="floorpc"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <input type='hidden' name='floorId' id='floorId' value="" />
+        </div>
     </div>
-  </div>
-  
+
+    <footer style="color: white; background-color: #1d2039; margin-top: 2%; padding: 1px;">
+        <p style="text-align: center; padding-top:1%">&copy; Mall Dashboard 2024 | Bedria Mashyanda Maail - 2440027303</p>
+    </footer>
+    </div>
+</div>
 </body>
 <script>
     var presisiX=0;
@@ -384,7 +289,7 @@ select.malldropdown {
      var isdeleted=1;
      var checkloop=1;
     var index = 0;
-    var type = 'hibob';
+    var type = 'pc';
     var arrId=[];
      const svg=document.getElementById('mysvg');
     var pt=svg.createSVGPoint();
@@ -392,7 +297,7 @@ select.malldropdown {
     var FloorID =0;
     var floor = <?php echo isset($floor) ? json_encode($floor) : 0; ?>;
     // Hibob = #21de54,CCTV = #db2525,People Counting = #f79545,Wifi = #04d9ff
-    var color = '#21de54';
+    var color = '#f79545';
     var menu = <?php echo isset($pagesurface) ? json_encode($pagesurface) : 1; ?>;
     var colortext = 'white';
     var colortextalert = 'red';
@@ -427,12 +332,8 @@ $('#malldropdown')
     currentMinutes = ("0" + currentMinutes).slice(-2);
 
     window.onload = function(){
-         var totalCCTV = <?php echo isset($cctv) ? json_encode($cctv) : 0; ?>;
-            var totalHibob = <?php echo isset($hibobdata) ? json_encode($hibobdata) : 0; ?>;
             var totalPC = <?php echo isset($pcdata) ? json_encode($pcdata) : 0; ?>;
             var totalWifi = <?php echo isset($wifidata) ? json_encode($wifidata) : 0; ?>;
-        document.getElementById("allcctv").innerHTML =totalCCTV+" Device";
-                document.getElementById("allhibob").innerHTML ="<tspan x='42%' font-weight='bold' font-size='100x'  fill='white' style='font-color:white' >"+totalHibob+" Device</tspan>";
                  document.getElementById("allpc").innerHTML ="<tspan x='42%' font-weight='bold' font-size='100x'  fill='white' style='font-color:white' >"+totalPC+" Device</tspan>";
                  document.getElementById("allwifi").innerHTML ="<tspan x='42%' font-weight='bold' font-size='100x'  fill='white' style='font-color:white' >"+totalWifi+" Device</tspan>";
         $("#btnSave").hide();
@@ -446,110 +347,14 @@ $('#malldropdown')
 
     function changetype(){
         var value = document.getElementById('type').value;
-        if(value == 'hibob'){
-            document.getElementById('typeppoint').value = 'hibob';
-            type = 'hibob';
-            color = '#21de54';
-
-          /*  document.getElementById('name').type = 'text';
-            document.getElementById('name').value = '';
-
-            document.getElementById('idn').type = 'hidden';
-            document.getElementById('idn').value = '';
-
-            document.getElementById('link').type = 'text';
-            document.getElementById('link').value= '';
-
-            document.getElementById('idtext').style.display = 'none';
-          //  document.getElementById('brtext').style.display = 'none';
-
-            document.getElementById('brlink').style.display = 'none';
-            document.getElementById('linktext').style.display='block';
-
-            document.getElementById('nametext').style.display = 'block';
-           // document.getElementById('brname').style.display = 'block';
-
-            document.getElementById('idlinktext').style.display='block';
-            //document.getElementById('bridlink').style.display='none';
-            document.getElementById('idlink').type='block';*/
-        }else if(value == 'cctv'){
-            document.getElementById('typeppoint').value = 'cctv';
-            type = 'cctv';
-            color = '#db2525';
-           /*   document.getElementById('name').type = 'text';
-            document.getElementById('name').value = '';
-
-            document.getElementById('idn').type = 'hidden';
-            document.getElementById('idn').value = '';
-
-            document.getElementById('link').type = 'text';
-            document.getElementById('link').value= '';
-
-            document.getElementById('idtext').style.display = 'none';
-           // document.getElementById('brtext').style.display = 'none';
-
-          //  document.getElementById('brlink').style.display = 'none';
-            document.getElementById('linktext').style.display='block';
-
-            document.getElementById('nametext').style.display = 'block';
-          //  document.getElementById('brname').style.display = 'block';
-
-            document.getElementById('idlinktext').style.display='block';
-           // document.getElementById('bridlink').style.display='none';
-            document.getElementById('idlink').type='block';
-*/
-        }else if(value == 'pc'){
+       if(value == 'pc'){
             document.getElementById('typeppoint').value = 'pc';
             type = 'pc';
             color = '#f79545';
-             /* document.getElementById('name').type = 'text';
-            document.getElementById('name').value = '';
-
-            document.getElementById('idn').type = 'hidden';
-            document.getElementById('idn').value = '';
-
-            document.getElementById('link').type = 'text';
-            document.getElementById('link').value= '';
-
-            document.getElementById('idtext').style.display = 'none';
-            document.getElementById('brtext').style.display = 'none';
-
-            document.getElementById('brlink').style.display = 'none';
-            document.getElementById('linktext').style.display='block';
-
-            documedragnt.getElementById('nametext').style.display = 'block';
-            document.getElementById('brname').style.display = 'block';
-
-            document.getElementById('idlinktext').style.display='block';
-            document.getElementById('bridlink').style.display='none';
-            document.getElementById('idlink').type='block';
-*/
         }else if(value == 'wifi'){
             document.getElementById('typeppoint').value = 'wifi';
             type = 'wifi';
             color = '#04d9ff';
-           /*  document.getElementById('name').type = 'text';
-            document.getElementById('name').value = '';
-
-            document.getElementById('idn').type = 'hidden';
-            document.getElementById('idn').value = '';
-
-            document.getElementById('link').type = 'text';
-            document.getElementById('link').value= '';
-
-            document.getElementById('idtext').style.display = 'none';
-           // document.getElementById('brtext').style.display = 'none';
-
-          //  document.getElementById('brlink').style.display = 'none';
-            document.getElementById('linktext').style.display='block';
-
-            document.getElementById('nametext').style.display = 'block';
-           // document.getElementById('brname').style.display = 'block';
-
-            document.getElementById('idlinktext').style.display='block';
-          //  document.getElementById('bridlink').style.display='none';
-            document.getElementById('idlink').type='block';
-*/
         }
     }
     function nexts() {
@@ -617,37 +422,7 @@ $('#malldropdown')
                      
                     for(var i = 0;i < data.length;i++){
                         var typenya=data[i]['type'];
-                        if(data[i]['type'] == 'hibob'){
-                            var x = data[i]['x_axis'];
-                            var y = data[i]['y_axis'];
-                            var id = data[i]['id'];
-                            totalHibobFloor = totalHibobFloor + 1;
-                              var id_no = (data[i]['zm_id']!=null?data[i]['zm_id']:"");
-                            var ip_addr = (data[i]['link']!=null?data[i]['link']:"");
-                            var namedevice = (data[i]['name']!=null?data[i]['name']:"");
-                            div.innerHTML += '<circle id="c3_'+id+'" cx="'+x+'" cy="'+y+'" namenya="'+namedevice+'" linknya="'+ip_addr+'"  idnya="'+id_no+'" typenya="'+typenya+'"  r="12" fill="#21de54" onclick="deleteddata('+id+')"></circle>';
-                            var newtr="<tr><td>"+id_no+"</td><td>"+namedevice+"</td><td>"+ip_addr+"</td><td>"+typenya+"</td></tr>";
-                       //     $("#ajax-crud-datatable tbody").append(newtr);
-                         //   div.innerHTML += '<circle id="c1'+index+'" fill="transparent" stroke="#21de54" stroke-width="0.5" cx="'+x+'" cy="'+y+'" r="12"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle id="c2'+index+'" fill="transparent" stroke="#21de54" stroke-width="0.5" cx="'+x+'" cy="'+y+'" r="10"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle id="c3'+index+'" cx="'+x+'" cy="'+y+'" r="8" fill="#21de54" onclick="deleteddata('+id+')"></circle>';
-                            // onclick="hibobclickjs(\''+name+'\')"
-                            index++;
-                        }else if(data[i]['type'] == 'cctv'){
-                            var x = data[i]['x_axis'];
-                            var y = data[i]['y_axis'];
-                            var id = data[i]['id'];
-                            totalCCTVFloor = totalCCTVFloor + 1;
-                            var id_no = (data[i]['zm_id']!=null?data[i]['zm_id']:" ");
-                            var ip_addr = (data[i]['link']!=null?data[i]['link']:" ");
-                            var namedevice = (data[i]['name']!=null?data[i]['name']:" ");
-                            div.innerHTML += '<circle id="c3_'+id+'" cx="'+x+'" cy="'+y+'"  linknya="'+ip_addr+'"   idnya="'+id_no+'"  r="12" namenya="'+namedevice+'"  typenya="'+typenya+'" fill="#db2525" onclick="deleteddata('+id+')"></circle>';
-                            //div.innerHTML += '<circle  id="c3_'+id+'" cx="'+x+'" cy="'+y+'" namenya="'+namedevice+'" linknya="'+ip_addr+'"  idnya="'+id_no+'"  r="12" fill="#db2525" onclick="deleteddata('+id+')" ></circle>';
-                           // div.innerHTML += '<circle id="c1'+index+'" fill="transparent" stroke="#db2525" stroke-width="0.5" cx="'+x+'" cy="'+y+'" r="12"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle id="c2'+index+'" fill="transparent" stroke="#db2525" stroke-width="0.5" cx="'+x+'" cy="'+y+'" r="10"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle  id="c3'+index+'" cx="'+x+'" cy="'+y+'" r="8" fill="#db2525" onclick="deleteddata('+id+')" onmouseover="inmouse(\'Name: '+id+'\',\''+index+'\')" onmouseout="outmouse(\''+index+'\')"></circle><svg width="300" height="150" x="'+(x+15)+'" y="'+(y+15)+'"  id="pop'+index+'" visibility="hidden"><image width="100%" height="100%" margin="0px" xlink:href="../asset/rectpop.svg"></image><text id="text'+index+'" visibility="hidden" x="10" y="25" font-family="Arial" font-size="18" fill="'+colortext+'"></text></svg>';
-                            //  onclick="cctvclick('+id+')"
-                            // 
-                            var newtr="<tr><td>"+id_no+"</td><td>"+namedevice+"</td><td>"+ip_addr+"</td><td>"+typenya+"</td></tr>";
-                            //$("#ajax-crud-datatable tbody").append(newtr);
-                            index++;
-                        }else if(data[i]['type'] == 'pc'){
+                            if(data[i]['type'] == 'pc'){
                             var x = data[i]['x_axis'];
                             var y = data[i]['y_axis'];
                             var id = data[i]['id'];
@@ -656,7 +431,6 @@ $('#malldropdown')
                             var ip_addr = (data[i]['link']!=null?data[i]['link']:" ");
                             var namedevice = (data[i]['name']!=null?data[i]['name']:" ");
                             div.innerHTML += '<circle  id="c3_'+id+'" cx="'+x+'" cy="'+y+'"  namenya="'+namedevice+'" linknya="'+ip_addr+'"  idnya="'+id_no+'" typenya="'+typenya+'" r="12" fill="#f79545" onclick="deleteddata('+id+')" ></circle>';
-                            //div.innerHTML += '<circle id="c1'+index+'" fill="transparent" stroke="#f79545" stroke-width="0.5" cx="'+x+'" cy="'+y+'" r="12"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle id="c2'+index+'" fill="transparent" stroke="#f79545" stroke-width="0.5" cx="'+x+'" cy="'+y+'" r="10"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle  id="c3'+index+'" cx="'+x+'" cy="'+y+'" r="8" fill="#f79545" onclick="deleteddata('+id+')" onmouseover="inmouse(\'Name: '+data[i]['name']+'\',\''+index+'\')" onmouseout="outmouse(\''+index+'\')"></circle><svg width="300" height="150" x="'+(x+15)+'" y="'+(y+15)+'"  id="pop'+index+'" visibility="hidden"><image width="100%" height="100%" margin="0px" xlink:href="../asset/rectpop.svg"></image><text id="text'+index+'" visibility="hidden" x="10" y="25" font-family="Arial" font-size="18" fill="'+colortext+'"></text></svg>';
                             var newtr="<tr><td>"+id_no+"</td><td>"+namedevice+"</td><td>"+ip_addr+"</td><td>"+typenya+"</td></tr>";
                         //    $("#ajax-crud-datatable tbody").append(newtr);
                             index++;
@@ -669,18 +443,13 @@ $('#malldropdown')
                             var ip_addr = (data[i]['link']!=null?data[i]['link']:" ");
                             var namedevice = (data[i]['name']!=null?data[i]['name']:" ");
                                                         div.innerHTML += '<circle id="c3_'+id+'" cx="'+x+'" cy="'+y+'"  linknya="'+ip_addr+'"   idnya="'+id_no+'" class="popover-icon" r="12" namenya="'+namedevice+'"  typenya="'+typenya+'" fill="#04d9ff" onclick="deleteddata('+id+')"></circle>';
-                            //div.innerHTML += '<circle  id="c3_'+id+'" cx="'+x+'" cy="'+y+'" namenya="'+namedevice+'" linknya="'+ip_addr+'"  idnya="'+id_no+'"  r="12" fill="#04d9ff" onclick="deleteddata('+id+')"></circle>';
-    //                                        div.innerHTML += '<circle id="c1'+index+'" fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="'+x+'" cy="'+y+'" r="12"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle id="c2'+index+'" fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="'+x+'" cy="'+y+'" r="10"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle  id="c3'+index+'" cx="'+x+'" cy="'+y+'" r="8" fill="#04d9ff" onclick="deleteddata('+id+')"></circle>';
-                            // onclick="wificlickjs(\''+id+'\');
                             var newtr="<tr><td>"+id_no+"</td><td>"+namedevice+"</td><td>"+ip_addr+"</td><td>"+typenya+"</td></tr>";
                         //    $("#ajax-crud-datatable tbody").append(newtr);
                             index++;
                         }
                     }
-                       document.getElementById("floorhibob").innerHTML =totalHibobFloor+" Device";
                        document.getElementById("floorwifi").innerHTML =totalWifiFloor+" Device";
                        document.getElementById("floorpc").innerHTML =totalPCFloor+" Device";
-                       document.getElementById("floorcctv").innerHTML =totalCCTVFloor+" Device";
                     populateDataTable(data);
                 }
              
@@ -703,41 +472,7 @@ $('#malldropdown')
            row++;
         });
     }
-    function hibobclickjs(id) {
-    $(".popover").hide();
-        $.ajax({
-            type: 'GET',
-            url: window.location.origin + "/hibobadmindata/" + id,
-            beforeSend: function () {
-            },
-            success: function (response) {
-               // console.log(response);
-                if (response.length != 0) {
-                    document.getElementById("point_id").innerHTML = response[0]['nama_gateway'].toString();
-                }
-                var div = document.getElementById('hibobstatus');
-                div.value = '1';
-                document.getElementById('hibob').setAttribute('href', "../asset/hibob2.png");
-                document.getElementById("hibobrect").innerHTML = '<rect">';
 
-                for (var i = 0; i < response.length; i++) {
-                    var y = 40 + (i * 75);
-                    var y2 = 55 + (i * 75);
-                    var nama = response[i]['nama_staff'];
-                    var type = response[i]['tipe_alert'];
-                    if (type == 'Late') {
-                        var image = 'http://hibob.id:2092/images/?url=' + response[i]['url_photo'];
-                        document.getElementById("hibobrect").innerHTML += '<text x="10" y="45" font-size="12px" font-family="Arial" fill="' + colortext + '">' + name + '</text><svg x="10" y="' + y + '" width="55" height="70" fill="red"><image width="55" height="70" margin="0px" xlink:href="' + image + '"></image></svg><text x="70" y="' + y2 + '" font-size="12px" font-family="Arial" fill="' + colortext + '">' + nama + '</text><text x="70" y="' + parseInt(y2 + 15) + '" font-family="Arial" font-size="12px" fill="' + colortextalert + '">' + type + '</text>';
-                    } else {
-                        var image = 'http://hibob.id:2092/images/?url=' + response[i]['url_photo'];
-                        document.getElementById("hibobrect").innerHTML += '<text x="10" y="45" font-size="12px" font-family="Arial" fill="' + colortext + '">' + name + '</text><svg x="10" y="' + y + '" width="55" height="70" fill="red"><image width="55" height="70" margin="0px" xlink:href="' + image + '"></image></svg><text x="70" y="' + y2 + '" font-size="12px" font-family="Arial" fill="' + colortext + '">' + nama + '</text><text x="70" y="' + parseInt(y2 + 15) + '" font-size="12px" font-family="Arial" fill="' + colortext + '">' + type + '</text>';
-                    }
-                    // <text x="70" y="'+parseInt(y2+30)+'" font-size="12px" fill="'+colortext+'">Alert Type:</text><text x="70" y="'+parseInt(y2+45)+'" font-size="12px" fill="'+colortext+'">'+type+'</text>
-                }
-                document.getElementById("hibobrect").innerHTML += '</rect>';
-            }
-        });
-    }
     function showDevice(){
     var classnya=$('#dropDownDevice').val();
         // console.log(classnya);
@@ -878,58 +613,7 @@ $('#malldropdown')
         }
     }
 
-    function hibobclick() {
-        var div = document.getElementById('hibobstatus');
-        // if(div.value == '0'){
-        //     div.value = '1';
-          document.getElementById('hibob').setAttribute('href', "../asset/hibobNew2.png");
-        //     document.getElementById("hibobrect").innerHTML = '<rect">';
-        //     for(var i = 0;i < 2; i++){
-        //         var y = 40 + (i * 75);
-        //         var y2 = 55 + (i * 75);
-        //         document.getElementById("hibobrect").innerHTML += '<rect x="10" y="'+y+'" width="55" height="70" fill="red"></rect><text x="70" y="'+y2+'" font-size="12px" fill="'+colortext+'">Hello</text><text x="70" y="'+parseInt(y2+15)+'" font-size="12px" fill="'+colortext+'">Hello</text><text x="70" y="'+parseInt(y2+30)+'" font-size="12px" fill="'+colortext+'">Hello</text><text x="70" y="'+parseInt(y2+45)+'" font-size="12px" fill="'+colortext+'">Hello</text>';
-        //     }
-        //     document.getElementById("hibobrect").innerHTML += '</rect>';
-        // }else{
-        var hibob = <?php echo isset($hibob) ? json_encode($hibob) : 0; ?>;
-        div.value = '0';
-        //  document.getElementById('hibob').setAttribute('href', "../asset/hibobNew1.png");
-        //   document.getElementById("hibobrect").innerHTML = '<text x="32%" y="58%" font-family="Arial" font-weight="bold" font-size="60px" fill="'+colortext+'" >'+hibob+'</text><text x="32%" y="75%" font-family="Arial" font-size="16px" fill="'+colortext+'">Total Staff</text>';
 
-
-        var hibobHouseKeeper = <?php echo isset($hibobcountHK) ? json_encode($hibobcountHK) : 0; ?>;
-        var hibobGS = <?php echo isset($hibobcountGS) ? json_encode($hibobcountGS) : 0; ?>;
-        var hibobOthers = <?php echo isset($hibobcountOthers) ? json_encode($hibobcountOthers) : 0; ?>;
-        var wifiDownload = <?php echo isset($wifiDownload) ? json_encode($wifiDownload) : 0; ?>;
-        var wifiUpload = <?php echo isset($wifiUpload) ? json_encode($wifiUpload) : 0; ?>;
-        /// console.log(hibob);
-        document.getElementById("hibobrect").innerHTML = '<text x="32%" y="55%" font-family="Arial" font-weight="bold" font-size="55px" fill="' + colortext + '" >' + hibob + '</text>\n\
-                                                        <text x="27%" y="62%" font-family="Arial" font-size="16px" fill="' + colortext + '">Total Staff</text>\n\
-                                                        <text x="15%" y="75%" font-family="Arial" font-size="12px" fill="' + colortext + '">Staff : ' + hibobOthers + '</text>\n\
-                                                        <text x="15%" y="82%" font-family="Arial" font-size="12px" fill="' + colortext + '">Cleaning Service : ' + hibobHouseKeeper + '</text>\n\
-                                                        <text x="15%" y="89%" font-family="Arial" font-size="12px" fill="' + colortext + '">Engineering : ' + hibobGS + '</text>';
-        //iexit;
-        document.getElementById("wifirect").innerHTML = '<text id="wificount1" x="20%" y="55%" font-family="Arial" font-size="55px" fill="' + colortext + '" font-weight="bold"></text>\n\
-                                                         <text x="18%" y="62%" font-family="Arial" font-size="16px" fill="' + colortext + '">Connected Device</text>\n\
-                                                        <text x="10%" y="80%" font-family="Arial" font-size="12px" fill="' + colortext + '">' + wifiDownload + '</text>\n\
-\n\                                                         <text x="65%" y="80%" font-family="Arial" font-size="12px" fill="' + colortext + '">' + wifiUpload + '</text>\n\
-\n\                                                          <text x="7%" y="90%" font-family="Arial" font-size="12px" fill="' + colortext + '" font-height="bold">Mbps Download</text>\n\
-                                                       <text x="62%" y="90%" font-family="Arial" font-size="12px" fill="' + colortext + '" font-height="bold">Mbps Upload</text>';
-        document.getElementById("point_id").innerHTML = '';
-        var unifi = <?php echo isset($unifi) ? json_encode($unifi) : 0; ?>;
-        if (unifi != 0 || unifi != '0') {
-            counter("wificount1", 0, parseInt(unifi), 1);
-        } else {
-            document.getElementById("wificount1").value = 0;
-        }
-        var pcounting = <?php echo isset($PeopleCounting) ? json_encode($PeopleCounting) : 0; ?>;
-        if (pcounting < 500) {
-            counter("pccount", 0, pcounting, 1);
-        } else {
-            counter("pccount", parseInt(pcounting - 500), pcounting, 1);
-        }
-        // }
-    }
 
     function wificlick() {
         var div = document.getElementById('wifistatus');
@@ -1001,7 +685,6 @@ $('#malldropdown')
     }
     function showHeatMap(a,iddevice){
 
-
         var div = document.getElementById('maps');
       //  var div2 = document.getElementById('maps2');
         $.ajax({
@@ -1016,14 +699,7 @@ $('#malldropdown')
                 if(data.length != 0){
                     document.getElementById('mps').setAttribute('href', '../'+data[0]['maps_img']);
                     for(var i = 0;i < data.length;i++){
-                        if (data[i]['tipe'] == 'hibob') {
-                                    totalHibobFloor = totalHibobFloor + 1;
-                                      index++;
-                                } else if (data[i]['tipe'] == 'cctv') {
-                                       // onmouseover="inmouse(\'Name: '+data[i]['name']+'\',\''+index+'\')" onmouseout="outmouse(\''+index+'\')"<svg width="300" height="150" x="'+(x+15)+'" y="'+(y+15)+'"  id="pop'+index+'" visibility="hidden"><image width="100%" height="100%" margin="0px" xlink:href="../asset/rectpop.svg"></image><text id="text'+index+'" visibility="hidden" x="10" y="25" font-family="Arial" font-size="18" fill="'+colortext+'"></text></svg>
-                                    index++;
-                                } else if (data[i]['tipe'] == 'pc') {
-                                         //  onmouseover="inmouse(\'Name: '+data[i]['name']+'\',\''+index+'\')" onmouseout="outmouse(\''+index+'\')"></circle><svg width="300" height="150" x="'+(x+15)+'" y="'+(y+15)+'"  id="pop'+index+'" visibility="hidden"><image width="100%" height="100%" margin="0px" xlink:href="../asset/rectpop.svg"></image><text id="text'+index+'" visibility="hidden" x="10" y="25" font-family="Arial" font-size="18" fill="'+colortext+'"></text></svg>
+                        if (data[i]['tipe'] == 'pc') {
                                     index++;
                                 } else if (data[i]['tipe'] == 'wifi') {
                                    // console.log(totalWifiFloor);

@@ -22,13 +22,7 @@ use App\Http\Controllers\AdminMapsController;
 use App\Http\Controllers\PostAjaxController;
 use App\Http\Controllers\DataTableAjaxCRUDController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\WifiController;
 
-Route::get('/getWifiDevices/{id}/{name}', [WifiController::class, 'getWifiDevices']);
-Route::get('/getAllWifiDevices/{id}', [WifiController::class, 'getAllWifiDevices']);
-
-Route::get('/test', [MapsController::class, 'test']);
-Route::get('/displayFloor', [MapsController::class, 'displayfloor']);
 
 //Routing Web : Staff
 Route::get('/', [UserController::class, 'viewLogin'])->name('viewLogin');
@@ -46,15 +40,8 @@ Route::get('/admin', [AdminController::class, 'viewAdminLogin'])->name('viewAdmi
 Route::post('verifyLogin', [AdminController::class, 'verifyLogin'])->name('verifyLogin');
 
 Route::get('/dashboard', [AdminController::class, 'dashboard']);
-Route::get('adminlogout', [AdminController::class, 'adminlogout'])->name('adminlogout');
+Route::get('adminlogout', [AdminMapsController::class, 'adminlogout'])->name('adminlogout');
 Route::post('backdashboard', [AdminController::class, 'dashboard']);
-
-/*end*/
-
-
-Route::get('/index/asset/{id}', [MapsController::class, 'assetview']);
-Route::get('/maps', [MapsController::class, 'maps']);
-Route::get('/right', [MapsController::class, 'right']);
 
 
 Route::get('/floor/{id}', [MapsController::class, 'floor']);
@@ -62,7 +49,6 @@ Route::get('/floorUser/{id}', [MapsController::class, 'floorUser']);
 Route::get('/changefloor/{id}', [MapsController::class, 'changefloor']);
 
 
-Route::get('/hibobdata/{name}', [MapsController::class, 'hibobdata']);
 Route::get('/selectDeviceType/{id}', [MapsController::class, 'selectDeviceType']);
 Route::get('/wifidatadetail/{nama}', [MapsController::class, 'wifidatadetail']);
 Route::get('/cctvchange/{id}', [MapsController::class, 'cctvclick']);
@@ -93,16 +79,13 @@ Route::get('/deletedata/{id}', [AdminMapsController::class, 'delete']);
 
 Route::get('/changeadminfloor/{id}', [AdminMapsController::class, 'changefloor']);
 Route::get('/flooradmin/{id}', [AdminMapsController::class, 'floor']);
-Route::get('/hibobadmindata/{name}', [AdminMapsController::class, 'hibobdata']);
 Route::get('/wifiadmindatadetail/{nama}', [AdminMapsController::class, 'wifidatadetail']);
-Route::get('/cctvadminchange/{id}', [AdminMapsController::class, 'cctvclick']);
 Route::get('/pcadminclick/{id}', [AdminMapsController::class, 'pcclick']);
 
 Route::get('/user/', [AdminMapsController::class, 'useredit']);
 
 Route::resource('ajaxposts', PostAjaxController::class);
-/*tsruh ini paling bawah ntar kacau*/
-//Route::get('/{id}', [MapsController::class, 'indexbycompany']);
+
 Route::get('ajax-crud-user-datatable', [DataTableAjaxCRUDController::class, 'indexuser']);
 Route::post('edit-user', [DataTableAjaxCRUDController::class, 'edituser']);
 Route::post('edit-mall', [DataTableAjaxCRUDController::class, 'editmall']);
