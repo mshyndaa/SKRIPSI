@@ -9,13 +9,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 
-class AdminLoginController extends Controller
+class AdminController extends Controller
 {
     
     public function viewAdminLogin()
     {
           if (Session::get('admin.id') != null){ 
-            return view('dashboard');
+            return view('../admin/Listadmin');
         }else{
             return view('../admin/login');
         }

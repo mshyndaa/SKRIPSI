@@ -19,12 +19,7 @@ class AdminMapsController extends Controller {
             }
         });
     }
-    public function home(){
-       /// if(Session::has('sessionuser')){
-       //  if(Auth::check()){
-          //   dd(Auth::check());
-            //return view('dashboard');
-      
+    public function home(){      
           $data = DB::connection('mysql1')->table('users')
                   ->join('user_akses', 'user_akses.user_id', 'users.user_id')
                    ->join('ms_company', 'ms_company.id', 'user_akses.company_id')
@@ -34,8 +29,6 @@ class AdminMapsController extends Controller {
                 ->get();
               
           return view('HomeUser', ['Data' => $data]);
-           // }
-            //return redirect("/");
     }
     public function getMap($id){
          $data = DB::connection('mysql1')->table('ms_floor')
@@ -1231,6 +1224,6 @@ return response()->json(['data'=>$data,'chgDeviceStatus'=>$changedDevice]);
         return redirect('/admin');
     }
     public function useredit(){
-       return view('dashboardUser');
+       return view('../admin/ListUser');
     }
 }

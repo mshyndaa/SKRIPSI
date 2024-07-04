@@ -17,7 +17,7 @@ use App\Http\Controllers\MapsController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\AdminLoginController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminMapsController;
 use App\Http\Controllers\PostAjaxController;
 use App\Http\Controllers\DataTableAjaxCRUDController;
@@ -42,12 +42,12 @@ Route::post('logout', [UserController::class, 'logout'])->name('logout');
 
 
 //Routing Web : Admin
-Route::get('/admin', [AdminLoginController::class, 'viewAdminLogin'])->name('viewAdminLogin');
-Route::post('verifyLogin', [AdminLoginController::class, 'verifyLogin'])->name('verifyLogin');
+Route::get('/admin', [AdminController::class, 'viewAdminLogin'])->name('viewAdminLogin');
+Route::post('verifyLogin', [AdminController::class, 'verifyLogin'])->name('verifyLogin');
 
-Route::get('/dashboard', [AdminMapsController::class, 'dashboard']);
-Route::get('adminlogout', [AdminMapsController::class, 'adminlogout'])->name('adminlogout');
-Route::post('backdashboard', [AdminMapsController::class, 'dashboard']);
+Route::get('/dashboard', [AdminController::class, 'dashboard']);
+Route::get('adminlogout', [AdminController::class, 'adminlogout'])->name('adminlogout');
+Route::post('backdashboard', [AdminController::class, 'dashboard']);
 
 /*end*/
 

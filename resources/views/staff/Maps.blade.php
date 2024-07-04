@@ -177,7 +177,7 @@
                     </table>
             </div>
         </div>
-        <footer style="color: white; background-color: #300970; margin-top: 2%; padding: 1px;">
+        <footer style="color: white; background-color: #11142C; margin-top: 2%; padding: 1px;">
             <p style="text-align: center; padding-top:1%">&copy; Mall Dashboard 2024 | Bedria Mashyanda Maail - 2440027303</p>
     </footer>
     </body>

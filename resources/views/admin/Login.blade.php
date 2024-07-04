@@ -92,11 +92,11 @@
           </div>
           <!-- /.col -->
           <div class="col-4">
-            <button type="submit" class="btn btn-danger btn-sm btn-block" id="btnLogin">Sign In</button>
+            <button type="submit" class="btn btn-sm btn-block" id="btnLogin">Sign In</button>
           </div>
             @if ($errors->has('email'))
           <span>
-            <strong style="color:red;">{{ $errors->first('email') }}</strong>
+            <strong>{{ $errors->first('email') }}</strong>
           </span>
         @endif
           <!-- /.col -->

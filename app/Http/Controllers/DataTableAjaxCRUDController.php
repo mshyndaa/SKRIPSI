@@ -32,7 +32,7 @@ class DataTableAjaxCRUDController extends Controller {
     public function index() {
         if (request()->ajax()) {
             return datatables()->of(Admin::select('id_users', 'username', 'email', 'created_at'))
-                            ->addColumn('action', 'company-action')
+                            ->addColumn('action', '../../ajax/company-action')
                             ->rawColumns(['action'])
                             ->addIndexColumn()
                             ->make(true);
@@ -43,7 +43,7 @@ class DataTableAjaxCRUDController extends Controller {
     public function indexuser() {
         if (request()->ajax()) {
             return datatables()->of(User::select('id_users', 'username', 'email', 'created_at'))
-                            ->addColumn('action', 'user-action')
+                            ->addColumn('action', '../ajax/user-action')
                             ->rawColumns(['action'])
                             ->addIndexColumn()
                             ->make(true);

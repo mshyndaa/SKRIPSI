@@ -1,88 +1,73 @@
-@extends('master')
+@extends('Template')
+@section('content')
+<div class="container" style="margin-top: 2rem;">
+  <div class="row">
+      <div class="col-lg-12">
+          <div class="text-right mb-2">
+              <button class="btn btn-primary" onclick="add()">Create Admin</button>
+          </div>
+      </div>
+  </div>
 
-@section('konten')
-<div class="container mt-2">
+  @if ($message = Session::get('success'))
+  <div class="alert alert-success" role="alert">
+      {{ $message }}
+  </div>
+  @endif
 
-<div class="row">
-        <div class="col-lg-12 margin-tb">
-            <div class="pull-left">
-                <h2>Admin</h2>
-            </div>
-            <div class="pull-right mb-2">
-                <a class="btn btn-success" onClick="add()" href="javascript:void(0)"> Create Admin</a>
-            </div>
-        </div>
-    </div>
-   
-    @if ($message = Session::get('success'))
-        <div class="alert alert-success">
-            <p>{{ $message }}</p>
-        </div>
-    @endif
-
-    <div class="card-body">
-
-        <table class="table table-bordered" id="ajax-crud-datatable">
-           <thead>
+  <div class="card-body">
+      <table class="table table-bordered" id="ajax-crud-datatable">
+          <thead>
               <tr>
-                 <th>Id</th>
-                 <th>Name</th>
-                 <th>Email</th>
-                
-                 <th>Created at</th>
-                 <th>Action</th>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Created At</th>
+                  <th>Action</th>
               </tr>
-           </thead>
-        </table>
-
-    </div>
-   
+          </thead>
+      </table>
+  </div>
 </div>
 
-  <!-- boostrap company model -->
-    <div class="modal fade" id="company-modal" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title" id="CompanyModal"></h4>
+<div class="modal fade" id="company-modal" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header header">
+              <h4 class="modal-title" id="CompanyModal"></h4>
           </div>
           <div class="modal-body">
-            <form action="javascript:void(0)" id="CompanyForm" name="CompanyForm" class="form-horizontal" method="POST" enctype="multipart/form-data">
-              <input type="hidden" name="id" id="id">
-              <div class="form-group">
-                <label for="name" class="col-sm-2 control-label">Username</label>
-                <div class="col-sm-12">
-                  <input type="text" class="form-control" id="name" name="name" placeholder="Enter Username" maxlength="50" readonly required>
-                </div>
-              </div>  
+              <form id="CompanyForm" name="CompanyForm" class="form-horizontal" method="POST" enctype="multipart/form-data">
+                  <input type="hidden" name="id" id="id">
+                  <div class="form-group">
+                      <label for="name" class="col-sm-2 control-label">Username</label>
+                      <div class="col-sm-12">
+                          <input type="text" class="form-control" id="name" name="name" placeholder="Enter Username" maxlength="50" readonly required>
+                      </div>
+                  </div>
 
-              <div class="form-group">
-                <label for="name" class="col-sm-2 control-label"> Email</label>
-                <div class="col-sm-12">
-                  <input type="email" class="form-control" id="email" name="email" placeholder="Enter  Email" maxlength="50" required="">
-                </div>
-              </div>
+                  <div class="form-group">
+                      <label for="email" class="col-sm-2 control-label">Email</label>
+                      <div class="col-sm-12">
+                          <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email" maxlength="50" required>
+                      </div>
+                  </div>
 
-              <div class="form-group">
-                <label class="col-sm-2 control-label">Password</label>
-                <div class="col-sm-12">
-                  <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" >
-                </div>
-              </div>
+                  <div class="form-group">
+                      <label class="col-sm-2 control-label">Password</label>
+                      <div class="col-sm-12">
+                          <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password">
+                      </div>
+                  </div>
 
-              <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary" id="btn-save">Save changes
-                </button>
-              </div>
-            </form>
+                  <div class="d-flex justify-content-center">
+                      <button type="submit" class="btn btn-primary" id="btn-save">Save Changes</button>
+                  </div>
+              </form>
           </div>
-          <div class="modal-footer">
-            
-          </div>
-        </div>
       </div>
-    </div>
-<!-- end bootstrap model -->
+  </div>
+</div>
 
 </body>
 <script type="text/javascript">
