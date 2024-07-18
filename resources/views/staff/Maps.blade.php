@@ -241,7 +241,7 @@
                                                             <text x="7%" y="90%" font-family="Poppins" font-size="9px" fill="' + colortext + '" font-height="bold">Mbps Download</text>\n\
                                                            <text x="62%" y="90%" font-family="Poppins" font-size="9px" fill="' + colortext + '" font-height="bold">Mbps Upload</text>';
         document.getElementById("pcrect").innerHTML = '<text x="14%" y="25%" font-family="Poppins" font-size="14px" fill="' + colortext + '">' +<?php echo isset($compname) ? json_encode($compname) : 0; ?> + '</text>\n\
-                                                          <text id="pccount" x="'+xpospc+'%" y="58%" font-family="Poppins" font-size="50px" fill="' + colortext + '" font-weight="bold"></text>\n\
+                                                          <text id="pccount" x="10%" y="58%" font-family="Poppins" font-size="40px" fill="' + colortext + '" font-weight="bold"></text>\n\
                                                            <text x="33%" y="75%" font-family="Poppins" font-size="10px" fill="' + colortext + '">People Counting</text>\n\
                                                            <text x="39%" y="85%" font-family="Poppins" font-size="15px" fill="' + colortext + '">' + currentHours + ' : ' + currentMinutes + '</text>';
         var unifi = <?php echo isset($unifi) ? json_encode($unifi) : 0; ?>;
@@ -673,7 +673,7 @@
                         div.value = '1';
                         document.getElementById('pc').setAttribute('href', "../asset/pc2.png");
                         document.getElementById("pcrect").innerHTML = '<text x="14%" y="25%" font-family="Poppins" font-size="14px" fill="' + colortext + '">' +<?php echo isset($compname) ? json_encode($compname) : 0; ?> + '</text>\n\
-                                                                   <text id="pccount" x="'+xpospc+'%" y="58%" font-family="Poppins" font-size="50px" fill="' + colortext + '" font-weight="bold"></text><text x="30%" y="75%" font-family="Poppins" font-size="10px" fill="' + colortext + '">Gate Away Number</text><text x="39%" y="85%" font-family="Poppins" font-size="15px" fill="' + colortext + '">' + currentHours + ' : ' + currentMinutes + '</text>';
+                                                                   <text id="pccount" x="10%" y="58%" font-family="Poppins" font-size="40px" fill="' + colortext + '" font-weight="bold"></text><text x="30%" y="75%" font-family="Poppins" font-size="10px" fill="' + colortext + '">Gate Away Number</text><text x="39%" y="85%" font-family="Poppins" font-size="15px" fill="' + colortext + '">' + currentHours + ' : ' + currentMinutes + '</text>';
                         if (count < 500) {
                         counter("pccount", 0, count, 1);
                         } else {
@@ -774,7 +774,7 @@
             var pcounting = <?php echo isset($PeopleCounting) ? json_encode($PeopleCounting) : 0; ?>;
             div.value = '0';
             document.getElementById('pc').setAttribute('href', "../asset/pc1.png");
-            document.getElementById("pcrect").innerHTML = '<text x="14%" y="25%" font-family="Poppins" font-size="14px" fill="' + colortext + '">' +<?php echo isset($compname) ? json_encode($compname) : 0; ?> + '</text><text id="pccount" x="15%" y="58%" font-family="Poppins" font-size="50px" fill="' + colortext + '" font-weight="bold"></text><text x="33%" y="75%" font-family="Poppins" font-size="10px" fill="' + colortext + '">People Counting</text><text x="39%" y="85%" font-family="Poppins" font-size="15px" fill="' + colortext + '">' + currentHours + ' : ' + currentMinutes + '</text>';
+            document.getElementById("pcrect").innerHTML = '<text x="14%" y="25%" font-family="Poppins" font-size="14px" fill="' + colortext + '">' +<?php echo isset($compname) ? json_encode($compname) : 0; ?> + '</text><text id="pccount" x="10%" y="58%" font-family="Poppins" font-size="40px" fill="' + colortext + '" font-weight="bold"></text><text x="33%" y="75%" font-family="Poppins" font-size="10px" fill="' + colortext + '">People Counting</text><text x="39%" y="85%" font-family="Poppins" font-size="15px" fill="' + colortext + '">' + currentHours + ' : ' + currentMinutes + '</text>';
             document.getElementById("point_id").innerHTML = '';
             counter("pccount", parseInt(pcounting - 500), pcounting, 1);
         }

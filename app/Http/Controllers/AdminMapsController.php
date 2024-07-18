@@ -44,13 +44,11 @@ class AdminMapsController extends Controller {
 
     public function ms_itemcompany($id) {
         if ($id == 1) {
-            $hibobcount = DB::connection('mysql2')->table('hibob_gc_getuserinoutbytime_src')->select("nama_staff")->distinct()->get();
             $unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%'");
             $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%' or msg like '%disconnected from%'");
             $unifi = count($unificountdisconnect) - count($unificountconnect);
             $pc = 0;
         } else if ($id == 2) {
-            $hibobcount = DB::connection('mysql2')->table('hibob_kk_getuserinoutbytime_src')->select("nama_staff")->distinct()->get();
             $unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_kk_src where msg like '%has connected%'");
             $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_kk_src where msg like '%has connected%' or msg like '%disconnected from%'");
             $unifi = count($unificountdisconnect) - count($unificountconnect);
@@ -63,7 +61,6 @@ class AdminMapsController extends Controller {
                 $pc = $pc + $list->ctvalue;
             }
         } else if ($id == 3) {
-            $hibobcount = DB::connection('mysql2')->table('hibob_pbm_getuserinoutbytime_src')->select("nama_staff")->distinct()->get();
             $unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%'");
             $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%' or msg like '%disconnected from%'");
             $unifi = count($unificountdisconnect) - count($unificountconnect);
@@ -76,16 +73,9 @@ class AdminMapsController extends Controller {
                 $pc = $pc + $list->ctvalue;
             }
         } else {
-            $hibobcount = [];
             $unifi = 0;
             $pc = 0;
         }
-         $cctv_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', $id)
-                ->where('ms_item.type', 'cctv')
-                ->get();
              $pc_data = DB::connection('mysql1')->table('ms_item')
                 ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
                  ->select('ms_floor.*')     
@@ -97,12 +87,6 @@ class AdminMapsController extends Controller {
                  ->select('ms_floor.*')     
                 ->where('ms_floor.company_id', $id)
                 ->where('ms_item.type', 'wifi')
-                ->get();
-             $hibob_data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
-                ->where('ms_floor.company_id', $id)
-                ->where('ms_item.type', 'hibob')
                 ->get();
         $floor = DB::connection('mysql1')->table('ms_floor')
                 ->join('ms_company', 'ms_company.id', 'ms_floor.company_id')
@@ -123,7 +107,7 @@ class AdminMapsController extends Controller {
         foreach ($data2 as $index) {
             $FloorID = $index->id;
         }
-        return view('../admin/Maps', ['hibob'=>count($hibobcount),'hibobdata'=>count($hibob_data),'wifidata'=>count($wifi_data),'pcdata'=>count($pc_data),'cctv'=>count($cctv_data), 'unifi' => $unifi, 'PeopleCounting' => $pc, 'floor' => $floor, 'compname' => $compname, 'FloorID' => $FloorID, 'CompID' => $id]);
+        return view('../admin/Maps', ['wifidata'=>count($wifi_data),'pcdata'=>count($pc_data),'unifi' => $unifi, 'PeopleCounting' => $pc, 'floor' => $floor, 'compname' => $compname, 'FloorID' => $FloorID, 'CompID' => $id]);
     }
 
     public function changefloor($id) {
@@ -144,7 +128,6 @@ class AdminMapsController extends Controller {
                 ->orderBy('id','asc')
                 ->get();
         $i=0;
-       //dd();
        
         echo $data;
     }
@@ -155,18 +138,12 @@ class AdminMapsController extends Controller {
                 ->orderBy('id','asc')
                 ->get();
         $i=0;
-       //dd();
         foreach ($data as $index) {
             $arrDataDevice =array();
             $arrDataDevice['id']=$index->id;
             $arrDataDevice['name']=$index->name;
             $arrDataDevice['isalive']=$index->isalive;
-            
-          //  echo "test<br>";
-            //print_r($arrDataDevice);
             $arrTotalDataDevice[$i]=$arrDataDevice;
-            // echo "test2<br>";
-          //  print_r($arrTotalDataDevice);
             $i++;
 
             
@@ -174,22 +151,11 @@ class AdminMapsController extends Controller {
         $sessionName="sessionDevice_".$id;
         if(Session::has($sessionName)){
             $value = Session::get($sessionName);;
-          //  print_r($value);
-            //echo "true";
             session([$sessionName => '']);
              $value = Session::get($sessionName);
-              //echo "truea";
-            //print_r($value);
-    //$devices[$key] = $subArr;  
-//}
-
-            //Session::put('product', $product);
         }
-     //print_r($arrTotalDataDevice);
-     //  print_r($arrTotalDataDevice);
       Session::put($sessionName, $arrTotalDataDevice);
       $value = Session::get($sessionName);
-           //print_r($value);
         echo $data;
     }
 
@@ -205,8 +171,6 @@ class AdminMapsController extends Controller {
         $company = (isset($request['company'])) ? $request['company'] : '';
 
         if ($x != null) {
-        
-             //DB::connection('mysql1')->table('students')->updateOrInsert(['age'=>40],['name'=>'Arbaaz Khanna', 'email'=>'arbaaz@gmail.com', 'address'=>'testing', 'age'=>'35']);
             DB::connection('mysql1')->table('ms_item')->updateOrInsert([
                 '_id' => $idn,
                 'link' => $link,
@@ -231,22 +195,8 @@ class AdminMapsController extends Controller {
         $idlink = (isset($request['idlink'])) ? $request['idlink'] : '';
         $idn = (isset($request['idn'])) ? $request['idn'] : '';
         $id = (isset($request['deleteid'])) ? $request['deleteid'] : '';
-        
-//dd();
-
 
         if ($x != null) {
-        
-             //DB::connection('mysql1')->table('students')->updateOrInsert(['age'=>40],['name'=>'Arbaaz Khanna', 'email'=>'arbaaz@gmail.com', 'address'=>'testing', 'age'=>'35']);
-           /* DB::connection('mysql1')->table('ms_item')->update([
-                '_id' => $idn,
-                'link' => trim($link),
-                'zm_id' => trim($idlink),
-                'x_axis' => $x,
-                'y_axis' => $y,
-                'name' => trim($name),
-                'id'=> $id
-            ]);*/
             $post = new ms_item();
 $post->exists = true;
 $post->id = $id; //already exists in database.
@@ -295,9 +245,8 @@ $post->save();
             $unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%' and ap_name = '" . $name . "'");
             $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%'  and ap_name = '" . $name . "' or msg like '%disconnected from%' and ap_name = '" . $name . "'");
             $unifi = count($unificountdisconnect) - count($unificountconnect);
-             $unifiSumDownload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')   as total from unifi_list_event_src where  ap_name = '" . $name . "'"); //where  DATE(last_update) = CURDATE()
-//dump($unifiSumDownload[0]->total);
-            $unifiSumUpload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')  as total from unifi_list_event_src where  ap_name = '" . $name . "'"); //where  DATE(last_update) = CURDATE()
+             $unifiSumDownload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')   as total from unifi_list_event_src where  ap_name = '" . $name . "'"); 
+            $unifiSumUpload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')  as total from unifi_list_event_src where  ap_name = '" . $name . "'"); 
         } else if ($companyid == '2') {
             $unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_kk_src where msg like '%has connected%' and ap_name = '" . $name . "'");
             $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_kk_src where msg like '%has connected%'  and ap_name = '" . $name . "' or msg like '%disconnected from%' and ap_name = '" . $name . "'");
@@ -374,15 +323,6 @@ $post->save();
         $pcdata[0]['Count'] = $pc;
         return json_decode(json_encode($pcdata));
     }
-
-    public function cctv($id) {
-        $old = DB::connection('mysql1')->table('cctv')->value('cctv_id_new');
-        if ($id != $old) {
-            return 'Change';
-        } else {
-            return 'None';
-        }
-    }
     public function HeatData($id) {
         $data = DB::connection('mysql1')->table('ms_item')
                 ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
@@ -444,15 +384,11 @@ $post->save();
         $i=0;
        //dd();
         $indexDevice=count($valueDevice);
-        
-        //add item
         foreach ($data as $index) {
             if(count($valueDevice)>0){
             for($i = 0;$i < count($valueDevice);$i++){
                 $isexist=1;
-            // echo "test";
              $array=$valueDevice[$i];
-           //  print_r($array['id']);
              if($index->id==$array['id']){
                  $isexist=0;
                  
@@ -461,12 +397,8 @@ $post->save();
                      $arrchangeDataDevice['ip']=$index->link;
                      $arrchangeDataDevice['name']=$index->name;
                 $changedDevice[$changedIndex]=$arrchangeDataDevice;
-                //$changedDevice[$changedIndex]['ip']=$index->link;
-                //$indexDevice++;
                 $changedIndex++;
                  }
-                 
-                 //check isalive condition to 
                  break;
              }
             }
@@ -490,34 +422,11 @@ $post->save();
         }
         if(Session::has($sessionName)){
             $value = Session::get($sessionName);
-          //  print_r($value);
-            //echo "true";
             session(['sessionDevice' => '']);
              $value = Session::get($sessionName);
-              //echo "truea";
-            //print_r($value);
-    //$devices[$key] = $subArr;  
-//}
-
-            //Session::put('product', $product);
         }
-     //print_r($arrTotalDataDevice);
-     //  print_r($arrTotalDataDevice);
       Session::put($sessionName, $arrTotalDataDevice);
-         //print_r($changedDevice);
                  }
-        //foreach ($data as $index) {
-        
-        //remove it
-        
-             
-          
-            
-          //  echo "test<br>";
-            //print_r($arrDataDevice);
-           // $arrTotalDataDevice[$i]=$arrDataDevice;
-            // echo "test2<br>";
-         // print_r($valueDevice);
             $i++;
 return response()->json(['data'=>$data,'chgDeviceStatus'=>$changedDevice]);
 
@@ -527,7 +436,6 @@ return response()->json(['data'=>$data,'chgDeviceStatus'=>$changedDevice]);
         
          public function adminlogout(Request $request)
     {
-           //  dd("test");
         $request->session()->forget('admin');
 
         return redirect('/admin');

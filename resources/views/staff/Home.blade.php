@@ -419,7 +419,7 @@
             });
         });
         var index = 0;
-        var type = 'hibob';
+        var type = 'pc';
         function changemaps(id,idfloor) {
             var div = document.getElementById(id);
             console.log(id);
@@ -435,63 +435,26 @@
                           
                             if (data.length != 0) {
                                 for (var i = 0; i < data.length; i++) {
-                                    if (data[i]['type'] == 'hibob') {
-                                    //    totalHibobFloor = totalHibobFloor + 1;
-                                   //     console.log("AA");
-                                     //     console.log(data[i]);
-                                        var x = data[i]['x_axis'];
-                                        var y = data[i]['y_axis'];
-                                        var name = data[i]['id'];
-                                        
-                                        var ip_addr = (data[i]['link']!=null?data[i]['link']:'');
-                                        var namedevice = (data[i]['name']!=null?data[i]['name']:'');
-                                     //   test = test + '<circle id="c1' + index + '" fill="transparent" stroke="#21de54" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle id="c2' + index + '" fill="transparent" stroke="#21de54" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle id="c3' + index + '" cx="' + x + '" cy="' + y + '" r="8" fill="#21de54" onclick="hibobclickjs(\'' + name + '\')"></circle>';
-                                        div.innerHTML += '<a data-toggle="popover" id="pop' + index + '"  class="popover-icon" data-container="body" title="Device Name" data-content="'+namedevice+'<br>'+ip_addr+'" data-placement="right" data-trigger="hover"><circle id="c1' + index + '" fill="transparent" stroke="#21de54" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle id="c2' + index + '" fill="transparent" stroke="#21de54" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle id="c3' + index + '" cx="' + x + '" cy="' + y + '" r="8" fill="#21de54" onclick="hibobclickjs(\'' + name + '\')"></circle></a>';
-                                        index++;
-                                    } else if (data[i]['type'] == 'cctv') {
-                                     //   totalCCTVFloor = totalCCTVFloor + 1;
-                                        var x = data[i]['x_axis'];
-                                        var y = data[i]['y_axis'];
-                                        var id = data[i]['id'];
-                                        var ip_addr = (data[i]['link']!=null?data[i]['link']:'');
-                                        var namedevice = (data[i]['name']!=null?data[i]['name']:'');
-                                   //     test = test + '<circle id="c1' + index + '" fill="transparent" stroke="#21de54" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle id="c2' + index + '" fill="transparent" stroke="#db2525" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle id="c3' + index + '" cx="' + x + '" cy="' + y + '" r="8" fill="#db2525" onclick="hibobclickjs(\'' + name + '\')"></circle>';
-                                        div.innerHTML += '<a data-toggle="popover" id="pop' + index + '"  class="popover-icon" data-container="body" title="Device Name" data-content="'+namedevice+'<br>'+ip_addr+'" data-placement="right" data-trigger="hover"><circle id="c1' + index + '" fill="transparent" stroke="#db2525" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle id="c2' + index + '" fill="transparent" stroke="#db2525" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle  id="c3' + index + '" cx="' + x + '" cy="' + y + '" r="8" fill="#db2525" onclick="cctvclick(' + id + ')"></circle></a>';
-                                        // onmouseover="inmouse(\'Name: '+data[i]['name']+'\',\''+index+'\')" onmouseout="outmouse(\''+index+'\')"<svg width="300" height="150" x="'+(x+15)+'" y="'+(y+15)+'"  id="pop'+index+'" visibility="hidden"><image width="100%" height="100%" margin="0px" xlink:href="asset/rectpop.svg"></image><text id="text'+index+'" visibility="hidden" x="10" y="25" font-family="Arial" font-size="18" fill="'+colortext+'"></text></svg>
-                                        index++;
-                                    } else if (data[i]['type'] == 'pc') {
+                                    if (data[i]['type'] == 'pc') {
                                       //  totalPCFloor = totalPCFloor + 1;
                                         var x = data[i]['x_axis'];
                                         var y = data[i]['y_axis'];
-                            var id = data[i]['id'];
+                                        var id = data[i]['id'];
                                         var ip_addr = (data[i]['link']!=null?data[i]['link']:'');
-                                                    var namedevice = (data[i]['name']!=null?data[i]['name']:'');
-                                   //     test = test + '<circle id="c1' + index + '" fill="transparent" stroke="#21de54" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle id="c2' + index + '" fill="transparent" stroke="#f79545" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle id="c3' + index + '" cx="' + x + '" cy="' + y + '" r="8" fill="#f79545" onclick="hibobclickjs(\'' + name + '\')"></circle>';
+                                        var namedevice = (data[i]['name']!=null?data[i]['name']:'');
                                         div.innerHTML += '<a data-toggle="popover" id="pop' + index + '"  class="popover-icon" data-container="body" title="Device Name" data-content="'+namedevice+'<br>'+ip_addr+'" data-placement="right" data-trigger="hover"><circle id="c1' + index + '" fill="transparent" stroke="#f79545" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle id="c2' + index + '" fill="transparent" stroke="#f79545" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle  id="c3' + index + '" cx="' + x + '" cy="' + y + '" r="8" fill="#f79545" onclick="pcclickjs(' + id + ')"</circle></a>';
-                                        //  onmouseover="inmouse(\'Name: '+data[i]['name']+'\',\''+index+'\')" onmouseout="outmouse(\''+index+'\')"></circle><svg width="300" height="150" x="'+(x+15)+'" y="'+(y+15)+'"  id="pop'+index+'" visibility="hidden"><image width="100%" height="100%" margin="0px" xlink:href="asset/rectpop.svg"></image><text id="text'+index+'" visibility="hidden" x="10" y="25" font-family="Arial" font-size="18" fill="'+colortext+'"></text></svg>
                                         index++;
                                     } else if (data[i]['type'] == 'wifi') {
-                                       // console.log(totalWifiFloor);
-                                     //   totalWifiFloor = totalWifiFloor + 1;
-                                       // console.log("bb");
-                                     //   console.log(totalWifiFloor);
-                                     //   console.log(data[i]['type']);
                                         var x = data[i]['x_axis'];
                                         var y = data[i]['y_axis'];
                                         var id = data[i]['id'];
                                         var ip_addr = (data[i]['link']!=null?data[i]['link']:'');
                                         var namedevice = (data[i]['name']!=null?data[i]['name']:'');
-                                      //  test = test + '<circle id="c1' + index + '" fill="transparent" stroke="#21de54" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle id="c2' + index + '" fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle id="c3' + index + '" cx="' + x + '" cy="' + y + '" r="8" fill="#04d9ff" onclick="hibobclickjs(\'' + name + '\')"></circle>';
                                         div.innerHTML += '<a data-toggle="popover" id="pop' + index + '"  class="popover-icon" data-container="body" title="Device Name" data-content="'+namedevice+'<br>'+ip_addr+'" data-placement="right" data-trigger="hover"><circle id="c1' + index + '" fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="12"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle id="c2' + index + '" fill="transparent" stroke="#04d9ff" stroke-width="0.5" cx="' + x + '" cy="' + y + '" r="10"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle  id="c3' + index + '" cx="' + x + '" cy="' + y + '" r="8" fill="#04d9ff"  onclick="wificlickjs(\'' + id + '\',\''+index+'\');"></circle></a>';
                                         index++;
                                     }
                                 }
                             }
-                          //  console.log(test);
-                                   
-                              //hetmap
-           
-                            // console.log(totalWifiFloor);
                         }
                     });
             

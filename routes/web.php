@@ -85,7 +85,7 @@ Route::get('/pcadminclick/{id}', [AdminMapsController::class, 'pcclick']);
 Route::get('/user/', [AdminMapsController::class, 'useredit']);
 
 Route::resource('ajaxposts', PostAjaxController::class);
-/*tsruh ini paling bawah ntar kacau*/
+
 //Route::get('/{id}', [MapsController::class, 'indexbycompany']);
 Route::get('ajax-crud-user-datatable', [DataTableAjaxCRUDController::class, 'indexuser']);
 Route::post('edit-user', [DataTableAjaxCRUDController::class, 'edituser']);
