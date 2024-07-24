@@ -51,133 +51,174 @@ class MapsController extends Controller {
                 ->get();    
          echo $data; 
     }
-    
-
+    // SELECT SUM(ctvalue) AS total_ctvalue
+    // FROM people_counting_kk_traffics_src
+    // JOIN people_counting_kk_ctsources_src ON people_counting_kk_traffics_src.CtSourceId = people_counting_kk_ctsources_src.CtSourceId
+    // JOIN people_counting_kk_tblcameralineindoor_src ON people_counting_kk_ctsources_src.CtSourceId = people_counting_kk_tblcameralineindoor_src.CtSourceId
+    // JOIN people_counting_kk_tbldoor_src ON people_counting_kk_tblcameralineindoor_src.Doorid = people_counting_kk_tbldoor_src.Doorid
+    // WHERE people_counting_kk_tbldoor_src.doorid = '44'
+    // AND DATE(ctdate) = '2024-05-13';
     public function indexByFloor($id) {
         if(Session::has('devicetype'))
             $valueDevice = Session::get('devicetype');
         else
-            $valueDevice ='classNone';
-            $data = DB::connection('mysql1')
-                ->table('ms_item')
-                ->where('location',$id)
-                ->get();
-            $companyprofile =  DB::connection('mysql1')
-                ->table('ms_floor')
-                ->join('ms_company', 'ms_company.id', 'ms_floor.company_id')
-                ->where('ms_floor.id', $id)
-                ->select('ms_company.*')
-                ->get();
-            $compname= $companyprofile[0]->sitename; 
-            $compid= $companyprofile[0]->id;
-            $floor = DB::connection('mysql1')
-                ->table('ms_floor')
-                ->join('ms_company', 'ms_company.id', 'ms_floor.company_id')
-                ->where('ms_floor.company_id', $compid)->select('ms_floor.*')
-                ->orderby('ms_floor.sequence_number', 'ASC')
-                ->get();
-            $no=1;
-            foreach ($floor as $index) {
-                if ((int)$index->id==$id){
-                    break;
-                }
-                $no++;
+            $valueDevice = 'classNone';
+    
+        $data = DB::connection('mysql1')
+            ->table('ms_item')
+            ->where('location', $id)
+            ->get();
+    
+        $companyprofile =  DB::connection('mysql1')
+            ->table('ms_floor')
+            ->join('ms_company', 'ms_company.id', 'ms_floor.company_id')
+            ->where('ms_floor.id', $id)
+            ->select('ms_company.*')
+            ->get();
+    
+        $compname = $companyprofile[0]->sitename; 
+        $compid = $companyprofile[0]->id;
+    
+        $floor = DB::connection('mysql1')
+            ->table('ms_floor')
+            ->join('ms_company', 'ms_company.id', 'ms_floor.company_id')
+            ->where('ms_floor.company_id', $compid)
+            ->select('ms_floor.*')
+            ->orderby('ms_floor.sequence_number', 'ASC')
+            ->get();
+    
+        $no = 1;
+        foreach ($floor as $index) {
+            if ((int)$index->id == $id) {
+                break;
             }
-            $jumlahlantai=count($floor);
-            $pagesurface=ceil($no/4);
-            if ($compid == 1) {
-                $unificountconnect = DB::connection('mysql2')
-                    ->select("select * from unifi_list_event_src where msg like '%has connected%'");
-                $unificountdisconnect = DB::connection('mysql2')
-                    ->select("select * from unifi_list_event_src where msg like '%has connected%' or msg like '%disconnected from%'");
-                $unifi = count($unificountdisconnect) - count($unificountconnect);
-                $unifiSumDownload=0;//$unifiSumDownload[0]->total;
-                $unifiSumdUpload=0;//$unifiSumdUpload[0]->total;
-                $unifi = count($unificountdisconnect) - count($unificountconnect);
-                $pc_data = DB::connection('mysql1')->table('ms_item')
-                    ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                    ->select('ms_floor.*')     
-                    ->where('ms_floor.company_id', '1')
-                    ->where('ms_item.type', 'pc')
-                    ->get(); 
-                $wifi_data = DB::connection('mysql1')->table('ms_item')
-                    ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                    ->select('ms_floor.*')     
-                    ->where('ms_floor.company_id', '1')
-                    ->where('ms_item.type', 'wifi')
-                    ->get();
-                $pc = 0;
-            } else if ($compid == 2) {
-                    $unificountconnect = DB::connection('mysql2')
-                        ->select("select * from unifi_list_event_kk_src where msg like '%has connected%'");
-                    $unificountdisconnect = DB::connection('mysql2')
-                        ->select("select * from unifi_list_event_kk_src where msg like '%has connected%' or msg like '%disconnected from%'");
-                    $unifiSumDownload=0;
-                    $unifiSumdUpload=0;
-                    $unifi = count($unificountdisconnect) - count($unificountconnect);
-                    $pc = 0;
-                    $pcdata = DB::connection('mysql2')->table('people_counting_kk_traffics_src')
-                        ->select('ctvalue')
-                        ->get();
-                        foreach ($pcdata as $list) {
-                            $pc = $pc + $list->ctvalue;
-                        }                
-                        $pc_data = DB::connection('mysql1')
-                            ->table('ms_item')
-                            ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                            ->select('ms_floor.*')     
-                            ->where('ms_floor.company_id', '2')
-                            ->where('ms_item.type', 'pc')
-                            ->get(); 
-                        $wifi_data = DB::connection('mysql1')
-                            ->table('ms_item')
-                            ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                            ->select('ms_floor.*')     
-                            ->where('ms_floor.company_id', '2')
-                            ->where('ms_item.type', 'wifi')
-                            ->get();
-            } else if ($compid == 3) {
-                $pc = 0;
-                $pc_data = DB::connection('mysql1')
-                    ->table('ms_item')
-                    ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                    ->select('ms_floor.*')     
-                    ->where('ms_floor.company_id', '3')
-                    ->where('ms_item.type', 'pc')
-                    ->get();
-                $pcdata = DB::connection('mysql2')->table('people_counting_pbm_traffics_src')
-                        ->select('ctvalue')
-                        ->get();
-                foreach ($pcdata as $list) {
-                    $pc = $pc + $list->ctvalue;
-                }
-                $pc_data = DB::connection('mysql1')->table('ms_item')
-                    ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                    ->select('ms_floor.*')     
-                    ->where('ms_floor.company_id', '3')
-                    ->where('ms_item.type', 'pc')
-                    ->get();
-                $wifi_data = DB::connection('mysql1')->table('ms_item')
-                    ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                    ->select('ms_floor.*')     
-                    ->where('ms_floor.company_id', '3')
-                    ->where('ms_item.type', 'wifi')
-                    ->get();
-            } else {
-                $unifi = 0;
-                $pc = 0;
-            }
-    $data2 = DB::connection('mysql1')->table('ms_floor')
-                    ->join('ms_company', 'ms_company.id', 'ms_floor.company_id')
-                    ->where('ms_company.id', $compid)
-                    ->where('ms_floor.sequence_number', '1')
-                    ->select('ms_floor.id')
-                    ->get();
-            $FloorID = $id;
-            return view('../staff/Maps',['typedevice'=>$valueDevice,'wifidata'=>count($wifi_data),'pcdata'=>count($pc_data),'unifi'=>$unifi,'PeopleCounting'=>$pc,'floor'=>$floor,'compname'=>$compname,'FloorID'=>$FloorID, 'pagesurface'=>$pagesurface]);
-        
+            $no++;
         }
-
+    
+        $jumlahlantai = count($floor);
+        $pagesurface = ceil($no / 4);
+    
+        if ($compid == 1) {
+            $date = '2024-06-11';
+            $unificountconnect = DB::connection('mysql2')
+                ->select("SELECT * FROM unifi_list_event_src WHERE msg LIKE '%has connected%' AND DATE(datetime) = ?", [$date]);
+            $unificountdisconnect = DB::connection('mysql2')
+                ->select("SELECT * FROM unifi_list_event_src WHERE (msg LIKE '%has connected%' OR msg LIKE '%disconnected from%') AND DATE(datetime) = ?", [$date]);
+            
+            $unifiSumDownload = 0;
+            $unifiSumdUpload = 0;
+            $unifi = count($unificountdisconnect) - count($unificountconnect);
+    
+            $pc_data = DB::connection('mysql1')
+                ->table('ms_item')
+                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
+                ->select('ms_floor.*')
+                ->where('ms_floor.company_id', '1')
+                ->where('ms_item.type', 'pc')
+                ->get(); 
+    
+            $wifi_data = DB::connection('mysql1')
+                ->table('ms_item')
+                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
+                ->select('ms_floor.*')
+                ->where('ms_floor.company_id', '1')
+                ->where('ms_item.type', 'wifi')
+                ->get();
+    
+            $pc = 0;
+    
+        } else if ($compid == 2) {
+            $date = '2024-05-12';
+            $unificountconnect = DB::connection('mysql2')
+                ->select("SELECT * FROM unifi_list_event_kk_src WHERE msg LIKE '%has connected%' AND DATE(datetime) = ?", [$date]);
+            $unificountdisconnect = DB::connection('mysql2')
+                ->select("SELECT * FROM unifi_list_event_kk_src WHERE (msg LIKE '%has connected%' OR msg LIKE '%disconnected from%') AND DATE(datetime) = ?", [$date]);
+    
+            $unifiSumDownload = 0;
+            $unifiSumdUpload = 0;
+            $unifi = count($unificountdisconnect) - count($unificountconnect);
+    
+            $pcdata = DB::connection('mysql2')
+                ->table('people_counting_kk_traffics_src')
+                ->select('ctvalue')
+                ->whereDate('ctdate', '2024-05-13')
+                ->get();
+    
+            $pc = $pcdata->sum('ctvalue');
+    
+            $pc_data = DB::connection('mysql1')
+                ->table('ms_item')
+                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
+                ->select('ms_floor.*')
+                ->where('ms_floor.company_id', '2')
+                ->where('ms_item.type', 'pc')
+                ->get();
+    
+            $wifi_data = DB::connection('mysql1')
+                ->table('ms_item')
+                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
+                ->select('ms_floor.*')
+                ->where('ms_floor.company_id', '2')
+                ->where('ms_item.type', 'wifi')
+                ->get();
+    
+        } else if ($compid == 3) {
+            $pc = 0;
+    
+            $pc_data = DB::connection('mysql1')
+                ->table('ms_item')
+                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
+                ->select('ms_floor.*')
+                ->where('ms_floor.company_id', '3')
+                ->where('ms_item.type', 'pc')
+                ->get();
+    
+            $pcdata = DB::connection('mysql2')
+                ->table('people_counting_pbm_traffics_src')
+                ->select('ctvalue')
+                ->get();
+    
+            foreach ($pcdata as $list) {
+                $pc += $list->ctvalue;
+            }
+    
+            $wifi_data = DB::connection('mysql1')
+                ->table('ms_item')
+                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
+                ->select('ms_floor.*')
+                ->where('ms_floor.company_id', '3')
+                ->where('ms_item.type', 'wifi')
+                ->get();
+    
+            $unifi = 0;
+    
+        } else {
+            $unifi = 0;
+            $pc = 0;
+        }
+    
+        $data2 = DB::connection('mysql1')
+            ->table('ms_floor')
+            ->join('ms_company', 'ms_company.id', 'ms_floor.company_id')
+            ->where('ms_company.id', $compid)
+            ->where('ms_floor.sequence_number', '1')
+            ->select('ms_floor.id')
+            ->get();
+    
+        $FloorID = $id;
+    
+        return view('../staff/Maps', [
+            'typedevice' => $valueDevice,
+            'wifidata' => count($wifi_data),
+            'pcdata' => count($pc_data),
+            'unifi' => $unifi,
+            'PeopleCounting' => $pc,
+            'floor' => $floor,
+            'compname' => $compname,
+            'FloorID' => $FloorID,
+            'pagesurface' => $pagesurface
+        ]);
+    }    
 
     public function changefloor($id) {
         $data = DB::connection('mysql1')->table('ms_floor')
@@ -225,106 +266,56 @@ class MapsController extends Controller {
         echo $data;
     }
 
-    public function save(Request $request) {
-        $location = (isset($request['location'])) ? $request['location'] : '';
-        $typeppoint = (isset($request['typeppoint'])) ? $request['typeppoint'] : '';
-        $x = (isset($request['x'])) ? $request['x'] : '';
-        $y = (isset($request['y'])) ? $request['y'] : '';
-        $name = (isset($request['name'])) ? $request['name'] : '';
-        $link = (isset($request['link'])) ? $request['link'] : '';
-        $idlink = (isset($request['idlink'])) ? $request['idlink'] : '';
-        $idn = (isset($request['idn'])) ? $request['idn'] : '';
-        $company = (isset($request['company'])) ? $request['company'] : '';
-
-        if ($x != null) {
-            DB::connection('mysql1')->table('ms_item')->updateOrInsert([
-                '_id' => $idn,
-                'link' => $link,
-                'zm_id' => $idlink,
-                'x_axis' => $x,
-                'y_axis' => $y,
-                'name' => $name,
-                'location' => $location,
-                'type' => $typeppoint
-            ]);
-        }
-    
-        return response()->json(['message' => 'Lokasi '.$typeppoint.' berhasil disimpan!']);
-    }
-    public function update(Request $request) {
-        $location = (isset($request['location'])) ? $request['location'] : '';
-        $typeppoint = (isset($request['typeppoint'])) ? $request['typeppoint'] : '';
-        $x = (isset($request['x'])) ? $request['x'] : '';
-        $y = (isset($request['y'])) ? $request['y'] : '';
-        $name = (isset($request['name'])) ? $request['name'] : '';
-        $link = (isset($request['link'])) ? $request['link'] : '';
-        $idlink = (isset($request['idlink'])) ? $request['idlink'] : '';
-        $idn = (isset($request['idn'])) ? $request['idn'] : '';
-        $id = (isset($request['deleteid'])) ? $request['deleteid'] : '';
-        if ($x != null) {
-            $post = new ms_item();
-            $post->exists = true;
-            $post->id = $id; //already exists in database.
-            $post->_id = $idn;
-            $post->link = trim($link);
-            $post->zm_id = trim($idlink);
-            $post->x_axis = $x;
-            $post->y_axis = $y;
-            $post->name = trim($name);
-            $post->save();
-        }
-        return response()->json(['message' => 'Update Device berhasil disimpan!']);
-    }
-    public function deleteData($id) {
-        DB::connection('mysql1')->table('ms_item')->where('id', $id)->delete();
-        return response()->json(['message' => 'Delete Lokasi berhasil !']);
-    }
-    public function deleteDataAjax(Request $request){
-        $id = (isset($request['deleteid'])) ? $request['deleteid'] : '';
-        DB::connection('mysql1')->table('ms_item')->where('id', $id)->delete();
-        return response()->json(['message' => 'Delete Lokasi berhasil !']);
-    }
-    public function delete($id) {
-        DB::connection('mysql1')->table('ms_item')->where('id', $id)->delete();
-        return 'true';
-    }
-
-
     public function wifidatadetail($id) {
         $name = DB::connection('mysql1')->table('ms_item')
                 ->where('id', $id)
                 ->value('name');
-         $ip_addr = DB::connection('mysql1')->table('ms_item')
+        $ip_addr = DB::connection('mysql1')->table('ms_item')
                 ->where('id', $id)
                 ->value('link');
         $companyid = DB::connection('mysql1')->table('ms_item')
                 ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
                 ->where('ms_item.id', $id)
                 ->value('ms_floor.company_id');
+        
+                // -- Untuk mengecek data dengan msg yang mengandung 'has connected'
+                // SELECT * 
+                // FROM unifi_list_event_kk_src 
+                // WHERE msg LIKE '%has connected%' 
+                //   AND ap_name = 'GF - People Cafe' 
+                //   AND DATE(datetime) = '2024-05-12';
+                
+                // -- Untuk mengecek data dengan msg yang mengandung 'has connected' atau 'disconnected from'
+                // SELECT * 
+                // FROM unifi_list_event_kk_src 
+                // WHERE (msg LIKE '%has connected%' OR msg LIKE '%disconnected from%') 
+                //   AND ap_name = 'GF - People Cafe' 
+                //   AND DATE(datetime) = '2024-05-12';
         if ($companyid == '1') {
-            $unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%' and ap_name = '" . $name . "'");
-            $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%'  and ap_name = '" . $name . "' or msg like '%disconnected from%' and ap_name = '" . $name . "'");
-            $unifi = count($unificountdisconnect) - count($unificountconnect);
-             $unifiSumDownload = 0;
-            $unifiSumUpload = 0;
-        } else if ($companyid == '2') {
-            $unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_kk_src where msg like '%has connected%' and ap_name = '" . $name . "'");
-            $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_kk_src where msg like '%has connected%'  and ap_name = '" . $name . "' or msg like '%disconnected from%' and ap_name = '" . $name . "'");
+            $date = '2024-06-11';
+            $unificountconnect = DB::connection('mysql2')->select("SELECT * FROM unifi_list_event_src WHERE msg LIKE '%has connected%' AND ap_name = ? AND DATE(datetime) = ?", [$name, $date]);
+            $unificountdisconnect = DB::connection('mysql2')->select("SELECT * FROM unifi_list_event_src WHERE (msg LIKE '%has connected%' OR msg LIKE '%disconnected from%') AND ap_name = ? AND DATE(datetime) = ?", [$name, $date]);
             $unifiSumDownload = 0;
             $unifiSumUpload = 0;
-            $unifi = count($unificountdisconnect) - count($unificountconnect);
+        } else if ($companyid == '2') {
+            $date = '2024-05-12';
+            $unificountconnect = DB::connection('mysql2')->select("SELECT * FROM unifi_list_event_kk_src WHERE msg LIKE '%has connected%' AND ap_name = ? AND DATE(datetime) = ?", [$name, $date]);
+            $unificountdisconnect = DB::connection('mysql2')->select("SELECT * FROM unifi_list_event_kk_src WHERE (msg LIKE '%has connected%' OR msg LIKE '%disconnected from%') AND ap_name = ? AND DATE(datetime) = ?", [$name, $date]);
+            $unifiSumDownload = 0;
+            $unifiSumUpload = 0;
         } else if ($companyid == '3') {
-            $unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%' and ap_name = '" . $name . "'");
-            $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%'  and ap_name = '" . $name . "' or msg like '%disconnected from%' and ap_name = '" . $name . "'");
-            $unifi = count($unificountdisconnect) - count($unificountconnect);
+            $unificountconnect = DB::connection('mysql2')->select("SELECT * FROM unifi_list_event_src WHERE msg LIKE '%has connected%' AND ap_name = ?", [$name]);
+            $unificountdisconnect = DB::connection('mysql2')->select("SELECT * FROM unifi_list_event_src WHERE (msg LIKE '%has connected%' OR msg LIKE '%disconnected from%') AND ap_name = ?", [$name]);
             $unifiSumDownload = 0;
             $unifiSumUpload = 0;
         } else {
             $unifi = 0;
-            $unifiSumDownload=0;
-            $unifiSumUpload=0;
+            $unifiSumDownload = 0;
+            $unifiSumUpload = 0;
         }
-
+    
+        $unifi = count($unificountdisconnect) - count($unificountconnect);
+    
         $array = array();
         $array[0]['Count'] = $unifi;
         $array[0]['Name'] = $name;
@@ -333,6 +324,7 @@ class MapsController extends Controller {
         $array[0]['WifiDownload'] = 0;
         return json_encode($array);
     }
+    
 
     public function pcclick($id) {
         $idsource = DB::connection('mysql1')->table('ms_item')
@@ -347,15 +339,17 @@ class MapsController extends Controller {
         } else if ($company_id == 2) {
             $pc = 0;
             $pcdata = DB::connection('mysql2')->table('people_counting_kk_traffics_src')
-                    ->join('people_counting_kk_ctsources_src', 'people_counting_kk_traffics_src.CtSourceId', 'people_counting_kk_ctsources_src.CtSourceId')
-                    ->join('people_counting_kk_tblcameralineindoor_src', 'people_counting_kk_ctsources_src.CtSourceId', 'people_counting_kk_tblcameralineindoor_src.CtSourceId')
-                    ->join('people_counting_kk_tbldoor_src', 'people_counting_kk_tblcameralineindoor_src.Doorid', 'people_counting_kk_tbldoor_src.Doorid')
-                    ->where('people_counting_kk_tbldoor_src.doorid', $idsource)
-                    ->select('people_counting_kk_traffics_src.ctvalue')
-                    ->get();
-            foreach ($pcdata as $list) {
-                $pc = $pc + $list->ctvalue;
-            }
+            ->join('people_counting_kk_ctsources_src', 'people_counting_kk_traffics_src.CtSourceId', '=', 'people_counting_kk_ctsources_src.CtSourceId')
+            ->join('people_counting_kk_tblcameralineindoor_src', 'people_counting_kk_ctsources_src.CtSourceId', '=', 'people_counting_kk_tblcameralineindoor_src.CtSourceId')
+            ->join('people_counting_kk_tbldoor_src', 'people_counting_kk_tblcameralineindoor_src.Doorid', '=', 'people_counting_kk_tbldoor_src.Doorid')
+            ->where('people_counting_kk_tbldoor_src.doorid', $idsource)
+            ->whereDate('ctdate', '2024-05-13')
+            ->select('people_counting_kk_traffics_src.ctvalue')
+            ->get();
+    
+    foreach ($pcdata as $list) {
+        $pc += $list->ctvalue; // Penjumlahan nilai ctvalue
+    }
         } else if ($company_id == 3) {
             $pc = 0;
             $pcdata = DB::connection('mysql2')->table('people_counting_pbm_traffics_src')

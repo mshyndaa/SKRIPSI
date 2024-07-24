@@ -9,8 +9,7 @@ use Session;
 use Illuminate\Support\Facades\Redirect;
 
 class AdminMapsController extends Controller {
-  public function __construct()
-    {
+    public function __construct(){
         $this->middleware(function ($request, $next) {
             if (Session::get('admin.id') == null) {
                 return Redirect::to('/admin')->send();
@@ -19,28 +18,7 @@ class AdminMapsController extends Controller {
             }
         });
     }
-    public function getMap($id){
-         $data = DB::connection('mysql1')->table('ms_floor')
-                ->where('company_id',$id)
-                ->get();
-         echo $data;
-    }
-    public function getNextMap(Request $request){
-        $id=$request->id;
-        $limit=$request->floorOnPage;
-        $offset=$request->pageNo;
-       
-        $data = DB::connection('mysql1')->table('ms_floor')
-                ->where('company_id',$id)
-                 ->offset(($offset-1)*$limit)
-                ->limit($limit)
-                ->get();
-        
-                        
-         echo $data;
-        
-        
-    }
+
 
     public function ms_itemcompany($id) {
         if ($id == 1) {
@@ -76,37 +54,37 @@ class AdminMapsController extends Controller {
             $unifi = 0;
             $pc = 0;
         }
-             $pc_data = DB::connection('mysql1')->table('ms_item')
+            $pc_data = DB::connection('mysql1')->table('ms_item')
                 ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
+                ->select('ms_floor.*')     
                 ->where('ms_floor.company_id', $id)
                 ->where('ms_item.type', 'pc')
                 ->get();
-             $wifi_data = DB::connection('mysql1')->table('ms_item')
+            $wifi_data = DB::connection('mysql1')->table('ms_item')
                 ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                 ->select('ms_floor.*')     
+                ->select('ms_floor.*')     
                 ->where('ms_floor.company_id', $id)
                 ->where('ms_item.type', 'wifi')
                 ->get();
-        $floor = DB::connection('mysql1')->table('ms_floor')
-                ->join('ms_company', 'ms_company.id', 'ms_floor.company_id')
-                ->where('ms_company.id', $id)
-                ->select('ms_floor.*')
-                ->orderby('ms_floor.sequence_number', 'ASC')
-                ->get();
-        $compname = DB::connection('mysql1')->table('ms_company')
-                ->where('ms_company.id', $id)
-                ->value('sitename');
-        $data2 = DB::connection('mysql1')->table('ms_floor')
-                ->join('ms_company', 'ms_company.id', 'ms_floor.company_id')
-                ->where('ms_company.id', $id)
-                ->where('ms_floor.sequence_number', '1')
-                ->select('ms_floor.id')
-                ->get();
-        $FloorID = 0;
-        foreach ($data2 as $index) {
-            $FloorID = $index->id;
-        }
+            $floor = DB::connection('mysql1')->table('ms_floor')
+                    ->join('ms_company', 'ms_company.id', 'ms_floor.company_id')
+                    ->where('ms_company.id', $id)
+                    ->select('ms_floor.*')
+                    ->orderby('ms_floor.sequence_number', 'ASC')
+                    ->get();
+            $compname = DB::connection('mysql1')->table('ms_company')
+                    ->where('ms_company.id', $id)
+                    ->value('sitename');
+            $data2 = DB::connection('mysql1')->table('ms_floor')
+                    ->join('ms_company', 'ms_company.id', 'ms_floor.company_id')
+                    ->where('ms_company.id', $id)
+                    ->where('ms_floor.sequence_number', '1')
+                    ->select('ms_floor.id')
+                    ->get();
+            $FloorID = 0;
+            foreach ($data2 as $index) {
+                $FloorID = $index->id;
+            }
         return view('../admin/Maps', ['wifidata'=>count($wifi_data),'pcdata'=>count($pc_data),'unifi' => $unifi, 'PeopleCounting' => $pc, 'floor' => $floor, 'compname' => $compname, 'FloorID' => $FloorID, 'CompID' => $id]);
     }
 
@@ -114,10 +92,8 @@ class AdminMapsController extends Controller {
         $data = DB::connection('mysql1')->table('ms_floor')
                 ->join('ms_company', 'ms_floor.company_id', 'ms_company.id')
                 ->where('ms_floor.id', $id)
-            //    ->where('ms_company.id', '1')
                 ->select('ms_floor.maps_img', 'ms_floor.id', 'ms_floor.name', 'ms_company.sitename')
                 ->get();
-
         echo $data;
     }
 
@@ -128,34 +104,6 @@ class AdminMapsController extends Controller {
                 ->orderBy('id','asc')
                 ->get();
         $i=0;
-       
-        echo $data;
-    }
- public function floorUser($id) {
-        $arrTotalDataDevice=array();
-        $data = DB::connection('mysql1')->table('ms_item')
-                ->where('location', $id)
-                ->orderBy('id','asc')
-                ->get();
-        $i=0;
-        foreach ($data as $index) {
-            $arrDataDevice =array();
-            $arrDataDevice['id']=$index->id;
-            $arrDataDevice['name']=$index->name;
-            $arrDataDevice['isalive']=$index->isalive;
-            $arrTotalDataDevice[$i]=$arrDataDevice;
-            $i++;
-
-            
-        }
-        $sessionName="sessionDevice_".$id;
-        if(Session::has($sessionName)){
-            $value = Session::get($sessionName);;
-            session([$sessionName => '']);
-             $value = Session::get($sessionName);
-        }
-      Session::put($sessionName, $arrTotalDataDevice);
-      $value = Session::get($sessionName);
         echo $data;
     }
 
@@ -169,7 +117,6 @@ class AdminMapsController extends Controller {
         $idlink = (isset($request['idlink'])) ? $request['idlink'] : '';
         $idn = (isset($request['idn'])) ? $request['idn'] : '';
         $company = (isset($request['company'])) ? $request['company'] : '';
-
         if ($x != null) {
             DB::connection('mysql1')->table('ms_item')->updateOrInsert([
                 '_id' => $idn,
@@ -182,9 +129,9 @@ class AdminMapsController extends Controller {
                 'type' => $typeppoint
             ]);
         }
-
         return response()->json(['message' => 'Lokasi '.$typeppoint.' berhasil disimpan!']);
     }
+
     public function update(Request $request) {
         $location = (isset($request['location'])) ? $request['location'] : '';
         $typeppoint = (isset($request['typeppoint'])) ? $request['typeppoint'] : '';
@@ -198,43 +145,44 @@ class AdminMapsController extends Controller {
 
         if ($x != null) {
             $post = new ms_item();
-$post->exists = true;
-$post->id = $id; //already exists in database.
-$post->_id = $idn;
-$post->link = trim($link);
-$post->zm_id = trim($idlink);
-$post->x_axis = $x;
-$post->y_axis = $y;
-$post->name = trim($name);
-$post->save();
-          
-
+            $post->exists = true;
+            $post->id = $id; //already exists in database.
+            $post->_id = $idn;
+            $post->link = trim($link);
+            $post->zm_id = trim($idlink);
+            $post->x_axis = $x;
+            $post->y_axis = $y;
+            $post->name = trim($name);
+            $post->save();
         }
-        
         return response()->json(['message' => 'Update Device berhasil disimpan!']);
     }
+
     public function deleteData($id) {
+        \Log::info('Deleting item with ID: ' . $id);
         DB::connection('mysql1')->table('ms_item')->where('id', $id)->delete();
         return response()->json(['message' => 'Delete Device berhasil !']);
     }
+    
     public function deleteDataAjax(Request $request){
         $id = (isset($request['deleteid'])) ? $request['deleteid'] : '';
-       // echo "a".$id."b";
+        \Log::info('Deleting item with ID: ' . $id);
         DB::connection('mysql1')->table('ms_item')->where('id', $id)->delete();
         return response()->json(['message' => 'Delete Device berhasil !']);
     }
-
+    
     public function delete($id) {
+        \Log::info('Deleting item with ID: ' . $id);
         DB::connection('mysql1')->table('ms_item')->where('id', $id)->delete();
         return 'true';
     }
-
+    
 
     public function wifidatadetail($id) {
         $name = DB::connection('mysql1')->table('ms_item')
                 ->where('id', $id)
                 ->value('name');
-         $ip_addr = DB::connection('mysql1')->table('ms_item')
+        $ip_addr = DB::connection('mysql1')->table('ms_item')
                 ->where('id', $id)
                 ->value('link');
         $companyid = DB::connection('mysql1')->table('ms_item')
@@ -250,23 +198,20 @@ $post->save();
         } else if ($companyid == '2') {
             $unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_kk_src where msg like '%has connected%' and ap_name = '" . $name . "'");
             $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_kk_src where msg like '%has connected%'  and ap_name = '" . $name . "' or msg like '%disconnected from%' and ap_name = '" . $name . "'");
-            $unifiSumDownload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')   as total from unifi_list_event_kk_src where  ap_name = '" . $name . "'"); //where  DATE(last_update) = CURDATE()
-//dump($unifiSumDownload[0]->total);
-            $unifiSumUpload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')  as total from unifi_list_event_kk_src where  ap_name = '" . $name . "'"); //where  DATE(last_update) = CURDATE()
+            $unifiSumDownload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')   as total from unifi_list_event_kk_src where  ap_name = '" . $name . "'"); 
+            $unifiSumUpload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')  as total from unifi_list_event_kk_src where  ap_name = '" . $name . "'"); 
             $unifi = count($unificountdisconnect) - count($unificountconnect);
         } else if ($companyid == '3') {
             $unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%' and ap_name = '" . $name . "'");
             $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%'  and ap_name = '" . $name . "' or msg like '%disconnected from%' and ap_name = '" . $name . "'");
             $unifi = count($unificountdisconnect) - count($unificountconnect);
-            $unifiSumDownload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')   as total from unifi_list_event_src where  ap_name = '" . $name . "'"); //where  DATE(last_update) = CURDATE()
-//dump($unifiSumDownload[0]->total);
-            $unifiSumUpload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')  as total from unifi_list_event_src where  ap_name = '" . $name . "'"); //where  DATE(last_update) = CURDATE()
+            $unifiSumDownload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')   as total from unifi_list_event_src where  ap_name = '" . $name . "'"); 
+            $unifiSumUpload = DB::connection('mysql2')->select("select FORMAT(sum(bytes)/(1024*1024),2,'de_DE')  as total from unifi_list_event_src where  ap_name = '" . $name . "'");
         } else {
             $unifi = 0;
             $unifiSumDownload=0;
             $unifiSumUpload=0;
         }
-
         $array = array();
         $array[0]['Count'] = $unifi;
         $array[0]['Name'] = $name;
@@ -323,121 +268,8 @@ $post->save();
         $pcdata[0]['Count'] = $pc;
         return json_decode(json_encode($pcdata));
     }
-    public function HeatData($id) {
-        $data = DB::connection('mysql1')->table('ms_item')
-                ->join('ms_floor', 'ms_item.location', 'ms_floor.id')
-                ->where('ms_floor.id', $id)
-              
-                ->select('ms_item.*', 'ms_floor.maps_img', 'ms_floor.name as floorname', 'ms_floor.company_id')
-                ->get();
-        $newdata = array();
-        foreach ($data as $key => $list) {
-            $newdata[$key]['x_axis'] = $list->x_axis;
-            $newdata[$key]['y_axis'] = $list->y_axis;
-            $newdata[$key]['maps_img'] = $list->maps_img;
-            $newdata[$key]['name'] = $list->name;
-            $newdata[$key]['link'] = $list->link;
-            
-            $newdata[$key]['tipe'] = $list->type;
-            $name = $list->name;
-            if ($list->company_id == '1' || $list->company_id = 1) {
-                $unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%' and ap_name = '" . $name . "'");
-                $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%'  and ap_name = '" . $name . "' or msg like '%disconnected from%' and ap_name = '" . $name . "'");
-                $unifi = count($unificountdisconnect) - count($unificountconnect);
-            } else if ($list->company_id == '2' || $list->company_id = 2) {
-                $unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_kk_src where msg like '%has connected%' and ap_name = '" . $name . "'");
-                $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_kk_src where msg like '%has connected%'  and ap_name = '" . $name . "' or msg like '%disconnected from%' and ap_name = '" . $name . "'");
-                $unifi = count($unificountdisconnect) - count($unificountconnect);
-            } else if ($list->company_id == '3' || $list->company_id = 3) {
-                $unificountconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%' and ap_name = '" . $name . "'");
-                $unificountdisconnect = DB::connection('mysql2')->select("select * from unifi_list_event_src where msg like '%has connected%'  and ap_name = '" . $name . "' or msg like '%disconnected from%' and ap_name = '" . $name . "'");
-                $unifi = count($unificountdisconnect) - count($unificountconnect);
-            } else {
-                $unifi = 0;
-            }
-            $newdata[$key]['count'] = $unifi;
-        }
-        return json_decode(json_encode($newdata));
-    }
-    public function floorcondition($id) {
-        $addedDevice=array();
-        $addedIndex=0;
-        $deletedIndex=0;
-        $deletedDevice=array();
-        $changedIndex=0;
-        $changedDevice=array();
-        $sessionName="sessionDevice_".$id;
-       if(Session::has($sessionName)){ 
-         $valueDevice = Session::get($sessionName);
-         for($i = 0;$i < count($valueDevice);$i++){
-             //echo "test";
-             $array=$valueDevice[$i];
-        //    print_r($array);
-         } 
-       }
-         $arrTotalChangeDataDevice=array();
-        $arrTotalDataDevice=array();
-        $data = DB::connection('mysql1')->table('ms_item')
-                ->where('location', $id)
-                ->orderBy('id','asc')
-                ->get();
-        $i=0;
-       //dd();
-        $indexDevice=count($valueDevice);
-        foreach ($data as $index) {
-            if(count($valueDevice)>0){
-            for($i = 0;$i < count($valueDevice);$i++){
-                $isexist=1;
-             $array=$valueDevice[$i];
-             if($index->id==$array['id']){
-                 $isexist=0;
-                 
-                 if($index->isalive!=$array['isalive'] && $index->isalive==0){
-                     $arrchangeDataDevice =array();
-                     $arrchangeDataDevice['ip']=$index->link;
-                     $arrchangeDataDevice['name']=$index->name;
-                $changedDevice[$changedIndex]=$arrchangeDataDevice;
-                $changedIndex++;
-                 }
-                 break;
-             }
-            }
-            
-         }
-         foreach ($data as $index) {
-            $arrDataDevice =array();
-            $arrDataDevice['id']=$index->id;
-            $arrDataDevice['name']=$index->name;
-            $arrDataDevice['isalive']=$index->isalive;
-            $arrDataDevice['type']=$index->type;
-            
-          //  echo "test<br>";
-            //print_r($arrDataDevice);
-            $arrTotalDataDevice[$i]=$arrDataDevice;
-            // echo "test2<br>";
-          //  print_r($arrTotalDataDevice);
-            $i++;
-
-            
-        }
-        if(Session::has($sessionName)){
-            $value = Session::get($sessionName);
-            session(['sessionDevice' => '']);
-             $value = Session::get($sessionName);
-        }
-      Session::put($sessionName, $arrTotalDataDevice);
-                 }
-            $i++;
-return response()->json(['data'=>$data,'chgDeviceStatus'=>$changedDevice]);
-
-
-            
-        }
-        
-         public function adminlogout(Request $request)
-    {
+    public function adminlogout(Request $request){
         $request->session()->forget('admin');
-
         return redirect('/admin');
     }
 

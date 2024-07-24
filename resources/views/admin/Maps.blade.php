@@ -286,18 +286,17 @@
 <script>
     var presisiX=0;
     var presisiY=0;
-     var loopke=0;
-     var isdeleted=1;
-     var checkloop=1;
+    var loopke=0;
+    var isdeleted=1;
+    var checkloop=1;
     var index = 0;
     var type = 'pc';
     var arrId=[];
-     const svg=document.getElementById('mysvg');
+    const svg=document.getElementById('mysvg');
     var pt=svg.createSVGPoint();
     var arrDeadIdTotal=[];
     var FloorID =0;
     var floor = <?php echo isset($floor) ? json_encode($floor) : 0; ?>;
-    // Hibob = #21de54,CCTV = #db2525,People Counting = #f79545,Wifi = #04d9ff
     var color = '#f79545';
     var menu = <?php echo isset($pagesurface) ? json_encode($pagesurface) : 1; ?>;
     var colortext = 'white';
@@ -307,24 +306,16 @@
         maxmenu++;
     }
     var menunya="";
-for (var i = 0; i < floor.length; i++) {
-    menunya +="<option  value='"+floor[i]['id']+"'>"+floor[i]['name']+"</option>";
-}
-$('#malldropdown')
+    for (var i = 0; i < floor.length; i++) {
+        menunya +="<option  value='"+floor[i]['id']+"'>"+floor[i]['name']+"</option>";
+    }
+    $('#malldropdown')
     .empty()
     .append(menunya);
-;
     var colormenuon = 'white';
     var colormenuoff = '#DFE2E2';
-
     var height = window.screen.availHeight;
     var width = window.screen.availWidth;
-
-    // console.log("Width: "+width+",Height: "+height);
-
-    //   document.getElementById("_x3C_Slice_x3E_").style.height = height
-    //    document.getElementById("_x3C_Slice_x3E_").style.width = width
-
     const now = new Date();
     currentHours = now.getHours();
     currentHours = ("0" + currentHours).slice(-2);
@@ -338,8 +329,7 @@ $('#malldropdown')
                  document.getElementById("allpc").innerHTML ="<tspan x='42%' font-weight='bold' font-size='100x'  fill='white' style='font-color:white' >"+totalPC+" Device</tspan>";
                  document.getElementById("allwifi").innerHTML ="<tspan x='42%' font-weight='bold' font-size='100x'  fill='white' style='font-color:white' >"+totalWifi+" Device</tspan>";
         $("#btnSave").hide();
-            $("#btnCancel").hide();
-        
+        $("#btnCancel").hide();
         menus();
         var FloorID = <?php echo isset($FloorID) ? json_encode($FloorID):1; ?>;
         changemaps(FloorID);
@@ -358,6 +348,7 @@ $('#malldropdown')
             color = '#04d9ff';
         }
     }
+    
     function nexts() {
         if (menu != maxmenu) {
             menu++;
@@ -403,10 +394,8 @@ $('#malldropdown')
 
     } 
     function reloadFloor(){
-          var totalHibobFloor = 0;
             var totalWifiFloor = 0;
             var totalPCFloor = 0;
-            var totalCCTVFloor = 0;
         idfloorReload = document.getElementById('location').value;
         var div = document.getElementById('maps');
         $.ajax({
@@ -433,7 +422,6 @@ $('#malldropdown')
                             var namedevice = (data[i]['name']!=null?data[i]['name']:" ");
                             div.innerHTML += '<circle  id="c3_'+id+'" cx="'+x+'" cy="'+y+'"  namenya="'+namedevice+'" linknya="'+ip_addr+'"  idnya="'+id_no+'" typenya="'+typenya+'" r="12" fill="#f79545" onclick="deleteddata('+id+')" ></circle>';
                             var newtr="<tr><td>"+id_no+"</td><td>"+namedevice+"</td><td>"+ip_addr+"</td><td>"+typenya+"</td></tr>";
-                        //    $("#ajax-crud-datatable tbody").append(newtr);
                             index++;
                         }else if(data[i]['type'] == 'wifi'){
                             var x = data[i]['x_axis'];
@@ -445,7 +433,6 @@ $('#malldropdown')
                             var namedevice = (data[i]['name']!=null?data[i]['name']:" ");
                                                         div.innerHTML += '<circle id="c3_'+id+'" cx="'+x+'" cy="'+y+'"  linknya="'+ip_addr+'"   idnya="'+id_no+'" class="popover-icon" r="12" namenya="'+namedevice+'"  typenya="'+typenya+'" fill="#04d9ff" onclick="deleteddata('+id+')"></circle>';
                             var newtr="<tr><td>"+id_no+"</td><td>"+namedevice+"</td><td>"+ip_addr+"</td><td>"+typenya+"</td></tr>";
-                        //    $("#ajax-crud-datatable tbody").append(newtr);
                             index++;
                         }
                     }
@@ -476,14 +463,10 @@ $('#malldropdown')
 
     function showDevice(){
     var classnya=$('#dropDownDevice').val();
-        // console.log(classnya);
     $('.classNone').hide();
     $('.'+classnya).show();
-       //    $('.classNone').hide();
-     //    $('.'+classnya).show();
     }
     function wificlickjs(id,pos) {
-        
         $.ajax({
             type: 'GET',
             url: window.location.origin + "/wifiadmindatadetail/" + id,
@@ -495,9 +478,7 @@ $('#malldropdown')
                 var div = document.getElementById('wifistatus');
                 div.value = '1';
                 document.getElementById('wifi').setAttribute('href', "../asset/wifi2.png");
-               //document.getElementById("wifirect").innerHTML = '<text id="wificount1" x="20%" y="55%" font-family="Arial" font-size="55px" fill="' + colortext + '" font-weight="bold"></text>\n\
                                                                  <!--<text x="30%" y="80%" font-family="Arial" font-size="9px" fill="' + colortext + '">' +<?php echo isset($compname) ? json_encode($compname) : 0; ?> + '</text>\n\
-                 //                                                <text x="20%" y="90%" font-family="Arial" font-size="15px" fill="' + colortext + '" font-height="bold">' + response[0]['Name'] + '</text>';-->
                 document.getElementById("wifirect").innerHTML = '<text id="wificount1" x="20%" y="55%" font-family="Arial" font-size="55px" fill="' + colortext + '" font-weight="bold"></text>\n\
                                                                  <text x="40%" y="80%" font-family="Arial" font-size="12px" fill="' + colortext + '">' + response[0]['Name'] + '</text>\n\
                                                                      <text x="40%" y="90%" font-family="Arial" font-size="10px" fill="' + colortext + '">' + (response[0]['Ip']==null?'':response[0]['Ip']) + '</text>\n\
@@ -515,24 +496,10 @@ $('#malldropdown')
             }
         });
         var floorvalue=document.getElementById('floorId').value;
-
-       // showHeatMap(floorvalue,pos);
     }
 
-    function cctvclick(id) {
-        $.ajax({
-            type: 'GET',
-            url: window.location.origin + "/cctvadminchange/" + id,
-            beforeSend: function () {
-            },
-            success: function (response) {
-                document.getElementById("point_id").innerHTML = response.toString();
-            }
-        });
-    }
 
     function pcclickjs(id) {
-    //$(".popover").hide();
         $.ajax({
             type: 'GET',
             url: window.location.origin + "/pcadminclick/" + id,
@@ -546,7 +513,7 @@ $('#malldropdown')
                 div.value = '1';
                 document.getElementById('pc').setAttribute('href', "../asset/pc2.png");
                 document.getElementById("pcrect").innerHTML = '<text x="22%" y="25%" font-family="Arial" font-size="14px" fill="' + colortext + '">' +<?php echo isset($compname) ? json_encode($compname) : 0; ?> + '</text>\n\
-                                                               <text id="pccount" x="15%" y="58%" font-family="Arial" font-size="50px" fill="' + colortext + '" font-weight="bold"></text><text x="30%" y="75%" font-family="Arial" font-size="10px" fill="' + colortext + '">Gate Away Number</text><text x="39%" y="85%" font-family="Arial" font-size="15px" fill="' + colortext + '">' + currentHours + ' : ' + currentMinutes + '</text>';
+                                                               <text id="pccount" x="15%" y="58%" font-family="Arial" font-size="50px" fill="' + colortext + '" font-weight="bold"></text><text x="30%" y="75%" font-family="Arial" font-size="10px" fill="' + colortext + '">Name</text><text x="39%" y="85%" font-family="Arial" font-size="15px" fill="' + colortext + '">' + currentHours + ' : ' + currentMinutes + '</text>';
                 if (count < 500) {
                     counter("pccount", 0, count, 1);
                 } else {
@@ -585,8 +552,6 @@ $('#malldropdown')
                 innerhtml = innerhtml + '<rect style="fill-opacity:0.3;" x="' + xposition + '%" y="20%" height="2" width="15" fill="' + colormenuoff + '"></rect>';
             }
         }
-
-       // document.getElementById("srect").innerHTML = innerhtml;
     }
 
     function inmouse(a, index1) {
@@ -618,11 +583,6 @@ $('#malldropdown')
 
     function wificlick() {
         var div = document.getElementById('wifistatus');
-        // if(div.value == '0'){
-        //     div.value = '1';
-        //     document.getElementById('wifi').setAttribute('href', "../asset/wifi2.png");
-        //     document.getElementById("wifirect").innerHTML = '<text id="wificount1" x="20%" y="55%" font-family="Arial" font-size="55px" fill="'+colortext+'" font-weight="bold"></text><text x="30%" y="80%" font-family="Arial" font-size="9px" fill="'+colortext+'">'+<?php echo isset($compname) ? json_encode($compname) : 0; ?>+'</text><text x="30%" y="90%" font-family="Arial" font-size="15px" fill="'+colortext+'" font-height="bold">WIFI UNIFI</text>';
-        // }else{
         div.value = '0';
         var wifiDownload = <?php echo isset($wifiDownload) ? json_encode($wifiDownload) : 0; ?>;
         var wifiUpload = <?php echo isset($wifiUpload) ? json_encode($wifiUpload) : 0; ?>;
@@ -635,8 +595,6 @@ $('#malldropdown')
                                                         <text x="65%" y="80%" font-family="Arial" font-size="12px" fill="' + colortext + '">' + wifiUpload + '</text>\n\
                                                           <text x="7%" y="90%" font-family="Arial" font-size="12px" fill="' + colortext + '" font-height="bold">Mbps Download</text>\n\
                                                        <text x="62%" y="90%" font-family="Arial" font-size="12px" fill="' + colortext + '" font-height="bold">Mbps Upload</text>';
-
-    //    document.getElementById("wifirect").innerHTML = '<text id="wificount1" x="20%" y="55%" font-family="Arial" font-size="55px" fill="' + colortext + '" font-weight="bold"></text><text x="30%" y="80%" font-family="Arial" font-size="9px" fill="' + colortext + '">' +<?php echo isset($compname) ? json_encode($compname) : 0; ?> + '</text><text x="30%" y="90%" font-family="Arial" font-size="15px" fill="' + colortext + '" font-height="bold">WIFI UNIFI</text>';
         var unifi = <?php echo isset($unifi) ? json_encode($unifi) : 0; ?>;
         if (unifi != 0 || unifi != '0') {
             counter("wificount1", 0, parseInt(unifi), 1);
@@ -644,18 +602,10 @@ $('#malldropdown')
             document.getElementById("wificount1").value = 0;
         }
         document.getElementById("point_id").innerHTML = '';
-        // }
     }
 
     function pcclick() {
         var div = document.getElementById('pcstatus');
-        // if(div.value == '0'){
-        //     div.value = '1';
-        //     document.getElementById('pc').setAttribute('href', "../asset/pc2.png");
-        //     document.getElementById("pcrect").innerHTML = '<text x="22%" y="25%" font-family="Arial" font-size="14px" fill="'+colortext+'">'+<?php echo isset($compname) ? json_encode($compname) : 0; ?>+'</text><text id="pccount" x="15%" y="58%" font-family="Arial" font-size="50px" fill="'+colortext+'" font-weight="bold"></text><text x="30%" y="75%" font-family="Arial" font-size="10px" fill="'+colortext+'">Gate Away Number</text><text x="39%" y="85%" font-family="Arial" font-size="15px" fill="'+colortext+'">'+currentHours+' : '+currentMinutes+'</text>';
-        //     document.getElementById("point_id").innerHTML = '';
-        //     counter("pccount",parseInt(900-700),900,1);
-        // }else{
         var pcounting = <?php echo isset($PeopleCounting) ? json_encode($PeopleCounting) : 0; ?>;
         div.value = '0';
         document.getElementById('pc').setAttribute('href', "../asset/pc1.png");
@@ -687,7 +637,6 @@ $('#malldropdown')
     function showHeatMap(a,iddevice){
 
         var div = document.getElementById('maps');
-      //  var div2 = document.getElementById('maps2');
         $.ajax({
             type: 'GET',
             url: window.location.origin+"/heatdata/"+a,
@@ -696,14 +645,12 @@ $('#malldropdown')
             },
             success: function (data) {
             div.innerHTML = '';
-        //        div2.innerHTML = '';
                 if(data.length != 0){
                     document.getElementById('mps').setAttribute('href', '../'+data[0]['maps_img']);
                     for(var i = 0;i < data.length;i++){
                         if (data[i]['tipe'] == 'pc') {
                                     index++;
                                 } else if (data[i]['tipe'] == 'wifi') {
-                                   // console.log(totalWifiFloor);
                                    var x = data[i]['x_axis'];
                         var y = data[i]['y_axis'];
                          var ip_addr = (data[i]['link']!=null?data[i]['link']:'');
@@ -719,15 +666,10 @@ $('#malldropdown')
                             var color = 'green';
                         }
                         let str = index.toString();
-                    // console.log(str.substr(1));
-                   //   console.log(iddevice);
                         div.innerHTML += '<a data-toggle="popover" id="pop' + str.substr(1) + '"  class="popover-icon" data-container="body" title="Wifi" data-content="'+namedevice+'<br>'+ip_addr+'" data-placement="right" data-trigger="hover"><circle style="filter: blur(30px);" id="c1'+index+'" cx="'+x+'" cy="'+y+'" r="70" fill="'+color+'"></circle></a>';
                         div.innerHTML += '<circle id="c1'+index+'" cx="'+x+'" cy="'+y+'" r="8" fill="#04d9ff"></circle>';
-                      // if(str.substr(1)==iddevice)
-
                         index++;
                                 }
-
                     }
                 }
                  $('#pop'+iddevice).popover('show');
@@ -784,7 +726,6 @@ $('#malldropdown')
             y=cursorpt.y;
             var div = document.getElementById('maps');
             div.innerHTML += '<circle id="c1'+index+'" fill="transparent" stroke="'+color+'" stroke-width="0.5" cx="'+x+'" cy="'+y+'" r="12"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="1" /></circle><circle id="c2'+index+'" fill="transparent" stroke="'+color+'" stroke-width="0.5" cx="'+x+'" cy="'+y+'" r="10"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0" /></circle><circle  id="c3'+index+'" cx="'+x+'" cy="'+y+'" r="8" fill="'+color+'" </circle>';
-            // onmouseover="inmouse(\'Hello\',\''+index+'\')" onmouseout="outmouse(\''+index+'\')"><svg width="300" height="150" x="'+(x+15)+'" y="'+(y+15)+'"  id="pop'+index+'" visibility="hidden"><image width="100%" height="100%" margin="0px" xlink:href="asset/rectpop.svg"></image><text id="text'+index+'" visibility="hidden" x="10" y="25" font-family="Arial" font-size="18" fill="'+colortext+'"></text></svg>
             index++;
             document.getElementById('x').value = x;
             document.getElementById('y').value = y;
@@ -819,8 +760,6 @@ $('#malldropdown')
         console.log("y val"+y_val);
         if($("#actionmap").val()=='update')
         makeDrag(id);
-         //   document.getElementById("mydiv").removeAttribute("hidden");
-          //  document.getElementById("deleteid").value = id;
      }
       
 
@@ -836,10 +775,6 @@ $('#malldropdown')
             pt.x = newPosition.left;
             pt.y = newPosition.top;
             console.log("baru" + pt.x  + ", " + pt.y + ")");
-         //The cursor point, translated into svg coordinates
-            //var cursorpt + ", " + pt.y + ")");
-            //  console.log("(baru=" + cursorpt.x + ", " + cursorpt.y + ")");
-         //The cursor point, translated into svg coordinates
             var cursorpt =  pt.matrixTransform(svg.getScreenCTM().inverse());
             console.log("(xxxxx" + cursorpt.x + ", " + cursorpt.y + ")");
 
@@ -849,10 +784,6 @@ $('#malldropdown')
             pt.x = newPosition.left;
             pt.y = newPosition.top;
             console.log("baru" + pt.x  + ", " + pt.y + ")");
-         //The cursor point, translated into svg coordinates
-            //var cursorpt + ", " + pt.y + ")");
-            //  console.log("(baru=" + cursorpt.x + ", " + cursorpt.y + ")");
-         //The cursor point, translated into svg coordinates
             var cursorpt =  pt.matrixTransform(svg.getScreenCTM().inverse());
             console.log("(zxxx" + cursorpt.x + ", " + cursorpt.y + ")");
             $("#x").val(cursorpt.x-presisiX+12);
@@ -867,10 +798,6 @@ $('#malldropdown')
             pt.x = pointerXY.clientX;
             pt.y = pointerXY.clientY;
             console.log("baru" + pt.x  + ", " + pt.y + ")");
-         //The cursor point, translated into svg coordinates
-            //var cursorpt + ", " + pt.y + ")");
-            //  console.log("(baru=" + cursorpt.x + ", " + cursorpt.y + ")");
-         //The cursor point, translated into svg coordinates
             var cursorpt =  pt.matrixTransform(svg.getScreenCTM().inverse());
             presisiX=cursorpt.x-x_val;
             presisiY=cursorpt.y-y_val;
@@ -899,13 +826,11 @@ $('#malldropdown')
             data: $('#newlocation').serialize(),
             dataType: 'json',
             success: function(response) {
-                // Handle the response message
                 reloadFloor();
                 $('#error').html(response.message);
                 $("#flash-msg").modal("show");
             },
             error: function(xhr, status, error) {
-                // Handle errors if needed
                 console.error(xhr.responseText);
             }
         });
@@ -916,64 +841,52 @@ $('#malldropdown')
         document.getElementById('my_form').submit();
 
     }
-function logout(){
-    window.location.href = "adminlogout";
-    //document.getElementById('my_form').action = "adminlogout";
-      //  document.getElementById('my_form').submit();
+    function logout(){
+        window.location.href = "adminlogout";
+        }
+        function showAddUpdate(){
+            $("#btnUpdate").hide();
+                $("#btnDelete").hide();
+                $("#btnAdd").hide();
+                $("#btnSave").show();
+                $("#btnCancel").show();
+            }
+            function hideAddUpdate(){
+                $("#btnUpdate").show();
+                $("#btnDelete").show();
+                $("#btnAdd").show();
+                $("#btnSave").hide();
+                $("#btnCancel").hide();
+                $("#name").val('');
+                $("#idlink").val('');
+                $("#link").val('');
+            }
 
-    }
-    function showAddUpdate(){
-          $("#btnUpdate").hide();
-            $("#btnDelete").hide();
-            $("#btnAdd").hide();
-            $("#btnSave").show();
-            $("#btnCancel").show();
-        }
-        function hideAddUpdate(){
-            $("#btnUpdate").show();
-            $("#btnDelete").show();
-            $("#btnAdd").show();
-            $("#btnSave").hide();
-            $("#btnCancel").hide();
-            $("#name").val('');
-            $("#idlink").val('');
-            $("#link").val('');
-        }
-    </script>
+</script>
   
     <script>
       /* $('form').on('submit', function(event) {
     event.preventDefault();
     $('#hiddenInput').val(someVariable); //perform some operations
-    this.submit(); //now submit the form
-}); */          
-  $(document).on("mouseover", ".popover-icon", function(e) {
-    //  console.log(this.id);
-    idnya=this.id;
-  // const exampleEl = document.getElementById('pop15');
-    $('#'+idnya).popover({html:true});
-    $('#'+idnya).popover('show');
-  
-//const popover = new coreui.Popover(exampleEl, options)
-//60000 1menit
-});
-$(document).on('click',".popover-icon",function(){
- //console.log(this.id);
-    idnya=this.id;
-   const exampleEl = document.getElementById('pop15');
-   $('#'+idnya).popover({html:true});
-   $('#'+idnya).popover('hide');
-  
-});
-$(document).on("mouseout", ".popover-icon", function(e) {
-      //console.log(this.id);
-    idnya=this.id;
-  // const exampleEl = document.getElementById('pop15');
+    this.submit();
+    }); */          
+    $(document).on("mouseover", ".popover-icon", function(e) {
+        idnya=this.id;
+        $('#'+idnya).popover({html:true});
+        $('#'+idnya).popover('show');
+    });
+    $(document).on('click',".popover-icon",function(){
+        idnya=this.id;
+    const exampleEl = document.getElementById('pop15');
     $('#'+idnya).popover({html:true});
     $('#'+idnya).popover('hide');
-  
-//const popover = new coreui.Popover(exampleEl, options)
-});
+    
+    });
+    $(document).on("mouseout", ".popover-icon", function(e) {
+        idnya=this.id;
+        $('#'+idnya).popover({html:true});
+        $('#'+idnya).popover('hide');
+    });
 
         
 jQuery.fn.extend({
@@ -986,7 +899,6 @@ jQuery.fn.extend({
 });
 
     $(document).ready(function() {
-         //$('#ajax-crud-datatable').DataTable();
       $('#ajax-crud-datatable').dataTable({   
         
             "bLengthChange" : false,
@@ -1026,16 +938,11 @@ jQuery.fn.extend({
                     
            }
            else{
-            //e.preventDefault();
-            
             var process="";
             if($("#deleteid").val()!='')
                     process="/update";
             else
                 process="/save";
-            // Serialize the form data
-          // const formData = new FormData(form);
-            // Send an AJAX request
             $.ajax({
                 type: 'POST',
                 url: process,
@@ -1081,18 +988,11 @@ jQuery.fn.extend({
             
         });
         $('#btnDelete').click(function(e) {
-            //e.preventDefault();
               $.confirmModal('Are you sure to delete this?', function(el) {
         console.log("Ok was clicked!");
         var process="";
              id = document.getElementById("deleteid").value;
            console.log("test"+$("#actionmap").val());
-         
-               
-        //  exit;
-            // Serialize the form data
-          // const formData = new FormData(form);id_no
-            // Send an AJAX request
             $.ajax({
                 type: 'POST',
                 url: "/deletedata",
@@ -1115,8 +1015,6 @@ jQuery.fn.extend({
       });
             
     });
-
-
 
 </script>
 <!--

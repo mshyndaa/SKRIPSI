@@ -58,12 +58,9 @@ class DataTableAjaxCRUDController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-
-
         DB::connection('mysql1')->enableQueryLog();
         $id_users = $request->id;
         $password = Hash::make($request->password);
-        //dd(Session::get('admin.username'));
         $company = Admin::updateOrCreate(
                         [
                             'id_users' => $id_users
@@ -75,18 +72,13 @@ class DataTableAjaxCRUDController extends Controller {
                             'updated_at' => NOW(),
                             'updated_by' => Session::get('admin.username')
         ]);
-        //  print_r(DB::connection('mysql1')->getQueryLog());       
-        //exit();
         return Response()->json($company);
     }
 
     public function storeuser(Request $request) {
         $company = $request->input('mall');
-        // dd($colors);
-        
         $id_users = $request->id;
         $password = Hash::make($request->password);
-        //dd(Session::get('admin.username'));
         $post = User::find($id_users);
         if ($request->password != '') {
             $password = Hash::make($request->password);
@@ -113,9 +105,6 @@ class DataTableAjaxCRUDController extends Controller {
             $akses->user_id = $id_users;
             $akses->save();
         }
-//$post = User::find($id_users);
-        //  print_r(DB::connection('mysql1')->getQueryLog());       
-        //exit();
         return Response()->json($post);
     }
 
@@ -126,45 +115,33 @@ class DataTableAjaxCRUDController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request) {
-
-
-
         $where = array('id_users' => $request->id);
         $company = Admin::where($where)->first();
-
         return Response()->json($company);
     }
 
     public function edituser(Request $request) {
-
-
-
         $where = array('id_users' => $request->id);
         $company = User::where($where)->get();
-
         return Response()->json($company);
     }
-public function editmall(Request $request) {
-
-
-//$dat
-        $where = array('user_id' => $request->id);
-        $company = UserAkses::where($where)->first();
-         $data = DB::connection('mysql1')->table('user_akses')
-                ->where('user_id', $request->id)
-              
-                ->select('company_id')
-                ->get();
-        $newdata = array();
-        $dataMall="";
-        foreach ($data as $key => $list) {
-            if($dataMall=='')
-                $dataMall=$list->company_id;
-            else
-                $dataMall .=";".$list->company_id;
+    public function editmall(Request $request) {
+            $where = array('user_id' => $request->id);
+            $company = UserAkses::where($where)->first();
+            $data = DB::connection('mysql1')->table('user_akses')
+                    ->where('user_id', $request->id)
+                    ->select('company_id')
+                    ->get();
+            $newdata = array();
+            $dataMall="";
+            foreach ($data as $key => $list) {
+                if($dataMall=='')
+                    $dataMall=$list->company_id;
+                else
+                    $dataMall .=";".$list->company_id;
+            }
+            return Response()->json($data);
         }
-        return Response()->json($data);
-    }
     /**
      * Remove the specified resource from storage.
      *
@@ -174,8 +151,6 @@ public function editmall(Request $request) {
     public function destroy(Request $request)
     {
         $userId = $request->id;
-    
-        // Find and delete user by ID
         $deleted = Admin::where('id_users', $userId)->delete();
     
         if ($deleted) {
@@ -188,10 +163,7 @@ public function editmall(Request $request) {
     public function destroyUser(Request $request)
     {
         $userId = $request->id;
-    
-        // Find and delete user by ID
         $deleted = User::where('id_users', $userId)->delete();
-    
         if ($deleted) {
             return response()->json(['success' => true]);
         } else {

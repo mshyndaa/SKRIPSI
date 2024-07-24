@@ -99,7 +99,6 @@
         </div>
     </div>
 </div>
-<!-- End Bootstrap model -->
 
 <script type="text/javascript">
 $(document).ready(function() {
@@ -187,16 +186,13 @@ function deleteFunc(id) {
             dataType: 'json',
             success: function(response) {
                 if (response.success) {
-                    // Success handling, maybe show a success message or update UI
                     var oTable = $('#ajax-crud-datatable').DataTable();
-                    oTable.draw(false); // Redraw the DataTable
+                    oTable.draw(false);
                 } else {
-                    // Error handling, show an error message to the user
                     alert("Deletion failed: " + response.message);
                 }
             },
             error: function(xhr, status, error) {
-                // General error handling, log or show a generic error message
                 console.error("Error deleting user:", error);
                 alert("An error occurred while deleting.");
             }

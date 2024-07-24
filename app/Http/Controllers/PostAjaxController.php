@@ -16,9 +16,7 @@ class PostAjaxController extends Controller
     public function index(Request $request)
     {
          $post = "";
-       // if ($request->ajax()) {
             $post = Admin::latest()->get();
-          //  dd($post);
             return Datatables::of($post)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
